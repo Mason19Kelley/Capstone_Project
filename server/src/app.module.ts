@@ -40,6 +40,6 @@ export class AppModule implements OnApplicationBootstrap  {
   constructor(private dataSource: DataSource, private readonly seedService: SeedService) {}
 
   async onApplicationBootstrap() {
-    await this.seedService.seed();
+    await this.seedService.seedDB();
   }
 }

@@ -10,7 +10,7 @@ export class SeedService {
         private rolesService: RolesService
       ) {}
 
-  async seed() {
+  async seedDB() {
 
     await this.rolesService.seedRoles();
     
