@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { DataSource } from 'typeorm';
 import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
+import { SeedService } from './seed/seed.service';
 
 @Module({
   imports: [
@@ -33,8 +34,12 @@ import { Role } from './roles/role.entity';
     
   ],
   controllers: [AppController],
-  providers: [AppService, OrganizationsService],
+  providers: [AppService, OrganizationsService, SeedService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
+export class AppModule implements OnApplicationBootstrap  {
+  constructor(private dataSource: DataSource, private readonly seedService: SeedService) {}
+
+  async onApplicationBootstrap() {
+    await this.seedService.seed();
+  }
 }
