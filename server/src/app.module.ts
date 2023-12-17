@@ -34,10 +34,10 @@ import { SeedService } from './seed/seed.service';
     
   ],
   controllers: [AppController],
-  providers: [AppService, OrganizationsService, SeedService],
+  providers: [AppService, SeedService],
 })
 export class AppModule implements OnApplicationBootstrap  {
-  constructor(private dataSource: DataSource, private readonly seedService: SeedService) {}
+  constructor(private readonly seedService: SeedService) {}
 
   async onApplicationBootstrap() {
     await this.seedService.seedDB();

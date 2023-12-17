@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from 'src/roles/role.entity';
 import { RolesService } from 'src/roles/roles.service';
-import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { OrganizationsService } from 'src/organizations/organizations.service';
 
 @Injectable()
 export class SeedService {
     constructor(
-        private rolesService: RolesService
+        private rolesService: RolesService,
+        private usersService: UsersService,
+        private orgsService: OrganizationsService
       ) {}
 
   async seedDB() {
 
     await this.rolesService.seedRoles();
+    await this.orgsService.seedOrganizations();
+    await this.usersService.seedUsers();
     
   }
 }

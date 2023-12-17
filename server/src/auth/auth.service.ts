@@ -6,14 +6,16 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+  saltRounds = 10; // don't change
   constructor(private usersService: UsersService,
     private jwtService: JwtService
     ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findUser(username);
-    const hashedPass = await bcrypt.hash(pass);
-    if (user && user.password === hashedPass) {
+    const hashedPassMatches = await bcrypt.compare(pass, user.password);
+    console.log(hashedPassMatches)
+    if (user && hashedPassMatches) {
       const { password, ...result } = user;
       return result;
     }

@@ -10,6 +10,11 @@ export class RolesService {
         private rolesRepository: Repository<Role>,
       ) {}
 
+
+    findRole(id: number) {
+      return this.rolesRepository.findOneBy({id: id })
+    }
+
     async seedRoles() {
 
         let roles = await this.rolesRepository.count();

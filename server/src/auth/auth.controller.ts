@@ -10,9 +10,10 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     async login(@Request() req) {
-        return this.authService.login(req.user);
+        console.log(req.query)
+        return this.authService.login(req.query);
     }
-
+    // testing that auth works
     @UseGuards(JwtAuthGuard)
     @Get('profile')
     getProfile(@Request() req) {
