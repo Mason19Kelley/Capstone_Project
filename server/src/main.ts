@@ -8,19 +8,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('APIs')
-    .setDescription('Lists all of our apis.');
-    
-
-
-  const controllers = app.getHttpServer().getModules().map((module) => module.controllers);
-  const controllerNames = controllers.reduce((acc, curr) => acc.concat(curr.map((controller) => controller.name)), []);
-  
-  controllerNames.forEach((controllerName) => {
-    config.addTag(controllerName);
-  });
-
-
-  const document = SwaggerModule.createDocument(app, config.build());
+    .setDescription('Lists all of our apis.')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
