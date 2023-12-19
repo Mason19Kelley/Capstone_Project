@@ -19,7 +19,7 @@ import { SeedService } from './seed/seed.service';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'surge-user',
+      username: "surge-user",
       password: 'password',
       database: 'surge',
       entities: [User, Organization, Role],
