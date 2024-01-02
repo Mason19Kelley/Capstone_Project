@@ -3,8 +3,9 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { UserOutlined } from '@ant-design/icons';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react'
+import Dashboard from '../../components/Dashboard/Dashboard';
 
 
 
@@ -50,31 +51,33 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Item 1', 'g1', null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
-    getItem('Item 2', 'g2', null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
-  ]),
-
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-  ]),
-
-  { type: 'divider' },
-
-  getItem('Navigation Three', 'sub4', <SettingOutlined />, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Option 11', '11'),
-    getItem('Option 12', '12'),
-  ]),
-
-  getItem('Group', 'grp', null, [getItem('Option 13', '13'), getItem('Option 14', '14')], 'group'),
+  getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), getItem('Logout', 'Logout', <LogoutOutlined />)
 ];
 
 function HomePage() {
+  const [page, setPage] = useState('Dashboard');
   
+  const renderPage = () => {
+    switch (page) {
+      case 'Dashboard':
+        return <Dashboard />;
+      case 'Courses':
+        return <div>Courses Page</div>;
+      case 'Account':
+        return <div>Account Page</div>;
+      case 'Logout':
+        // Handle logout logic here
+        return null;
+      default:
+        return null;
+    }
+  };
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    setPage(key);
+    console.log(page)
+  };
+
   return (
     <div>
       <Layout style={layoutStyle}>
@@ -92,14 +95,16 @@ function HomePage() {
               </Typography.Title>
             </div>
             <Menu
-              style={{ width: 256 }}
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"
+              style={{ width: '100%', backgroundColor: '#1677ff' }}
+              defaultSelectedKeys={['Dashboard']}
+              mode="vertical"
+              onClick={handleMenuClick}
               items={items}
             />
           </Sider>
-          <Content style={contentStyle}>Content</Content>
+          <Content style={contentStyle}>
+            {renderPage()}
+          </Content>
         </Layout>
       </Layout>
     </div>
