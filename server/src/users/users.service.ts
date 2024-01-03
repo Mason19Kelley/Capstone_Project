@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { RolesService } from 'src/roles/roles.service';
-import { OrganizationsService } from 'src/organizations/organizations.service';
+import { RolesService } from '../roles/roles.service';
+import { OrganizationsService } from '../organizations/organizations.service';
 
 @Injectable()
 export class UsersService {
@@ -32,7 +32,7 @@ export class UsersService {
     const role = await this.rolesService.findRole(1);
 
     const usersToSeed = [
-      { username: 'SuperAdmin', password: hashedPass, organization, role},
+      { username: 'username', password: hashedPass, organization, role},
       
     ];
 

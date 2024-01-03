@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage/HomePage'
 
 
 
+// test comment
 function App() {
 
   // example login api call, response returns JWT
@@ -15,7 +16,7 @@ function App() {
       password: "password"
     })
       .then(response => {
-        console.log(response.data.access_token)
+        console.log(response.data)
       })
       .catch(error => {
         console.error(error);

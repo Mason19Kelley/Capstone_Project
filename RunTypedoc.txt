@@ -1,0 +1,7 @@
+use this command in root dir to build docs
+
+typedoc --out docs
+
+Run this to open docs in browser
+
+start ./docs/index.html
