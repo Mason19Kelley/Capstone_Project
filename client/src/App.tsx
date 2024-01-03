@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage/HomePage'
 
 
 
-// test comment
+// default App function that loads the full application
 function App() {
 
   // example login api call, response returns JWT
