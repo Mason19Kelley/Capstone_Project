@@ -10,7 +10,7 @@ build:
   os: ubuntu-22.04
   tools:
     # You can also specify other tool versions:
-    nodejs: "18"
+    python: "3.8"
     # rust: "1.64"
     # golang: "1.19"
 
