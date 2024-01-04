@@ -7,7 +7,7 @@ import LoginPage from './pages/Login/LoginPage'
 
 
 
-// test comment
+// default App function that loads the full application
 function App() {
 
   // example login api call, response returns JWT
