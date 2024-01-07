@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
-import HomePage from './pages/HomePage/HomePage'
+import CreateAcct from './pages/CreateAcct/CreateAcct'
 
 
 
@@ -24,7 +24,7 @@ function App() {
   
   return (
     <div>
-      <HomePage />
+      <CreateAcct />
     </div>
   )
 }
