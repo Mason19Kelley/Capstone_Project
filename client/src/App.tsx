@@ -4,26 +4,6 @@ import axios from 'axios'
 import { BrowserRouter as Router} from 'react-router-dom'
 import AppRoutes from './routes'
 
-
-// const AuthContext = React.createContext<{ isAuthenticated: boolean; login: () => void }>({
-//   isAuthenticated: false,
-//   login: () => {},
-// });
-
-// // test comment
-// const App: React.FC = () => {
-
-//   const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-//   const login = () => {
-//     // In a real-world scenario, you would perform authentication here
-//     setIsAuthenticated(true);
-//   };
-
-//   const logout = () => {
-//     // In a real-world scenario, you would perform logout here
-//     setIsAuthenticated(false);
-//   };
   
 
 const App: React.FC = () => {
