@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage/HomePage'
 import LoginPage from './pages/Login/LoginPage'
 
@@ -25,9 +26,14 @@ function App() {
   }, []);
   
   return (
-    <div>
-      <LoginPage />
-    </div>
+    //Creating routes
+    // indext element is the default landing page
+    <Router>
+      <Routes>
+        <Route index element={<LoginPage />} />
+        <Route path="/home" element={<HomePage />} />
+      </Routes>
+    </Router>
   )
 }
 
