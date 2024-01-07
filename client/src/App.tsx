@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import HomePage from './pages/HomePage/HomePage'
 import { AuthAPI } from './api/AuthAPI';
+import LoginPage from './pages/Login/LoginPage'
 
 
 
 
 
-// test comment
+// default App function that loads the full application
 function App() {
 
   // example login call
@@ -23,7 +24,7 @@ function App() {
   
   return (
     <div>
-      <HomePage />
+      <LoginPage />
     </div>
   )
 }

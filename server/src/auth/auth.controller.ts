@@ -5,13 +5,14 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './auth.model';
 import { Response } from 'express';
-
+// controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
 @ApiBearerAuth()
 export class AuthController {
     constructor(private authService: AuthService) {}
 
+    // basic login endpoints
     @UseGuards(LocalAuthGuard)
     @ApiBody({ type: LoginDto })
     @Post('login')
@@ -23,7 +24,8 @@ export class AuthController {
         response.cookie('jwt', token);
         return token
     }
-    // testing that auth works
+    // auth testing endpoint
+    // will return username if login works
     @UseGuards(JwtAuthGuard)
     @Get('profile')
     getProfile(@Request() req) {

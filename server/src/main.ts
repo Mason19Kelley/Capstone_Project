@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.use(cookieParser());
-
+  //Swagger setup, see swagger docs for config meanings
   const config = new DocumentBuilder()
     .setTitle('APIs')
     .setDescription('Lists all of our apis.')
