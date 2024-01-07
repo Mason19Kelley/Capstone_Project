@@ -13,6 +13,7 @@ import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
 
+// sets up db/typeorm connection and loads all modules into app
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -38,7 +39,8 @@ import { SeedService } from './seed/seed.service';
 })
 export class AppModule implements OnApplicationBootstrap  {
   constructor(private readonly seedService: SeedService) {}
-
+  // lifecycle hook on app start
+  //currently seeds db
   async onApplicationBootstrap() {
     await this.seedService.seedDB();
   }

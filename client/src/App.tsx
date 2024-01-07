@@ -4,9 +4,8 @@ import axios from 'axios'
 import { BrowserRouter as Router} from 'react-router-dom'
 import AppRoutes from './routes'
 
-  
-
 const App: React.FC = () => {
+
   // example login api call, response returns JWT
   useEffect(() => {
     axios.post('http://localhost:3000/auth/login', {

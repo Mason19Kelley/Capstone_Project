@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Role } from './role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+// business logic for roles
 @Injectable()
 export class RolesService {
     constructor(
@@ -10,11 +10,11 @@ export class RolesService {
         private rolesRepository: Repository<Role>,
       ) {}
 
-
+    // finds role by id
     findRole(id: number) {
       return this.rolesRepository.findOneBy({id: id })
     }
-
+    // inserts roles seeds into db
     async seedRoles() {
 
         let roles = await this.rolesRepository.count();

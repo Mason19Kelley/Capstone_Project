@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
-
+// user business logic class
 @Injectable()
 export class UsersService {
     constructor(
@@ -15,11 +15,11 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,    
       ) {}
-
+  // finds user by username
   async findUser(username: string): Promise<User | undefined> {
     return this.usersRepository.findOneBy({username})
   }
-
+  // inserts a default users into db
   async seedUsers() {
 
     let users = await this.usersRepository.count();
