@@ -9,12 +9,16 @@ const App: React.FC = () => {
 
   // example login call
   useEffect(() => {
-    AuthAPI.login("username", "password")
+    AuthAPI.login("usernam", "password")
       .then(response => {
           //checking if auth header works
           AuthAPI.checkUser().then(response => console.log(response)).catch(error => console.error(error));
       }).catch(error => {
-          console.error(error);
+          if(error.response.status === 401){
+            console.log("incorrect password")
+          } else if (error.response.status === 500){
+            console.log("user not found")
+          }
         });
   }, []);
 
