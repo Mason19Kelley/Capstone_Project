@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
-import axios from 'axios'
+import CreateAcct from './pages/CreateAcct/CreateAcct'
 import { BrowserRouter as Router} from 'react-router-dom'
+import { AuthAPI } from './api/AuthAPI';
 import AppRoutes from './routes'
+
 
 const App: React.FC = () => {
 
-  // example login api call, response returns JWT
+  // example login call
   useEffect(() => {
-    axios.post('http://localhost:3000/auth/login', {
-      username: "SuperAdmin",
-      password: "password"
-    })
+    AuthAPI.login("username", "password")
       .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.error(error);
-      });
+          //checking if auth header works
+          AuthAPI.checkUser().then(response => console.log(response)).catch(error => console.error(error));
+      }).catch(error => {
+          console.error(error);
+        });
   }, []);
 
   return (
