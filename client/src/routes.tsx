@@ -8,7 +8,8 @@ import CreateAcct from './pages/CreateAcct/CreateAcct'
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route index element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/createacct" element={<CreateAcct />} />
     </Routes>
