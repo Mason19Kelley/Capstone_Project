@@ -1,6 +1,7 @@
 
 import './Dashboard.css'
-import { Card } from 'antd';
+import { Card, Image } from 'antd';
+import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 
 const cards: string[] = [
     'My Courses',
@@ -13,6 +14,14 @@ function Dashboard() {
   
   return (
     <div className='wrapper'>
+      <div className='headerImage'>
+        <Image
+          width= '100%'
+          height = '98%'
+          src = {headerImg}
+          preview = {false}
+        />
+      </div>
       <h1 className='self-start'>Dashboard</h1>
       <div className='cards'>
         {cards.map(card => <Card style={{width: '100%'}}>{card}</Card>)}

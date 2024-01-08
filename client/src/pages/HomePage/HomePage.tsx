@@ -6,6 +6,7 @@ import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
+import LoginPage from '../Login/LoginPage';
 
 
 
@@ -66,7 +67,6 @@ function HomePage() {
       case 'Account':
         return <div>Account Page</div>;
       case 'Logout':
-        // Handle logout logic here
         return null;
       default:
         return null;
@@ -84,8 +84,10 @@ function HomePage() {
         <Layout>
           <Sider width="20%" style={siderStyle}>
             <div className="title">
-              <Typography.Title level={2} className='text-center align-middle'>
+              <Typography.Title level={2} className='text-left align-middle'>
+                <div className = "brand">
                 Surge
+                </div>
               </Typography.Title>
             </div>
             <div className="user">

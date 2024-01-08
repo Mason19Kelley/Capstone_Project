@@ -3,7 +3,14 @@
     height: 10%;
   }
   
-  .user {
+.user {
     height: 30%;
     margin-top:5%;
+  }
+
+.brand {
+    padding-top: 15px;
+    padding-left: 25px;
+    font-size: 160%;
+    font-family: 'Major Mono Display', monospace;
   }
