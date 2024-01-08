@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
-import CreateAcct from './pages/CreateAcct/CreateAcct'
 import { BrowserRouter as Router} from 'react-router-dom'
 import { AuthAPI } from './api/AuthAPI';
 import AppRoutes from './routes'
