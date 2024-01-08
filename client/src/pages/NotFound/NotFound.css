@@ -1,0 +1,13 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    width: 40%;
+    margin: auto;
+    align-items: center;
+}
+
+.not-found-button {
+    width: 50%;
+}
