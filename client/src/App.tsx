@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import CreateAcct from './pages/CreateAcct/CreateAcct'
-import HomePage from './pages/HomePage/HomePage'
+import { BrowserRouter as Router} from 'react-router-dom'
 import { AuthAPI } from './api/AuthAPI';
-import LoginPage from './pages/Login/LoginPage'
+import AppRoutes from './routes'
 
 
-
-
-
-// default App function that loads the full application
-function App() {
+const App: React.FC = () => {
 
   // example login call
   useEffect(() => {
@@ -22,12 +18,14 @@ function App() {
           console.error(error);
         });
   }, []);
-  
+
   return (
-    <div>
-      <CreateAcct />
-    </div>
-  )
+    <Router>
+      <AppRoutes />
+    </Router>
+  );
+
+
 }
 
 export default App
