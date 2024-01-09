@@ -5,24 +5,26 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './auth.model';
 import { Response } from 'express';
+import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
 @ApiBearerAuth()
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private userService: UsersService) {}
 
     // basic login endpoints
     @UseGuards(LocalAuthGuard)
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
-        console.log(credentials)
-        
+
         const token = (await this.authService.login(credentials)).access_token;
-        console.log(token)
-        response.cookie('jwt', token);
-        return token
+        let userId: number = null;
+        userId = (await this.userService.findUser(credentials.username)).id
+    
+        return {token: token, userId: userId}
     }
     // auth testing endpoint
     // will return username if login works
