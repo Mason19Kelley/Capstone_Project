@@ -5,12 +5,13 @@ import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
 @Controller('users')
+@ApiBearerAuth()
 export class UsersController {
 
     constructor(private usersService: UsersService) {}
 
-    // @UseGuards(JwtAuthGuard)
-    @Get('getUser:id')
+    @UseGuards(JwtAuthGuard)
+    @Get('getUser/:id')
     async getUser(@Param('id') id: number) {
         return await this.usersService.findUserById(id)
     }
