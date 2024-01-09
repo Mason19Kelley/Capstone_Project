@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 interface LoginPageProps {
-  onLogin: (user: string, password: string) => void;
+  onLogin: (user: string, password: string) => Promise<void>;
   authentication: boolean;
 }
 
@@ -15,16 +15,16 @@ interface NavConditionalProps {
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin, authentication }) => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  console.log(authentication)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onLogin(user, password);
-  };
-
-  const NavConditional: React.FC<NavConditionalProps> = ({ auth }) => {
-    return auth ? <Link to="/createacct">Login</Link> : <Link to="/createacct">Login</Link>;
+    await onLogin(user, password)
+    console.log(authentication)
+    if(authentication){
+      navigate("/home");
+    }
   };
 
   return (
@@ -49,7 +49,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, authentication }) => {
                 <a href="#">Forgot password?</a>
               </label>
             </div>
-            <NavConditional auth={authentication}/>
+            <button type="submit" >Login</button>
             <div className="register">
               <p>
                 Don't have an account ? <Link to="/createacct">Register</Link>

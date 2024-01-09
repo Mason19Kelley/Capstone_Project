@@ -9,26 +9,26 @@ import LoginPage from './pages/Login/LoginPage'
 const App: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
-  const handleLogin =  (user: string, password: string) => {
-  // example login call
- 
-    AuthAPI.login(user, password)
-      .then(response => {
-                    //checking if auth header works
-          AuthAPI.checkUser().then(response => {console.log(response); setAuthenticated(true)}).catch(error => console.error(error));
-      }).catch(error => {
-          if(error.response.status === 401){
-            console.log("incorrect password")
-          } else if (error.response.status === 500){
-            console.log("user not found")
+  const handleLogin = (user: string, password: string): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+      AuthAPI.login(user, password)
+        .then(response => {
+          setAuthenticated(true);
+          console.log(authenticated)
+          resolve(); // Resolve the promise on successful login
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 401) {
+            console.log("incorrect password");
+          } else if (error.response && error.response.status === 500) {
+            console.log("user not found");
           }
+          console.error(error);
+          reject(error); // Reject the promise on login failure
         });
-
-    // Do something with the user and password, for example, send to an authentication API
-    console.log('User:', user);
-    console.log('Password:', password);
-    
+    });
   };
+  
   
 
   return (

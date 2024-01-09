@@ -8,12 +8,11 @@ import NotFound from './pages/NotFound/NotFound';
 
 
 interface AppRoutesProps {
-  onLogin: (username: string, password: string) => void;
+  onLogin: (username: string, password: string) => Promise<void>;
   authenticated: boolean
 }
 
 const AppRoutes: React.FC<AppRoutesProps> = ({ onLogin, authenticated }) => {
-  console.log("authenticated")
   return (
     <Routes>
 
