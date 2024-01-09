@@ -21,10 +21,10 @@ export class AuthController {
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
 
         const token = (await this.authService.login(credentials)).access_token;
-        let userId: number = null;
-        userId = (await this.userService.findUser(credentials.username)).id
+        let user: User = null;
+        user = (await this.userService.findUser(credentials.username))
     
-        return {token: token, userId: userId}
+        return {token: token, user: user}
     }
     // auth testing endpoint
     // will return username if login works
