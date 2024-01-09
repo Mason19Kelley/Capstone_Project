@@ -9,7 +9,7 @@ const App: React.FC = () => {
 
   // example login call
   useEffect(() => {
-    AuthAPI.login("usernam", "password")
+    AuthAPI.login("SuperAdmin", "hello")
       .then(response => {
           //checking if auth header works
           AuthAPI.checkUser().then(response => console.log(response)).catch(error => console.error(error));
