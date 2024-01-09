@@ -12,11 +12,10 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(isLoggedIn)
     if (isLoggedIn) {
       navigate('/home');
     }
-  }, []);
+  }, [isLoggedIn]);
 
 
   const handleSubmit = (e: React.FormEvent) => {
