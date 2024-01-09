@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { AuthAPI } from '../../api/AuthAPI';
@@ -11,7 +11,12 @@ const LoginPage: React.FC = () => {
   const { isLoggedIn, setLoggedIn } = useContext(AuthContext)
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    console.log(isLoggedIn)
+    if (isLoggedIn) {
+      navigate('/home');
+    }
+  }, []);
 
 
   const handleSubmit = (e: React.FormEvent) => {
