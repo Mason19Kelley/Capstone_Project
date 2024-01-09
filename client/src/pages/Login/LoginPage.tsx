@@ -1,31 +1,35 @@
-import React, { useState } from 'react';
-import { IonIcon } from '@ionic/react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
+import { AuthAPI } from '../../api/AuthAPI';
+import { AuthContext } from '../../context/AuthContext';
 
-interface LoginPageProps {
-  onLogin: (user: string, password: string) => Promise<void>;
-  authentication: boolean;
-}
 
-interface NavConditionalProps {
-  auth: boolean;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin, authentication }) => {
+const LoginPage: React.FC = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const { isLoggedIn, setLoggedIn } = useContext(AuthContext)
   const navigate = useNavigate();
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    await onLogin(user, password)
-    console.log(authentication)
-    if(authentication){
-      navigate("/home");
-    }
+    AuthAPI.login(user, password)
+      .then(response => {
+        setLoggedIn(true)
+        navigate("/home")
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 401) {
+          console.log("incorrect password");
+        } else if (error.response && error.response.status === 500) {
+          console.log("user not found");
+        }
+      });
   };
+    
 
   return (
     <section>

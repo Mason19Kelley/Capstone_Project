@@ -27,4 +27,4 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   );
 };
 
-export { AuthProvider };
+export { AuthProvider, AuthContext };
