@@ -15,14 +15,15 @@ const contentStyle: React.CSSProperties = {
   minHeight: 120,
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#0958d9',
+  backgroundColor: '#dbdbdb',
+  backgroundSize: '100%',
 };
 
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#1677ff',
+  backgroundColor: '#002F8B'
 };
 
 
@@ -30,7 +31,7 @@ const layoutStyle = {
   overflow: 'auto',
   width: '100%',
   maxWidth: '100%',
-  height: '100vh',
+  height: '100%',
 };
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -82,7 +83,7 @@ function HomePage() {
     <div>
       <Layout style={layoutStyle}>
         <Layout>
-          <Sider width="20%" style={siderStyle}>
+          <Sider width="17%" style={siderStyle}>
             <div className="title">
               <Typography.Title level={2} className='text-left align-middle'>
                 <div className = "brand">
@@ -91,13 +92,15 @@ function HomePage() {
               </Typography.Title>
             </div>
             <div className="user">
-              <Avatar size={128} icon={<UserOutlined />} />
-              <Typography.Title level={4} style={{ color: 'white' }}>
-                Employee Name
+              <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
+              <Typography.Title level={3} style={{ color: 'white' }}>
+                <div className='emName'>
+                  Employee Name
+                </div>
               </Typography.Title>
             </div>
             <Menu
-              style={{ width: '100%', backgroundColor: '#1677ff' }}
+              style={{ width: '100%', backgroundColor: '#002F8B' }}
               defaultSelectedKeys={['Dashboard']}
               mode="vertical"
               onClick={handleMenuClick}
