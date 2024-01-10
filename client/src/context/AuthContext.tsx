@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextProps>(defaultAuthContextValue);
 interface AuthProviderProps {
   children: ReactNode; // Correctly typing children prop
 }
-
+// stores auth context for user and logged in
 const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);

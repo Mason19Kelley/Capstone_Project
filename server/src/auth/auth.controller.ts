@@ -5,8 +5,8 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './auth.model';
 import { Response } from 'express';
-import { User } from 'src/users/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from '../users/user.entity';
+import { UsersService } from '../users/users.service';
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
