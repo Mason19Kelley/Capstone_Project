@@ -39,11 +39,7 @@ function Dashboard() {
             borderRadius: 1,
             bgcolor: 'primary.main',
           }}>
-            <Box sx={{
-              width:100,
-              height:100,
-              bgcolor: 'green'
-            }}/>
+            <Typography.Text>Learning Dashboard</Typography.Text>
           </Box>
         </ThemeProvider>
       </div>

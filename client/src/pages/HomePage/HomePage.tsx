@@ -17,13 +17,16 @@ const contentStyle: React.CSSProperties = {
   color: '#fff',
   backgroundColor: '#dbdbdb',
   backgroundSize: '100%',
+  paddingLeft: 324
 };
 
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#002F8B'
+  backgroundColor: '#002F8B',
+  height: '100vh',
+  position: 'fixed'
 };
 
 
