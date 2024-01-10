@@ -13,12 +13,11 @@ import Account from '../../components/Account/Account';
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
-  minHeight: 120,
+  height: '100vh',
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#dbdbdb',
   backgroundSize: '100%',
-  paddingLeft: 324
 };
 
 const siderStyle: React.CSSProperties = {
@@ -26,13 +25,10 @@ const siderStyle: React.CSSProperties = {
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#002F8B',
-  height: '100vh',
-  position: 'fixed'
 };
 
 
 const layoutStyle = {
-  overflow: 'auto',
   width: '100%',
   maxWidth: '100%',
   height: '100%',
