@@ -6,6 +6,7 @@ import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
+import Account from '../../components/Account/Account';
 
 
 
@@ -63,7 +64,7 @@ function HomePage() {
       case 'Courses':
         return <div>Courses Page</div>;
       case 'Account':
-        return <div>Account Page</div>;
+        return <Account />;
       case 'Logout':
         // Handle logout logic here
         return null;
