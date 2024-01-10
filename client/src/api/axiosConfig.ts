@@ -1,10 +1,13 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
+
 //base instance of api
+
 export const api: AxiosInstance = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
         'Authorization': ''
     },
+  withCredentials: true,
 });
 
 // defining a custom error handler for all APIs

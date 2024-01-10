@@ -15,5 +15,10 @@ export const AuthAPI = {
     checkUser: async () => {
       const { data } = await api.get("/auth/profile");
       return data
+    },
+
+    getUser: async (id: number) => {
+      const { data } = await api.get(`/users/getUser/${id}`)
+      return data
     }
 }

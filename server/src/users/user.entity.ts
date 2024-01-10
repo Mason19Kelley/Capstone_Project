@@ -14,11 +14,11 @@ export class User {
   @Column()
   password: string;
 
-  @OneToOne(() => Organization)
+  @OneToOne(() => Organization, { eager: true })
   @JoinColumn()
   organization: Organization;
 
-  @OneToOne(() => Role)
+  @OneToOne(() => Role, { eager: true })
   @JoinColumn()
   role: Role;
 }
