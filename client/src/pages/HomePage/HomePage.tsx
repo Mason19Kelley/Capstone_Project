@@ -4,8 +4,9 @@ import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
+import { AuthContext } from '../../context/AuthContext';
 
 
 
@@ -56,7 +57,9 @@ const items: MenuProps['items'] = [
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
+  const { user } = useContext(AuthContext)
   const renderPage = () => {
+    console.log(user)
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;

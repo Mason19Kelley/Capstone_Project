@@ -4,7 +4,8 @@ import './LoginPage.css';
 import { AuthAPI } from '../../api/AuthAPI';
 import { AuthContext } from '../../context/AuthContext';
 import { User } from '../../models/user.model'
-
+import { api } from '../../api/axiosConfig';
+import Cookies from 'js-cookie';
 
 interface LoginResponse {
   token: string,
@@ -22,6 +23,21 @@ const LoginPage: React.FC = () => {
       navigate('/home');
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    api.defaults.headers['Authorization'] = `Bearer ${token}`;
+    AuthAPI.checkUser().then(response => {
+      console.log(response)
+      setUser(response)
+      setLoggedIn(true)
+      navigate("/home")
+    }).catch(error => 
+      console.log(error)
+    )
+  }, [])
+
+
 
 
   const handleSubmit = (e: React.FormEvent) => {

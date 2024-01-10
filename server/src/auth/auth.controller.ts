@@ -30,7 +30,9 @@ export class AuthController {
     // will return username if login works
     @UseGuards(JwtAuthGuard)
     @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
+    async getProfile(@Request() req) {
+        const userName = req.user.username;
+        const user = await this.userService.findUser(userName);
+        return user
     }
 }
