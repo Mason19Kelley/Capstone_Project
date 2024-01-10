@@ -3,12 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { AuthAPI } from '../../api/AuthAPI';
 import { AuthContext } from '../../context/AuthContext';
+import { User } from '../../models/user.model'
 
+
+interface LoginResponse {
+  token: string,
+  user: User; 
+}
 
 const LoginPage: React.FC = () => {
-  const [user, setUser] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoggedIn, setLoggedIn } = useContext(AuthContext)
+  const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +26,10 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    AuthAPI.login(user, password)
-      .then(response => {
+    AuthAPI.login(username, password)
+      .then((response: LoginResponse) => {
         setLoggedIn(true)
+        setUser(response.user)
         navigate("/home")
       })
       .catch(error => {
@@ -42,7 +49,7 @@ const LoginPage: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <h2>Login</h2>
             <div className="inputbox">
-              <input type="username" required value={user} onChange={(e) => setUser(e.target.value)} />
+              <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
               <label>Username</label>
             </div>
             <div className="inputbox">
