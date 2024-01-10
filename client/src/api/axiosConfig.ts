@@ -1,10 +1,20 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
+import { CookieJar } from 'tough-cookie';
+import axiosCookieJarSupport from 'axios-cookiejar-support';
 //base instance of api
+
+
+// Add cookie support to axios
+// axiosCookieJarSupport(axios);
+
+// const cookieJar = new tough.CookieJar();
+
 export const api: AxiosInstance = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
         'Authorization': ''
     },
+  withCredentials: true,
 });
 
 // defining a custom error handler for all APIs

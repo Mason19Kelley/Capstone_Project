@@ -19,6 +19,10 @@ export class UsersService {
   async findUser(username: string): Promise<User | undefined> {
     return this.usersRepository.findOneBy({username})
   }
+
+  async findUserById(id: number): Promise<User | undefined> {
+    return this.usersRepository.findOneBy({id});
+  }
   // inserts a default users into db
   async seedUsers() {
 
