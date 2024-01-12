@@ -12,13 +12,16 @@ import Account from '../../components/Account/Account';
 
 
 
+const layoutStyle = {
+  width: '100%',
+  height: '100vh', 
+  display: 'flex', 
+};
+
 const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
-  height: '100vh',
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#dbdbdb',
-  backgroundSize: '100%',
+  flex: 1, 
+  overflowY: 'auto', 
+  padding: '20px',
 };
 
 const siderStyle: React.CSSProperties = {
@@ -26,13 +29,8 @@ const siderStyle: React.CSSProperties = {
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#002F8B',
-};
-
-
-const layoutStyle = {
-  width: '100%',
-  maxWidth: '100%',
-  height: '100%',
+  width: '17%', 
+  overflowY: 'auto', 
 };
 
 type MenuItem = Required<MenuProps>['items'][number];
