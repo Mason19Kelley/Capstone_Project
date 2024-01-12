@@ -22,6 +22,10 @@ const contentStyle: React.CSSProperties = {
   flex: 1, 
   overflowY: 'auto', 
   padding: '20px',
+  backgroundColor: '#dbdbdb',
+  backgroundSize: '100%',
+  textAlign: 'center',
+  lineHeight: '120px',
 };
 
 const siderStyle: React.CSSProperties = {
