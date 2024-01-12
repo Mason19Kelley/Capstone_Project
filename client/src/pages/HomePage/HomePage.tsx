@@ -8,17 +8,17 @@ import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import LoginPage from '../Login/LoginPage';
 import { AuthContext } from '../../context/AuthContext';
+import Account from '../../components/Account/Account';
 
 
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
-  minHeight: 120,
+  height: '100vh',
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#dbdbdb',
   backgroundSize: '100%',
-  paddingLeft: 324
 };
 
 const siderStyle: React.CSSProperties = {
@@ -26,13 +26,10 @@ const siderStyle: React.CSSProperties = {
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#002F8B',
-  height: '100vh',
-  position: 'fixed'
 };
 
 
 const layoutStyle = {
-  overflow: 'auto',
   width: '100%',
   maxWidth: '100%',
   height: '100%',
@@ -71,7 +68,7 @@ function HomePage() {
       case 'Courses':
         return <div>Courses Page</div>;
       case 'Account':
-        return <div>Account Page</div>;
+        return <Account />;
       case 'Logout':
         return null;
       default:
