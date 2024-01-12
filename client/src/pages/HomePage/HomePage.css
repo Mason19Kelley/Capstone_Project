@@ -1,0 +1,23 @@
+.title {
+  background-color: indianred;
+  height: 10%;
+}
+  
+.user {
+  padding-top: 15px;
+  height: 30%;
+  margin-top:5%;
+  font-size: 128px;
+}
+
+.brand {
+  padding-top: 15px;
+  padding-left: 25px;
+  font-size: 160%;
+  font-family: 'Major Mono Display', monospace;
+}
+
+.emName {
+  padding-top: 5px;
+  font-family: 'Playfair Display', serif;
+}

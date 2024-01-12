@@ -1,0 +1,8 @@
+{
+    // Comments are supported, like tsconfig.json
+    "entryPoints": ["client/src/**/*.tsx", "server/src/**/*.ts"],
+    "out": "docs",
+    "name": "Surge",
+    "commentStyle": "all"
+    
+}
