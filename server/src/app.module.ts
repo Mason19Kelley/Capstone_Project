@@ -7,7 +7,6 @@ import { UsersModule } from './users/users.module';
 import { OrganizationsService } from './organizations/organizations.service';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { RolesModule } from './roles/roles.module';
-import { DataSource } from 'typeorm';
 import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
