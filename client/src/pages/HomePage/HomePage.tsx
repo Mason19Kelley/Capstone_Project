@@ -6,7 +6,6 @@ import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
-import LoginPage from '../Login/LoginPage';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
 

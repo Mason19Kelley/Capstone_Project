@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
   }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isLoggedIn, setLoggedIn } = useContext(AuthContext)
+    const { isLoggedIn } = useContext(AuthContext)
     if (!isLoggedIn) {
       return <Navigate to="/login" replace />;
     }

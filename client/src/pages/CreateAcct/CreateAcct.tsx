@@ -4,7 +4,7 @@ import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import Create from '../../components/Create/Create';
 
