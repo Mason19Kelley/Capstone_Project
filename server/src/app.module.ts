@@ -12,6 +12,8 @@ import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
+import { CoursesModule } from './courses/courses.module';
+import { Courses } from './courses/courses.entity';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -23,7 +25,7 @@ import { SeedService } from './seed/seed.service';
       username: "surge-user",
       password: 'password',
       database: 'surge',
-      entities: [User, Organization, Role],
+      entities: [User, Organization, Role, Courses],
       synchronize: true,
       migrations: ["src/migration/**/*.ts"],
       
@@ -32,6 +34,7 @@ import { SeedService } from './seed/seed.service';
     UsersModule,
     OrganizationsModule,
     RolesModule,
+    CoursesModule,
     
   ],
   controllers: [AppController],
