@@ -18,7 +18,7 @@ import { SeedService } from './seed/seed.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgre',
       port: 5432,
       username: "surge-user",
       password: 'password',
