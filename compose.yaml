@@ -17,14 +17,14 @@ services:
       context: ./server
       dockerfile: Dockerfile.backend
     depends_on: 
-      - db
+      - postgres
     ports:
       - 3000:3000
     networks:
       - app_network
 
-  db:
-    container_name: db
+  postgres:
+    container_name: postgres
     build: 
       context: .
       dockerfile: Dockerfile.pg
@@ -32,6 +32,11 @@ services:
       - 5432:5432
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "surge", "-U", "surge-user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
  app_network:
