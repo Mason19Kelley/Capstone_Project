@@ -18,7 +18,7 @@ import { SeedService } from './seed/seed.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
+      host: 'postgres',
       port: 5432,
       username: "surge-user",
       password: 'password',
@@ -42,6 +42,7 @@ export class AppModule implements OnApplicationBootstrap  {
   // lifecycle hook on app start
   //currently seeds db
   async onApplicationBootstrap() {
+    console.log("test link")
     await this.seedService.seedDB();
   }
 }
