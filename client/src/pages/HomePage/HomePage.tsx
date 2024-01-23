@@ -6,9 +6,9 @@ import Sider from 'antd/es/layout/Sider'
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
-import LoginPage from '../Login/LoginPage';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
+import Cookies from 'js-cookie';
 
 
 
@@ -61,7 +61,7 @@ const items: MenuProps['items'] = [
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
-  const { user } = useContext(AuthContext)
+  const { setLoggedIn, user, setUser } = useContext(AuthContext)
   const renderPage = () => {
     console.log(user)
     switch (page) {
@@ -72,11 +72,19 @@ function HomePage() {
       case 'Account':
         return <Account />;
       case 'Logout':
+        logOut()
         return null;
       default:
         return null;
     }
   };
+
+  const logOut = () => {
+    Cookies.remove('token')
+    setLoggedIn(false)
+    setUser(null)
+
+  }
 
   const handleMenuClick = ({ key }: { key: string }) => {
     setPage(key);

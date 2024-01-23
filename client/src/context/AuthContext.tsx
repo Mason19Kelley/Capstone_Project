@@ -5,7 +5,7 @@ interface AuthContextProps {
   isLoggedIn: boolean;
   setLoggedIn: (value: boolean) => void; // Simplified the type for setLoggedIn
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
 }
 
 // Providing a default value for the context
