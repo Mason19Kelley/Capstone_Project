@@ -23,7 +23,7 @@ export class AuthController {
         const token = (await this.authService.login(credentials)).access_token;
         let user: User = null;
         user = (await this.userService.findUser(credentials.username))
-        response.cookie('token', token, {sameSite: "none"})
+        response.cookie('token', token)
         return {token: token, user: user}
     }
     // auth testing endpoint
