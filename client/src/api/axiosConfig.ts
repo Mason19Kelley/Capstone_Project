@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosError } from "axios";
 //base instance of api
 
 export const api: AxiosInstance = axios.create({
-  baseURL: "http://host.docker.internal:3000",
+  baseURL: process.env.ENVIRONMENT === 'docker' ? "http://host.docker.internal:3000" : "http://localhost:3000",
   headers: {
         'Authorization': ''
     },

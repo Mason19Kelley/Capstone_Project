@@ -4,6 +4,8 @@ services:
     build: 
       context: ./client
       dockerfile: Dockerfile.frontend
+    environment:
+      ENVIRONMENT: docker
     depends_on: 
       - backend
     ports:

@@ -8,6 +8,7 @@ export const AuthAPI = {
             password: password
           });
         // sets auth token to jwt
+        console.log(process.env.ENVIRONMENT)
         api.defaults.headers['Authorization'] = `Bearer ${data}`;
         return data;
       },
