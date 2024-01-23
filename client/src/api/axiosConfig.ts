@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosError } from "axios";
 //base instance of api
 
 export const api: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://server:3000",
   headers: {
         'Authorization': ''
     },
