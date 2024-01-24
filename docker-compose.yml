@@ -4,8 +4,6 @@ services:
     build: 
       context: ./client
       dockerfile: Dockerfile.frontend
-    environment:
-      VITE_ENVIRONMENT: docker
     depends_on: 
       - backend
     ports:
@@ -19,7 +17,7 @@ services:
       context: ./server
       dockerfile: Dockerfile.backend
     environment:
-      ENVIRONMENT: docker
+      ENVIRONMENT: prod
     depends_on: 
       - postgres
     ports:

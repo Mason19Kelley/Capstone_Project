@@ -23,7 +23,7 @@ import { ConfigService } from '@nestjs/config';
        inject: [ConfigService],
        useFactory: (configService: ConfigService) => ({
          type: 'postgres',
-         host: configService.get<string>('ENVIRONMENT') === 'docker' ? 'postgres' : 'localhost',
+         host: configService.get<string>('ENVIRONMENT') === 'prod' ? 'postgres' : 'localhost',
          port: 5432,
          username: "surge-user",
          password: 'password',

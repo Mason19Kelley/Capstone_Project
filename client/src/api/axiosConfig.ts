@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosError } from "axios";
 //base instance of api
 
 export const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_ENVIRONMENT === 'docker' ? "http://34.125.91.217:5173/api" : "http://localhost:3000",
+  baseURL: import.meta.env.VITE_ENVIRONMENT === 'prod' ? "http://34.125.74.75/api" : "http://localhost:3000",
   headers: {
         'Authorization': ''
     },
