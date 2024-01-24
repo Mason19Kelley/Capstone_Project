@@ -5,7 +5,7 @@ services:
       context: ./client
       dockerfile: Dockerfile.frontend
     environment:
-      ENVIRONMENT: docker
+      VITE_ENVIRONMENT: docker
     depends_on: 
       - backend
     ports:
