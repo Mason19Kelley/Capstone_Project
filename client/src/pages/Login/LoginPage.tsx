@@ -45,12 +45,9 @@ const LoginPage: React.FC = () => {
     console.log("waiting")
     AuthAPI.login(username, password)
       .then((response: LoginResponse) => {
-        console.log(response)
         setLoggedIn(true)
         setUser(response.user)
-        console.log("before home")
         navigate("/home")
-        console.log("after home")
       })
       .catch(error => {
         if (error.response && error.response.status === 401) {

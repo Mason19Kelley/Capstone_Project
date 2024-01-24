@@ -20,7 +20,6 @@ export class AuthController {
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
-        console.log(this.configService.get<string>('ENVIRONMENT'))
         const token = (await this.authService.login(credentials)).access_token;
         let user: User = null;
         user = (await this.userService.findUser(credentials.username))

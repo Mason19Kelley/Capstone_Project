@@ -50,7 +50,6 @@ export class AppModule implements OnApplicationBootstrap  {
   // lifecycle hook on app start
   //currently seeds db
   async onApplicationBootstrap() {
-    console.log("test link")
     await this.seedService.seedDB();
   }
 }
