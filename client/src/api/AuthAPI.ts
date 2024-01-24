@@ -8,8 +8,6 @@ export const AuthAPI = {
             password: password
           });
         // sets auth token to jwt
-        console.log(import.meta.env)
-        console.log(api.defaults.baseURL)
         api.defaults.headers['Authorization'] = `Bearer ${data}`;
         return data;
       },
