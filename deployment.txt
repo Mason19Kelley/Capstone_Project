@@ -4,5 +4,5 @@ steps to deploy
 2. make sure you're on main branch and git pull
 3. create .env in client folder with "VITE_ENVIRONMENT=prod"
 4. run "sudo docker system prune -a"
-5. run "sudo docker compose up"
+5. run "sudo docker compose up --build"
 6. profit
