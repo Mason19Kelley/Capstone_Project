@@ -9,6 +9,7 @@ import Dashboard from '../../components/Dashboard/Dashboard';
 import LoginPage from '../Login/LoginPage';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
+import Courses from '../../components/Courses/Courses';
 
 
 
@@ -62,13 +63,14 @@ const items: MenuProps['items'] = [
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
   const { user } = useContext(AuthContext)
+  const { username } = user || {};
   const renderPage = () => {
     console.log(user)
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;
       case 'Courses':
-        return <div>Courses Page</div>;
+        return <Courses />;
       case 'Account':
         return <Account />;
       case 'Logout':
@@ -99,7 +101,7 @@ function HomePage() {
               <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
               <Typography.Title level={3} style={{ color: 'white' }}>
                 <div className='emName'>
-                  Employee Name
+                  { username }
                 </div>
               </Typography.Title>
             </div>

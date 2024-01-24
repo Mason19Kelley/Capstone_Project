@@ -1,7 +1,8 @@
 
 import { Organization } from '../organizations/organization.entity';
 import { Role } from '../roles/role.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Courses } from '../courses/courses.entity'
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToMany } from 'typeorm';
 // user typeorm entity
 @Entity()
 export class User {
@@ -21,4 +22,8 @@ export class User {
   @OneToOne(() => Role, { eager: true })
   @JoinColumn()
   role: Role;
+
+  @OneToOne(() => Courses, { eager: true })
+  @JoinColumn()
+  courses: Courses;
 }

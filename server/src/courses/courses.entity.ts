@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 
 @Entity('courses')
 export class Courses {
@@ -6,7 +6,7 @@ export class Courses {
   id: number;
 
   @Column()
-  course_name: string;
+  courseName: string;
 
   @Column({ nullable: true })
   instructor: string;
