@@ -7,25 +7,47 @@ import { LoginDto } from './auth.model';
 import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
+import { LoginLog } from '../loginlogs/loginlogs.entity';
+import { LoginLogsService } from '../loginlogs/loginlogs.service';
 
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
 @ApiBearerAuth()
 export class AuthController {
-    constructor(private authService: AuthService, private userService: UsersService) {}
+    constructor(private authService: AuthService, private userService: UsersService, private loginLogsService: LoginLogsService) {}
 
     // basic login endpoints
     @UseGuards(LocalAuthGuard)
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
-        const token = (await this.authService.login(credentials)).access_token;
-        let user: User = null;
-        user = (await this.userService.findUser(credentials.username))
-        response.cookie('token', token)
-        return {token: token, user: user}
+            const token = await this.authService.login(credentials)
+            .then(async (res) => {
+                // res.access_token
+                let user: User = null;
+    
+                await this.handleLoginLog(credentials.username, true);
+                console.log("abc")
+                user = await this.userService.findUser(credentials.username);
+                console.log('there')
+                response.cookie('token', token);
+                console.log("final")
+                return { token, user };
+            })
+            .catch(async (err) => {
+                console.log("here")
+                await this.handleLoginLog(credentials.username, false);
+            });
     }
+    async handleLoginLog(username: string, success: boolean): Promise<void> {
+        const timestamp = new Date().toISOString();
+        const log = new LoginLog();
+        log.user = username;
+        log.Timestamp = timestamp;
+        log.success = success;
+        await this.loginLogsService.insertLog(log);
+      }
     // auth testing endpoint
     // will return username if login works
     @UseGuards(JwtAuthGuard)

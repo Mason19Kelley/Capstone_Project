@@ -15,13 +15,12 @@ export class LoginLogsService {
     }
 
     insertLog(log: LoginLog) {
-        return this.logRepository.insert(log)
+      const logEntity = this.logRepository.create(log)
+      return this.logRepository.insert(logEntity)
     }
 
     // inserts default log into seed
     async seedLoginLogs() {
-
-    
     
         const logsToSeed = [
           { user: 'SuperAdmin', success: true, Timestamp: '2020-04-20 12:00:00' },
