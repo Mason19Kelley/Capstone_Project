@@ -24,7 +24,7 @@ import { LoginlogsModule } from './loginlogs/loginlogs.module';
       username: "surge-user",
       password: 'password',
       database: 'surge',
-      entities: [User, Organization, Role],
+      entities: [User, Organization, Role, LoginLog],
       synchronize: true,
       migrations: ["src/migration/**/*.ts"],
       

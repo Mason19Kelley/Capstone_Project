@@ -10,21 +10,19 @@ export class LoginLogsService {
         private logRepository: Repository<LoginLog>,
       ) {}
     // gets org by id
-    findLog(Timestamp: number) {
+    findLog(Timestamp: string) {
         return this.logRepository.findOneBy({Timestamp: Timestamp})
     }
 
     // inserts default log into seed
     async seedLoginLogs() {
 
-        let log = await this.logRepository.count();
-    
-        if(log > 0) return
     
     
         const logsToSeed = [
-          { user: 'SuperAdmin', success: true, Timestamp: 0},
-          
+          { user: 'SuperAdmin', success: true, Timestamp: '2020-04-20 12:00:00' },
+          { user: 'test', success: true, Timestamp: '2020-04-20 12:00:01' },
+
         ];
     
         const voteEntities = this.logRepository.create(logsToSeed)
@@ -32,4 +30,3 @@ export class LoginLogsService {
         
       }
 }
-export class LoginlogsService {}
