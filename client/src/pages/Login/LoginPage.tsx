@@ -28,9 +28,9 @@ const LoginPage: React.FC = () => {
     const token = Cookies.get("token");
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
-      console.log(response)
+
       setUser(response)
-      setLoggedIn(true)
+      setLoggedIn(true)  
       navigate("/home")
     }).catch(error => 
       console.log(error)
@@ -42,6 +42,7 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("waiting")
     AuthAPI.login(username, password)
       .then((response: LoginResponse) => {
         setLoggedIn(true)
