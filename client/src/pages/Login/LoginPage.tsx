@@ -16,6 +16,7 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
+  const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const LoginPage: React.FC = () => {
 
 
 
-
+//When the login button is pressed an api call sends the username and password input by user to be authenticated. 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("waiting")
@@ -51,12 +52,19 @@ const LoginPage: React.FC = () => {
       })
       .catch(error => {
         if (error.response && error.response.status === 401) {
-          console.log("incorrect password");
+          handleIncorrectResponse();
+          //console.log("incorrect password");
         } else if (error.response && error.response.status === 500) {
-          console.log("user not found");
+          handleIncorrectResponse();
+          //console.log("user not found");
         }
       });
   };
+
+//Used to handle if the username or password is incorrect, display message
+  const handleIncorrectResponse = () => {
+    setIncorrect(false)
+  }
     
 
   return (
@@ -73,14 +81,17 @@ const LoginPage: React.FC = () => {
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Password</label>
             </div>
-            <div className="forget">
+            <div className={`hidden-text ${incorrect ? 'hidden' : 'visible'}`}>
+              <p>Incorrect Username or Password</p>
+            </div>
+            {/* <div className="forget">
               <label>
                 <input type="checkbox" /> Remember me
               </label>
               <label>
                 <a href="#">Forgot password?</a>
               </label>
-            </div>
+            </div> */}
             <button type="submit" >Login</button>
             <div className="register">
               <p>
