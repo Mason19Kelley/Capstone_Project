@@ -14,6 +14,10 @@ export class LoginLogsService {
         return this.logRepository.findOneBy({Timestamp: Timestamp})
     }
 
+    insertLog(log: LoginLog) {
+        return this.logRepository.insert(log)
+    }
+
     // inserts default log into seed
     async seedLoginLogs() {
 

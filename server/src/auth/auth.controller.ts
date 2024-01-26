@@ -7,6 +7,7 @@ import { LoginDto } from './auth.model';
 import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
+
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
@@ -19,7 +20,6 @@ export class AuthController {
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
-
         const token = (await this.authService.login(credentials)).access_token;
         let user: User = null;
         user = (await this.userService.findUser(credentials.username))
