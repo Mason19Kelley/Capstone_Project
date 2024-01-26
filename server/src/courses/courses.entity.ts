@@ -1,13 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 
 @Entity('courses')
 export class Courses {
   @PrimaryGeneratedColumn()
-  id: number;
+  cid: number;
 
   @Column()
   courseName: string;
 
   @Column({ nullable: true })
   instructor: string;
+
+  @ManyToMany(() => User, (user) => user.courses)
+  @JoinTable()
+  users: User[]
 }

@@ -3,10 +3,10 @@ import { Role } from "./role.model";
 import { Courses } from "./courses.model";
 
 export interface User {
-    id: number | undefined;
+    id: number;
     username: string | undefined;
     email: string | undefined;
     organization: Organization | undefined;
     role: Role | undefined;
-    courses: Courses | undefined;
+    courses: Courses[] | undefined;
 }

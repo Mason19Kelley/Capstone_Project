@@ -1,4 +1,3 @@
-
 import { Organization } from '../organizations/organization.entity';
 import { Role } from '../roles/role.entity';
 import { Courses } from '../courses/courses.entity'
@@ -23,7 +22,6 @@ export class User {
   @JoinColumn()
   role: Role;
 
-  @OneToOne(() => Courses, { eager: true })
-  @JoinColumn()
-  courses: Courses;
+  @ManyToMany(() => Courses, (course) => course.users)
+  courses: Courses[];
 }

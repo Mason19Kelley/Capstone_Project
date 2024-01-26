@@ -6,12 +6,14 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { CoursesService } from 'src/courses/courses.service';
 // user business logic class
 @Injectable()
 export class UsersService {
     constructor(
         private orgsService: OrganizationsService,
         private rolesService: RolesService,
+        private courseService: CoursesService,
         @InjectRepository(User)
         private usersRepository: Repository<User>,    
       ) {}
