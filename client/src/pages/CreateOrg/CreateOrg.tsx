@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './CreateOrg.css';
 import { User } from '../../models/user.model'
 import { api } from '../../api/axiosConfig';
+import { CreateOrgAPI } from '../../api/CreateOrgAPI';
 
 
 const CreateOrg: React.FC = () => {
@@ -19,7 +20,13 @@ const CreateOrg: React.FC = () => {
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log(username, password, orgname, adminname, adminemail)
+
+    CreateOrgAPI.createOrg(orgname, adminname, adminemail, username, password)
+    .then(response => {
+      console.log(response)
+    })
+    //console.log(username, password, orgname, adminname, adminemail)
+    
     navigate("/login")
   };
     
@@ -40,14 +47,14 @@ const CreateOrg: React.FC = () => {
             </div>
             <div className="inputbox">
               <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-              <label>Administrator Email</label>
+              <label>Administrator Username</label>
             </div>
             <div className="inputbox">
               <input type="adminemail" required value={adminemail} onChange={(e) => setAdminemail(e.target.value)} />
               <label>Administrator Email</label>
             </div>
             <div className="inputbox">
-              <input type="adminpassword" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Administrator Password</label>
             </div>
             <button type="submit" >Create</button>
