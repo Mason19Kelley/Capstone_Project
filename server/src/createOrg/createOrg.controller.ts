@@ -16,9 +16,10 @@ export class createOrgController {
 
     
     @ApiBody({ type: createOrgDto })
-    @Post('createOrg')
-    async insert(@Res({ passthrough: true }) response: Response, @Body() data: createOrgDto){
-        var temp = await this.createOrgService.insert();
+    @Post('insertOrg')
+    async insertOrg(@Res({ passthrough: true }) response: Response, @Body() data: createOrgDto){
+        
+        var temp = await this.createOrgService.insert(data);
         return temp;
     }
     

@@ -3,13 +3,14 @@ import { api } from "./axiosConfig";
 export const CreateOrgAPI = {
 
     createOrg: async (adminUsername: string, password: string, orgName: string, adminName: string, adminEmail: string) => {
-        const { data } = await api.post("/createOrg/insert", {
-            adminUsername: adminUsername,
+        const { data } = await api.post("/createOrg/insertOrg", {
+            username: adminUsername,
             password: password,
+            email: adminEmail,
             orgName: orgName,
-            adminName: adminName,
-            adminEmail: adminEmail
-          });
-          console.log(data)
+            adminName: adminName
+            }
+        );
+        console.log(data)
     }
 }

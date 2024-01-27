@@ -11,6 +11,7 @@ import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
+import { CreateOrgModule } from './createOrg/createOrg.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -28,6 +29,7 @@ import { SeedService } from './seed/seed.service';
       
     }),
     AuthModule,
+    CreateOrgModule,
     UsersModule,
     OrganizationsModule,
     RolesModule,

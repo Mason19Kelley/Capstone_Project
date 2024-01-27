@@ -6,8 +6,8 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class createOrgService {
    // don't change
-  createOrg() {
-    return("success")
+  insert(data) {
+    return(data)
   }
 
 
