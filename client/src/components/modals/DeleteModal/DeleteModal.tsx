@@ -1,15 +1,20 @@
 
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
+import { AdminAPI } from '../../../api/AdminAPI';
 
 
 
-function DeleteModal(props: { closeDeleteModal: () => void; isModalOpen: boolean | undefined; closeModal: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined; selectedUserId: number | undefined; }) {
+function DeleteModal(props: { closeDeleteModal: () => void; isModalOpen: boolean | undefined; closeModal: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined; selectedUserId: number | undefined; refetchUsers: () => void; }) {
   const [ loading, setLoading ] = useState(false);
 
   const deleteUser = () => {
     setLoading(true)
-    console.log(props.selectedUserId)
+    AdminAPI.deleteUser(props.selectedUserId).then(response => {
+      setLoading(false)
+      props.closeDeleteModal()
+      props.refetchUsers()
+    }).catch(error => console.log(error))
   }
 
   const closeModal = () => {

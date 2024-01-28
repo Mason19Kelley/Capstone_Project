@@ -13,6 +13,14 @@ export const AdminAPI = {
     updateOrgName: async (newOrgName: Organization) => {
         const { data } = await api.post(`/organizations/renameOrg`, newOrgName)
         return data
+    },
+
+    deleteUser: async (userId: number | undefined) => {
+        if(userId === undefined){
+            return
+        }
+        const { data } = await api.delete(`/users/deleteUser/${userId}`)
+        return data
     }
 
 }

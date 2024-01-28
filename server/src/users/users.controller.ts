@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, UseGuards, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
@@ -21,4 +21,12 @@ export class UsersController {
     async getUsersByOrg(@Param('OrgId') orgId: number) {
         return await this.usersService.getUsersByOrg(orgId)
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('deleteUser/:id')
+    async deleteUser(@Param('id') id: number) {
+        return await this.usersService.deleteUser(id)
+    }
+
+    
 }

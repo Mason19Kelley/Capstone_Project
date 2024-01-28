@@ -22,6 +22,7 @@ function Admin() {
 
   const openDeleteModal = (userid: number | undefined) => {
     setSelectedUserId(userid)
+    console.log(userid)
     setIsDeleteModalOpen(true);
   }
 
@@ -49,53 +50,37 @@ function Admin() {
     {
       title: 'Actions',
       key: 'action',
-      render: () => <Dropdown menu={{ items }} placement="bottom">
-                      <Button style={{width: "50%"}}><EllipsisOutlined /></Button>
-                    </Dropdown>
+      render: (user: UserTable) => (
+        <Dropdown menu={{ 
+            items: [
+                {
+                    key: '1',
+                    label: (
+                        <a>
+                            Edit
+                        </a>
+                    ),
+                },
+                {
+                    key: '2',
+                    label: (
+                        <a style={{color: "red"}} onClick={() => openDeleteModal(user.id)}>
+                            Delete
+                        </a>
+                    ),
+                }
+            ]
+        }} placement="bottom">
+          <Button style={{width: "50%"}}><EllipsisOutlined /></Button>
+        </Dropdown>
+     )
     }
-  ]
-  
-  
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: (
-        <a>
-          Edit
-        </a>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <a style={{color: "red"}} onClick={() => openDeleteModal(user?.id)}>
-          Delete
-        </a>
-      ),
-    }
-  ];
 
-  
+  ]
 
 
   useEffect(() => {
-    AdminAPI.getUsersByOrg(user?.organization?.id).then(response => {
-      response.map((user: User) => {
-        let userEntry: UserTable = {
-          id: user.id,
-          role: user.role?.roleName,
-          username: user.username,
-          email: user.email
-        }
-        setUsers(prevUsers => [...prevUsers, userEntry])
-        setAreUsersLoading(false);
-      })
-      console.log(user)
-      console.log(response)
- 
-    }).catch(error => 
-      console.log(error)
-    )
+    fetchUsers()
   }, [])
 
   const handleOrgNameChange = (event: { target: { value: SetStateAction<string | undefined>; }; }) => {
@@ -114,6 +99,30 @@ function Admin() {
     }
     
    }
+
+   const fetchUsers = () => {
+    setAreUsersLoading(true)
+    AdminAPI.getUsersByOrg(user?.organization?.id).then(response => {
+      const usersInTable: UserTable[] = []
+      response.map((User: User) => {
+        if(User.id === user?.id){
+          return
+        }
+        let userEntry: UserTable = {
+          id: User.id,
+          role: User.role?.roleName,
+          username: User.username,
+          email: User.email
+        }
+        usersInTable.push(userEntry)
+        
+      })
+      setUsers(usersInTable)
+      setAreUsersLoading(false);
+    }).catch(error => 
+      console.log(error)
+    )
+   }
   
   return (
    <div className="wrapper">
@@ -124,7 +133,7 @@ function Admin() {
         <p className="org-name">Organization Name</p>
         <Space.Compact style= {{width: "100%"}}>
           <Input defaultValue={orgName} onChange={handleOrgNameChange} style={{ width: "30vw" }}/>
-          <Button style={{ width: "8vw" }} loading={orgSaving} onClick={changeOrgName}>Save</Button>
+          <Button style={{ width: "8vw" }} type="primary" loading={orgSaving} onClick={changeOrgName}>Save</Button>
         </Space.Compact>
         </div>
       </Card>
@@ -133,7 +142,7 @@ function Admin() {
       <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
-      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUserId}></DeleteModal>
+      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUserId} refetchUsers={fetchUsers}></DeleteModal>
    </div>
     
   )
