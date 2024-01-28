@@ -18,8 +18,10 @@ function Admin() {
   const [orgSaving, setOrgSaving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [areUsersLoading, setAreUsersLoading] = useState(true);
+  const [selectedUserId, setSelectedUserId] = useState<number | undefined>();
 
-  const openDeleteModal = () => {
+  const openDeleteModal = (userid: number | undefined) => {
+    setSelectedUserId(userid)
     setIsDeleteModalOpen(true);
   }
 
@@ -66,7 +68,7 @@ function Admin() {
     {
       key: '2',
       label: (
-        <a style={{color: "red"}} onClick={openDeleteModal}>
+        <a style={{color: "red"}} onClick={() => openDeleteModal(user?.id)}>
           Delete
         </a>
       ),
@@ -131,7 +133,7 @@ function Admin() {
       <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
-      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal}></DeleteModal>
+      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUserId}></DeleteModal>
    </div>
     
   )
