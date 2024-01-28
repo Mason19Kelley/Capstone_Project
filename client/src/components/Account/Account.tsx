@@ -1,6 +1,6 @@
 import './Account.css';
 
-import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import { Box, ThemeProvider } from '@mui/system';
 
 function Account() {

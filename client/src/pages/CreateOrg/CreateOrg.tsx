@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './LoginPage.css';
+import './CreateOrg.css';
 import { AuthAPI } from '../../api/AuthAPI';
 import { AuthContext } from '../../context/AuthContext';
 import { User } from '../../models/user.model'
@@ -12,11 +12,14 @@ interface LoginResponse {
   user: User; 
 }
 
-const LoginPage: React.FC = () => {
+const CreateOrg: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [orgname, setOrgname] = useState('');
+  const [adminname, setAdminname] = useState('');
+  const [adminemail, setAdminemail] = useState('');
+  const [adminpassword, setAdminpassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
-  const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,21 +32,17 @@ const LoginPage: React.FC = () => {
     const token = Cookies.get("token");
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
-
+      console.log(response)
       setUser(response)
-      setLoggedIn(true)  
+      setLoggedIn(true)
       navigate("/home")
     }).catch(error => 
       console.log(error)
     )
   }, [])
 
-
-
-//When the login button is pressed an api call sends the username and password input by user to be authenticated. 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("waiting")
     AuthAPI.login(username, password)
       .then((response: LoginResponse) => {
         setLoggedIn(true)
@@ -52,19 +51,12 @@ const LoginPage: React.FC = () => {
       })
       .catch(error => {
         if (error.response && error.response.status === 401) {
-          handleIncorrectResponse();
-          //console.log("incorrect password");
+          console.log("incorrect password");
         } else if (error.response && error.response.status === 500) {
-          handleIncorrectResponse();
-          //console.log("user not found");
+          console.log("user not found");
         }
       });
   };
-
-//Used to handle if the username or password is incorrect, display message
-  const handleIncorrectResponse = () => {
-    setIncorrect(false)
-  }
     
 
   return (
@@ -72,32 +64,24 @@ const LoginPage: React.FC = () => {
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            <h2>Create an Organization</h2>
             <div className="inputbox">
-              <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-              <label>Username</label>
+              <input type="orgname" required value={username} onChange={(e) => setUsername(e.target.value)} />
+              <label>Organization Name</label>
             </div>
             <div className="inputbox">
-              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-              <label>Password</label>
+              <input type="adminname" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <label>Administrator Name</label>
             </div>
-            <div className={`hidden-text ${incorrect ? 'hidden' : 'visible'}`}>
-              <p>Incorrect Username or Password</p>
+            <div className="inputbox">
+              <input type="adminemail" required value={adminemail} onChange={(e) => setAdminemail(e.target.value)} />
+              <label>Administrator Email</label>
             </div>
-            {/* <div className="forget">
-              <label>
-                <input type="checkbox" /> Remember me
-              </label>
-              <label>
-                <a href="#">Forgot password?</a>
-              </label>
-            </div> */}
-            <button type="submit" >Login</button>
-            <div className="register">
-              <p>
-                Don't have an account ? <Link to="/createorg">Register</Link>
-              </p>
+            <div className="inputbox">
+              <input type="adminpassword" required value={adminpassword} onChange={(e) => setAdminpassword(e.target.value)} />
+              <label>Administrator Password</label>
             </div>
+            <button type="submit" >Create</button>
           </form>
         </div>
       </div>
@@ -105,4 +89,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default CreateOrg;
