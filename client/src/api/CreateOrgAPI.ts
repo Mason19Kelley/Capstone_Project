@@ -2,12 +2,12 @@ import { api } from "./axiosConfig";
 
 export const CreateOrgAPI = {
 
-    createOrg: async (adminUsername: string, password: string, email: string, orgName: string, adminName: string) => {
+    createOrg: async (adminUsername: string, password: string, email: string, organization: string, adminName: string) => {
         const { data } = await api.post("/createOrg/insertOrg", {
             username: adminUsername,
             password: password,
             email: email,
-            orgName: orgName,
+            organization: organization,
             adminName: adminName,
             role: "Administrator"
             }

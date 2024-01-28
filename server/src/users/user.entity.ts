@@ -20,10 +20,12 @@ export class User {
   @Column()
   adminName: string;
 
-  @Column()
-  role: string;
+  @OneToOne(() => Role, { eager: true })
+  @JoinColumn()
+  role: Role;
 
-  @Column()
-  orgName: string;
+  @OneToOne(() => Organization, { eager: true })
+  @JoinColumn()
+  organization: Organization;
 
 }

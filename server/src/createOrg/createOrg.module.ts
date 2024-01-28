@@ -3,10 +3,11 @@ import { createOrgService } from "./createOrg.service";
 import { createOrgController } from "./createOrg.controller";
 import { OrganizationsModule } from "../organizations/organizations.module";
 import { UsersModule } from "../users/users.module";
+import { RolesModule } from "../roles/roles.module";
 
 
 @Module({
-    imports: [OrganizationsModule, UsersModule],
+    imports: [OrganizationsModule, UsersModule, RolesModule],
     providers: [createOrgService],
     controllers: [createOrgController],
   })

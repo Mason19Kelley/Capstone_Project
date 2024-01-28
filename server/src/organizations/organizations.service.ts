@@ -14,9 +14,13 @@ export class OrganizationsService {
         return this.orgsRepository.findOneBy({id: id })
     }
 
+    findOrgByName(orgName: string) {
+        return this.orgsRepository.findOneBy({orgName: orgName })
+    }
+
     getOrgsRepository(): Repository<Organization> {
       return this.orgsRepository;
-  }
+    }
 
     async insert(data) {
         const dataEntity = this.orgsRepository.create(data)

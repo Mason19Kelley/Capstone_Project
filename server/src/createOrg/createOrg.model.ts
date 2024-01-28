@@ -10,8 +10,8 @@ export class createOrgDto {
     @ApiProperty({ example: 'example@email.com', description: 'Admin email' })
     email: string;
 
-    @ApiProperty({ example: 'orgName', description: 'Organization name' })
-    orgName: string;
+    @ApiProperty({ example: 'organization', description: 'Organization name' })
+    organization: string;
 
     @ApiProperty({ example: 'adminName', description: 'Admin name' })
     adminName: string;

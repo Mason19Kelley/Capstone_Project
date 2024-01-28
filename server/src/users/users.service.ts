@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+
+
 // user business logic class
 @Injectable()
 export class UsersService {
@@ -24,6 +26,7 @@ export class UsersService {
     return this.usersRepository.findOneBy({id});
   }
 
+  
   async insert(data) {
     const dataEntity = this.usersRepository.create(data)
     await this.usersRepository.insert(dataEntity)
@@ -40,10 +43,10 @@ export class UsersService {
     const hashedPass = await bcrypt.hash("password", 10);
 
     const organization = await this.orgsService.findOrg(1);
-    //const role = await this.rolesService.findRole(1);
+    const role = await this.rolesService.findRole(1);
 
     const usersToSeed = [
-      { username: 'username', password: hashedPass, organization: organization, role: "Administrator", email: "email", adminName: "adminName", orgName: "orgName"}
+      { username: 'username', password: hashedPass, organization: organization, role:role, email: "email", adminName: "adminName", orgName: "orgName"}
     ];
 
     const voteEntities = this.usersRepository.create(usersToSeed)
