@@ -136,3 +136,17 @@
   .register p a:hover {
     text-decoration: underline;
   }
+
+  .hidden-text{
+    display: none;
+    color: red;
+  }
+
+  .visible{
+    display: block;
+    color: red;
+  }
+
+  .hidden {
+    display: none;
+  }

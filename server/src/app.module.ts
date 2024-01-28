@@ -12,32 +12,40 @@ import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
 import { CreateOrgModule } from './createOrg/createOrg.module';
+import { ConfigModule } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: "surge-user",
-      password: 'password',
-      database: 'surge',
-      entities: [User, Organization, Role],
-      synchronize: true,
-      migrations: ["src/migration/**/*.ts"],
-      
-    }),
-    AuthModule,
-    CreateOrgModule,
-    UsersModule,
-    OrganizationsModule,
-    RolesModule,
-    
+     TypeOrmModule.forRootAsync({
+       imports: [ConfigModule],
+       inject: [ConfigService],
+       useFactory: (configService: ConfigService) => ({
+         type: 'postgres',
+         host: configService.get<string>('ENVIRONMENT') === 'prod' ? 'postgres' : 'localhost',
+         port: 5432,
+         username: "surge-user",
+         password: 'password',
+         database: 'surge',
+         entities: [User, Organization, Role],
+         synchronize: true,
+         migrations: ["src/migration/**/*.ts"],
+       }),
+     }),
+     ConfigModule.forRoot({
+       ignoreEnvFile: true,
+       isGlobal: true
+     }),
+     AuthModule,
+     CreateOrgModule,
+     UsersModule,
+     OrganizationsModule,
+     RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeedService],
-})
+ })
 export class AppModule implements OnApplicationBootstrap  {
   constructor(private readonly seedService: SeedService) {}
   // lifecycle hook on app start
