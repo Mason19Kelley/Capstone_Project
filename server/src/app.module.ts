@@ -11,6 +11,7 @@ import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
+import { CreateOrgModule } from './createOrg/createOrg.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 
@@ -37,6 +38,7 @@ import { ConfigService } from '@nestjs/config';
        isGlobal: true
      }),
      AuthModule,
+     CreateOrgModule,
      UsersModule,
      OrganizationsModule,
      RolesModule,

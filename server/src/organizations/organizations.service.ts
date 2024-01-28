@@ -14,6 +14,16 @@ export class OrganizationsService {
         return this.orgsRepository.findOneBy({id: id })
     }
 
+    getOrgsRepository(): Repository<Organization> {
+      return this.orgsRepository;
+  }
+
+    async insert(data) {
+        const dataEntity = this.orgsRepository.create(data)
+        await this.orgsRepository.insert(dataEntity)
+        console.log("inserted org")
+      }
+
     // inserts default organization into seed
     async seedOrganizations() {
 
@@ -23,7 +33,7 @@ export class OrganizationsService {
     
     
         const orgsToSeed = [
-          { orgName: 'Big Pharma'},
+          { orgName: 'Big Pharma', adminName: 'Dr. Evil' },
           
         ];
     
