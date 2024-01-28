@@ -24,6 +24,7 @@ export class OrganizationsService {
     
         const orgsToSeed = [
           { orgName: 'Big Pharma'},
+          { orgName: 'Amazon' }
           
         ];
     

@@ -35,16 +35,24 @@ export class UsersService {
 
     const hashedPass = await bcrypt.hash("password", 10);
 
-    const organization = await this.orgsService.findOrg(1);
-    const role = await this.rolesService.findRole(1);
+    const organization1 = await this.orgsService.findOrg(1);
+    const organization2 = await this.orgsService.findOrg(2);
+
+    const superAdmin = await this.rolesService.findRole(1);
+    const admin = await this.rolesService.findRole(2);
+    const regularRole = await this.rolesService.findRole(3);
 
     const usersToSeed = [
-      { username: 'username', password: hashedPass, organization, role},
-      
+      { username: 'username', password: hashedPass, organization: organization1, role: superAdmin},
+      { username: 'admin', password: hashedPass, organization: organization1, role: admin},
+      { username: 'user', password: hashedPass, organization: organization1, role: regularRole},
+      { username: 'user2', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
-    const voteEntities = this.usersRepository.create(usersToSeed)
-    await this.usersRepository.insert(voteEntities)
+    const newUsers = this.usersRepository.create(usersToSeed);
+    console.log(newUsers)
+    await this.usersRepository.insert(newUsers);
+   
     
   }
 }

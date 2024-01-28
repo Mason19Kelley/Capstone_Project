@@ -1,7 +1,7 @@
 
 import { Organization } from '../organizations/organization.entity';
 import { Role } from '../roles/role.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 // user typeorm entity
 @Entity()
 export class User {
@@ -14,11 +14,11 @@ export class User {
   @Column()
   password: string;
 
-  @OneToOne(() => Organization, { eager: true })
+  @ManyToOne(() => Organization, organization => organization.users, {eager: true})
   @JoinColumn()
   organization: Organization;
 
-  @OneToOne(() => Role, { eager: true })
+  @ManyToOne(() => Role, role => role.users, {eager: true})
   @JoinColumn()
   role: Role;
 }
