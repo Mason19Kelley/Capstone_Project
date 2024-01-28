@@ -16,7 +16,7 @@ export class UsersController {
         return await this.usersService.findUserById(id)
     }
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('getUsersByOrg/:OrgId')
     async getUsersByOrg(@Param('OrgId') orgId: number) {
         return await this.usersService.getUsersByOrg(orgId)

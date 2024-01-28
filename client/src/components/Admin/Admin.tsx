@@ -1,7 +1,8 @@
 
 import { Button, Card, Input, Space, Table, TableProps } from 'antd';
 import './Admin.css'
-import { useContext } from 'react';
+import { AdminAPI } from '../../api/AdminAPI';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 interface DataType {
@@ -36,16 +37,19 @@ const columns: TableProps<DataType>['columns'] = [
 ]
 
 function Admin() {
-  // const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
+  const [users, setUsers] = useState([]);
 
-  let dataSource = [
-    {
-      id: 1,
-      name: "Me",
-      role: "BOSS",
-      email: "ABC@GMAIL.com"
-    }
-  ]
+
+  useEffect(() => {
+    AdminAPI.getUsersByOrg(user?.organization?.id).then(response => {
+      setUsers(response)
+      console.log(response)
+ 
+    }).catch(error => 
+      console.log(error)
+    )
+  }, [])
   
   return (
    <div className="wrapper">
@@ -60,7 +64,7 @@ function Admin() {
         </div>
       </Card>
       <Card title="User Management" className='org-management'>
-        <Table columns={columns} dataSource={dataSource}/>
+        <Table columns={columns} dataSource={users}/>
       </Card>
    </div>
     
