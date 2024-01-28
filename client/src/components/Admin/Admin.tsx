@@ -133,7 +133,7 @@ function Admin() {
         <p className="org-name">Organization Name</p>
         <Space.Compact style= {{width: "100%"}}>
           <Input defaultValue={orgName} onChange={handleOrgNameChange} style={{ width: "30vw" }}/>
-          <Button style={{ width: "8vw" }} type="primary" loading={orgSaving} onClick={changeOrgName}>Save</Button>
+          <Button style={{ width: "8vw" }} type="primary" loading={orgSaving} onClick={changeOrgName} className="rename-button">Save</Button>
         </Space.Compact>
         </div>
       </Card>
