@@ -17,6 +17,7 @@ function Admin() {
   const [ orgName, setOrgName ] = useState(user?.organization?.orgName)
   const [orgSaving, setOrgSaving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [areUsersLoading, setAreUsersLoading] = useState(true);
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
@@ -85,6 +86,7 @@ function Admin() {
           email: user.email
         }
         setUsers(prevUsers => [...prevUsers, userEntry])
+        setAreUsersLoading(false);
       })
       console.log(user)
       console.log(response)
@@ -127,7 +129,7 @@ function Admin() {
       : null
       }
       <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
-        <Table columns={columns} dataSource={users} style={{width: "100%"}}/>
+        <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal}></DeleteModal>
    </div>
