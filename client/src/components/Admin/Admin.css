@@ -36,3 +36,7 @@
 .org-name {
     text-align: left;
 }
+
+.ant-card-body {
+    width: 100%;
+}

@@ -1,51 +1,92 @@
 
-import { Button, Card, Input, Space, Table, TableProps } from 'antd';
+import { Button, Card, Dropdown, Input, MenuProps, Space, Table, TableProps } from 'antd';
 import './Admin.css'
 import { AdminAPI } from '../../api/AdminAPI';
 import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { UserTable } from '../../models/userTable.model';
+import { User } from '../../models/user.model';
+import { EllipsisOutlined } from '@ant-design/icons';
+import DeleteModal from '../modals/DeleteModal/DeleteModal';
 
-interface DataType {
-  id: number;
-  name: string;
-  role: string;
-  email: string;
-}
 
-const columns: TableProps<DataType>['columns'] = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: 'Role',
-    dataIndex: 'role',
-    key: 'role',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Actions',
-    key: 'action',
-    render: () => <p>...</p>
-  }
-]
 
 function Admin() {
   const { user } = useContext(AuthContext)
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([] as UserTable[]);
   const [ orgName, setOrgName ] = useState(user?.organization?.orgName)
   const [orgSaving, setOrgSaving] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  }
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+   };
+
+  const columns: TableProps<UserTable>['columns'] = [
+    {
+      title: 'Name',
+      dataIndex: 'username',
+      key: 'username',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Actions',
+      key: 'action',
+      render: () => <Dropdown menu={{ items }} placement="bottom">
+                      <Button style={{width: "50%"}}><EllipsisOutlined /></Button>
+                    </Dropdown>
+    }
+  ]
+  
+  
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <a>
+          Edit
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a style={{color: "red"}} onClick={openDeleteModal}>
+          Delete
+        </a>
+      ),
+    }
+  ];
+
+  
 
 
   useEffect(() => {
     AdminAPI.getUsersByOrg(user?.organization?.id).then(response => {
-      setUsers(response)
+      response.map((user: User) => {
+        let userEntry: UserTable = {
+          id: user.id,
+          role: user.role?.roleName,
+          username: user.username,
+          email: user.email
+        }
+        setUsers(prevUsers => [...prevUsers, userEntry])
+      })
+      console.log(user)
       console.log(response)
  
     }).catch(error => 
@@ -73,18 +114,22 @@ function Admin() {
   return (
    <div className="wrapper">
       <h1 className="header">Organzation Administration</h1>
+      { user?.role?.roleName === 'Systems Admin' ?
       <Card title="Organization Settings" className='org-management'>
         <div>
         <p className="org-name">Organization Name</p>
-        <Space.Compact>
+        <Space.Compact style= {{width: "100%"}}>
           <Input defaultValue={orgName} onChange={handleOrgNameChange} style={{ width: "30vw" }}/>
           <Button style={{ width: "8vw" }} loading={orgSaving} onClick={changeOrgName}>Save</Button>
         </Space.Compact>
         </div>
       </Card>
+      : null
+      }
       <Card title="User Management" className='org-management'>
-        <Table columns={columns} dataSource={users}/>
+        <Table columns={columns} dataSource={users} style={{width: "100%"}}/>
       </Card>
+      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal}></DeleteModal>
    </div>
     
   )
