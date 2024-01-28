@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CreateOrg.css';
-import { User } from '../../models/user.model'
-import { api } from '../../api/axiosConfig';
 import { CreateOrgAPI } from '../../api/CreateOrgAPI';
 
 
@@ -21,12 +19,11 @@ const CreateOrg: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
 
-    CreateOrgAPI.createOrg(orgname, adminname, adminemail, username, password)
+    CreateOrgAPI.createOrg(username, password, adminemail, orgname, adminname)
     .then(response => {
+      console.log("here")
       console.log(response)
-    })
-    //console.log(username, password, orgname, adminname, adminemail)
-    
+    })    
     navigate("/login")
   };
     
