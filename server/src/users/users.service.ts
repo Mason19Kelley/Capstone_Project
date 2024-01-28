@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
@@ -22,6 +22,9 @@ export class UsersService {
 
   async findUserById(id: number): Promise<User | undefined> {
     return this.usersRepository.findOneBy({id});
+  }
+  async getUsersByOrg(orgId: number): Promise<User[] | undefined>{
+    return this.usersRepository.find({ where: { organization: Equal(orgId) } });
   }
   // inserts a default users into db
   async seedUsers() {
