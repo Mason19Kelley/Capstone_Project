@@ -9,7 +9,4 @@ export class Organization {
   @Column()
   orgName: string;
 
-  @Column()
-  adminName: string;
-
 }
