@@ -23,8 +23,7 @@ export class OrganizationsService {
           throw new Error(`Organization with ID ${orgRename.id} not found.`);
       }
 
-      org.orgName = orgRename.newName;
-
+      org.orgName = orgRename.orgName;
       await this.orgsRepository.save(org);
 
       return true

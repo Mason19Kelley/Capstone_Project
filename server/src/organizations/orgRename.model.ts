@@ -5,5 +5,5 @@ export class OrgRenameDto {
     id: number;
 
     @ApiProperty({ example: 'Amazon', description: 'New Org Name' })
-    newName: string;
+    orgName: string;
 }

@@ -1,5 +1,6 @@
+import { Organization } from "../models/organization.model";
 import { api } from "./axiosConfig";
-// login functions
+
 export const AdminAPI = {
     getUsersByOrg: async (orgId: number | undefined) => {
         if(orgId === undefined){
@@ -7,6 +8,11 @@ export const AdminAPI = {
         }
       const { data } = await api.get(`/users/getUsersByOrg/${orgId}`);
       return data
+    },
+
+    updateOrgName: async (newOrgName: Organization) => {
+        const { data } = await api.post(`/organizations/renameOrg`, newOrgName)
+        return data
     }
 
 }

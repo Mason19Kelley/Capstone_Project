@@ -1,5 +1,5 @@
 export interface Organization {
-    id: number;
+    id: number | undefined;
 
-    orgName: string;
+    orgName: string | undefined;
   }

@@ -2,7 +2,7 @@
 import { Button, Card, Input, Space, Table, TableProps } from 'antd';
 import './Admin.css'
 import { AdminAPI } from '../../api/AdminAPI';
-import { useContext, useEffect, useState } from 'react';
+import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 interface DataType {
@@ -39,6 +39,8 @@ const columns: TableProps<DataType>['columns'] = [
 function Admin() {
   const { user } = useContext(AuthContext)
   const [users, setUsers] = useState([]);
+  const [ orgName, setOrgName ] = useState(user?.organization?.orgName)
+  const [orgSaving, setOrgSaving] = useState(false);
 
 
   useEffect(() => {
@@ -50,6 +52,23 @@ function Admin() {
       console.log(error)
     )
   }, [])
+
+  const handleOrgNameChange = (event: { target: { value: SetStateAction<string | undefined>; }; }) => {
+    setOrgName(event.target.value);
+   };
+
+   const changeOrgName = () => {
+    if(!orgSaving){
+      setOrgSaving(true)
+      AdminAPI.updateOrgName({id: user?.organization?.id, orgName: orgName}).then(response => {
+        console.log(response)
+        setOrgSaving(false)
+      }).catch(error => 
+        console.log(error)
+      )
+    }
+    
+   }
   
   return (
    <div className="wrapper">
@@ -58,8 +77,8 @@ function Admin() {
         <div>
         <p className="org-name">Organization Name</p>
         <Space.Compact>
-          <Input defaultValue="" style={{ width: "30vw" }}/>
-          <Button style={{ width: "8vw" }}>Save</Button>
+          <Input defaultValue={orgName} onChange={handleOrgNameChange} style={{ width: "30vw" }}/>
+          <Button style={{ width: "8vw" }} loading={orgSaving} onClick={changeOrgName}>Save</Button>
         </Space.Compact>
         </div>
       </Card>
