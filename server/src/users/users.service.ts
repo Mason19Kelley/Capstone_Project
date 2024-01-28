@@ -23,6 +23,13 @@ export class UsersService {
   async findUserById(id: number): Promise<User | undefined> {
     return this.usersRepository.findOneBy({id});
   }
+
+  async insert(data) {
+    const dataEntity = this.usersRepository.create(data)
+    await this.usersRepository.insert(dataEntity)
+    console.log("inserted user")
+  }
+
   // inserts a default users into db
   async seedUsers() {
 
