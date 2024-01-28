@@ -6,7 +6,7 @@ import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { UserTable } from '../../models/userTable.model';
 import { User } from '../../models/user.model';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import DeleteModal from '../modals/DeleteModal/DeleteModal';
 
 
@@ -126,7 +126,7 @@ function Admin() {
       </Card>
       : null
       }
-      <Card title="User Management" className='org-management'>
+      <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
         <Table columns={columns} dataSource={users} style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal}></DeleteModal>
