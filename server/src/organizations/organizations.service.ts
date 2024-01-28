@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Organization } from './organization.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { OrgRenameDto } from './orgRename.model';
 // business logic for orgs
 @Injectable()
 export class OrganizationsService {
@@ -28,6 +29,21 @@ export class OrganizationsService {
         console.log("inserted org")
       }
 
+    async renameOrg(orgRename: OrgRenameDto) {
+      let id: number = orgRename.id
+      const org = await this.orgsRepository.findOneBy( { id } );
+
+      if (!org) {
+          throw new Error(`Organization with ID ${orgRename.id} not found.`);
+      }
+
+      org.orgName = orgRename.orgName;
+      await this.orgsRepository.save(org);
+
+      return true
+
+    }
+
     // inserts default organization into seed
     async seedOrganizations() {
 
@@ -38,6 +54,7 @@ export class OrganizationsService {
     
         const orgsToSeed = [
           { orgName: 'Big Pharma', adminName: 'Dr. Evil' },
+          { orgName: 'Amazon' }
           
         ];
     
