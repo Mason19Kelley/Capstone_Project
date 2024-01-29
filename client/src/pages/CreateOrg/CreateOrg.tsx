@@ -1,21 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CreateOrg.css';
-import { AuthAPI } from '../../api/AuthAPI';
-import { AuthContext } from '../../context/AuthContext';
-import { User } from '../../models/user.model'
-import { api } from '../../api/axiosConfig';
-import Cookies from 'js-cookie';
+import { CreateOrgAPI } from '../../api/CreateOrgAPI';
 
-interface LoginResponse {
-  token: string,
-  user: User; 
-}
 
 const CreateOrg: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [orgname, setOrgname] = useState('');
+  const [organization, setOrgname] = useState('');
   const [adminname, setAdminname] = useState('');
   const [adminemail, setAdminemail] = useState('');
   const [adminpassword, setAdminpassword] = useState('');
@@ -42,20 +34,12 @@ const CreateOrg: React.FC = () => {
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    AuthAPI.login(username, password)
-      .then((response: LoginResponse) => {
-        setLoggedIn(true)
-        setUser(response.user)
-        navigate("/home")
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 401) {
-          console.log("incorrect password");
-        } else if (error.response && error.response.status === 500) {
-          console.log("user not found");
-        }
-      });
+    CreateOrgAPI.createOrg(username, password, email, organization, adminname)
+    .then(response => {
+      console.log("here")
+      console.log(response)
+    })    
+    navigate("/login")
   };
     
 
@@ -66,7 +50,7 @@ const CreateOrg: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <h2>Create an Organization</h2>
             <div className="inputbox">
-              <input type="orgname" required value={username} onChange={(e) => setUsername(e.target.value)} />
+              <input type="organization" required value={organization} onChange={(e) => setOrgname(e.target.value)} />
               <label>Organization Name</label>
             </div>
             <div className="inputbox">
