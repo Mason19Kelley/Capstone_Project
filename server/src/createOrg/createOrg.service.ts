@@ -22,7 +22,7 @@ export class createOrgService {
 
 
     const orgsToSeed = [
-        { orgName: data.organization, adminName: data.adminName }
+        { orgName: data.organization }
       ];
     await this.orgsService.insert(orgsToSeed);
 
@@ -30,7 +30,7 @@ export class createOrgService {
     const role = await this.rolesService.findRole(1);
 
     const usersToSeed = [
-      { username: data.username, password: hashedPass, email: data.email, organization: organization, adminName: data.adminName, role: role}
+      { username: data.username, password: hashedPass, email: data.email, organization: organization,  role: role}
     ];
     console.log(usersToSeed)
     await this.usersService.insert(usersToSeed);

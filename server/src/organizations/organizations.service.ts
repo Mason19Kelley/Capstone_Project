@@ -53,8 +53,8 @@ export class OrganizationsService {
     
     
         const orgsToSeed = [
-          { orgName: 'Big Pharma', adminName: 'Dr. Evil' },
-          { orgName: 'Amazon', adminName: 'Bezos' }
+          { orgName: 'Big Pharma' },
+          { orgName: 'Amazon' }
           
         ];
     

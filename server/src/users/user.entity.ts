@@ -17,9 +17,6 @@ export class User {
   @Column()
   email:string;
 
-  @Column()
-  adminName: string;
-
 
   @ManyToOne(() => Role, role => role.users, {eager: true})
   @JoinColumn()

@@ -13,6 +13,4 @@ export class createOrgDto {
     @ApiProperty({ example: 'organization', description: 'Organization name' })
     organization: string;
 
-    @ApiProperty({ example: 'adminName', description: 'Admin name' })
-    adminName: string;
 }

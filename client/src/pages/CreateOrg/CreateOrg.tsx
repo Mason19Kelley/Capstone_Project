@@ -8,7 +8,6 @@ const CreateOrg: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [organization, setOrgname] = useState('');
-  const [adminname, setAdminname] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
@@ -18,7 +17,7 @@ const CreateOrg: React.FC = () => {
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
-    CreateOrgAPI.createOrg(username, password, email, organization, adminname)
+    CreateOrgAPI.createOrg(username, password, email, organization)
     .then(response => {
       console.log("here")
       console.log(response)
@@ -36,10 +35,6 @@ const CreateOrg: React.FC = () => {
             <div className="inputbox">
               <input type="organization" required value={organization} onChange={(e) => setOrgname(e.target.value)} />
               <label>Organization Name</label>
-            </div>
-            <div className="inputbox">
-              <input type="adminname" required value={adminname} onChange={(e) => setAdminname(e.target.value)} />
-              <label>Administrator Name</label>
             </div>
             <div className="inputbox">
               <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
