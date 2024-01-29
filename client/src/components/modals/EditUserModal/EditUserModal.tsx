@@ -6,7 +6,7 @@ import { UserTable } from '../../../models/userTable.model';
 
 
 
-function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; selectedUser: UserTable | undefined }) {
+function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; selectedUser: UserTable | undefined; refetchUsers: () => void; }) {
   const [ loading, setLoading ] = useState(false);
   const [username, setUserName] = useState("")
   const [userId, setUserId] = useState<number | undefined>();
@@ -27,9 +27,18 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
   }
 
   const saveUser = () => {
-    console.log(username)
-    console.log(email)
-    console.log(role)
+    const updatedUser: UserTable = {
+      id: userId,
+      username: username,
+      email: email,
+      role: role
+    }
+    setLoading(true)
+    AdminAPI.updateUser(updatedUser).then(response => {
+      setLoading(false)
+      props.refetchUsers()
+      props.closeModal()
+    })
     props.closeModal()
   }
   

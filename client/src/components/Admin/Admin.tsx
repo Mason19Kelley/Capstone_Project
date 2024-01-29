@@ -155,7 +155,7 @@ function Admin() {
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
-      <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser}></EditUserModal>
+      <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser} refetchUsers={fetchUsers}></EditUserModal>
    </div>
     
   )

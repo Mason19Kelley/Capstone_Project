@@ -1,4 +1,5 @@
 import { Organization } from "../models/organization.model";
+import { UserTable } from "../models/userTable.model";
 import { api } from "./axiosConfig";
 
 export const AdminAPI = {
@@ -23,7 +24,10 @@ export const AdminAPI = {
         return data
     },
 
-    // updateUser: async ()
+    updateUser: async (user: UserTable) => {
+        const { data } = await api.post(`/users/updateUser`, user)
+        return data
+    }
 
 
 }

@@ -48,7 +48,7 @@ export class UsersService {
     user.email = updatedUser.email
     user.role = await this.rolesService.findRoleByName(updatedUser.role)
 
-    console.log(user)
+    this.usersRepository.save(user)
     return true
   }
   
