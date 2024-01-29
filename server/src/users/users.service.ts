@@ -26,14 +26,7 @@ export class UsersService {
     return this.usersRepository.findOneBy({id});
   }
 
-  
-  async insert(data) {
-    const dataEntity = this.usersRepository.create(data)
-    await this.usersRepository.insert(dataEntity)
-    console.log("inserted user")
-  }
-
-  async getUsersByOrg(orgId: number): Promise<User[] | undefined>{
+    async getUsersByOrg(orgId: number): Promise<User[] | undefined>{
     return this.usersRepository.find({ where: { organization: Equal(orgId) } });
   }
 
