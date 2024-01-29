@@ -19,13 +19,12 @@ function Admin() {
   const [orgSaving, setOrgSaving] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [areUsersLoading, setAreUsersLoading] = useState(true);
-  const [selectedUserId, setSelectedUserId] = useState<number | undefined>();
+  const [selectedUser, setSelectedUser] = useState<UserTable | undefined>();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const openDeleteModal = (userid: number | undefined) => {
-    setSelectedUserId(userid)
-    console.log(userid)
+  const openDeleteModal = (user: UserTable | undefined) => {
+    setSelectedUser(user)
     setIsDeleteModalOpen(true);
   }
 
@@ -33,8 +32,9 @@ function Admin() {
     setIsDeleteModalOpen(false);
    };
 
-   const openEditModal = (userid: number | undefined) => {
-    setSelectedUserId(userid)
+   const openEditModal = (user: UserTable | undefined) => {
+    console.log(user)
+    setSelectedUser(user)
     setIsEditModalOpen(true);
   }
 
@@ -68,7 +68,7 @@ function Admin() {
                 {
                     key: '1',
                     label: (
-                        <a onClick={() => openEditModal(user.id)}>
+                        <a onClick={() => openEditModal(user)}>
                             Edit
                         </a>
                     ),
@@ -76,7 +76,7 @@ function Admin() {
                 {
                     key: '2',
                     label: (
-                        <a style={{color: "red"}} onClick={() => openDeleteModal(user.id)}>
+                        <a style={{color: "red"}} onClick={() => openDeleteModal(user)}>
                             Delete
                         </a>
                     ),
@@ -154,8 +154,8 @@ function Admin() {
       <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
-      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUserId} refetchUsers={fetchUsers}></DeleteModal>
-      <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal}></EditUserModal>
+      <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
+      <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser}></EditUserModal>
    </div>
     
   )
