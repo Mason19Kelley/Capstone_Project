@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { RolesService } from '../roles/roles.service';
 import { UsersService } from '../users/users.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { CoursesService } from 'src/courses/courses.service';
 // seed service to store seed business logic
 @Injectable()
 export class SeedService {
     constructor(
         private rolesService: RolesService,
         private usersService: UsersService,
-        private orgsService: OrganizationsService
+        private orgsService: OrganizationsService,
+        private coursesService: CoursesService
       ) {}
 
   // individually calls each service to seed their tables
@@ -17,6 +19,7 @@ export class SeedService {
     await this.rolesService.seedRoles();
     await this.orgsService.seedOrganizations();
     await this.usersService.seedUsers();
+    await this.coursesService.seedCourses();
     
   }
 }

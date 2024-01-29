@@ -13,9 +13,10 @@ export class CoursesController {
 
     constructor(private coursesService: CoursesService) {}
 
-    @UseGuards(JwtAuthGuard)
-    @Get('getCoursesById/:id')
+    //@UseGuards(JwtAuthGuard)
+    @Get('getCourses/:id')
     async getCoursesById(@Param('id') id: number) {
+        console.log(id)
         return await this.coursesService.findCourseById(id)
     }
 }

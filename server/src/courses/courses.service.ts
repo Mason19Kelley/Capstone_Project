@@ -27,8 +27,7 @@ export class CoursesService {
         if(courses > 0) return
 
         const coursesToSeed = [
-            { courseName: 'Default Name'},
-            { instructor: 'Default Teacher'}
+            { courseName: 'Default Name', instructor: 'Default Teacher'}
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)

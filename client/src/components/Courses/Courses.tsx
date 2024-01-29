@@ -3,6 +3,7 @@ import './Courses.css'
 import { Card } from 'antd';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react'
+import { CourseAPI } from '../../api/CourseAPI';
 
 const { Meta } = Card;
 
@@ -31,14 +32,12 @@ function generateCard({courseName, instructor}: CardProps) {
 
 
 const Courses: React.FC = () => {
-  const { user } = useContext(AuthContext)
-  const { courses } = user || {}
-  const { courseName, instructor } = courses || {}
-  const card = generateCard({ courseName,  instructor })
+  const ids = CourseAPI.getCourses(1)
+  console.log(ids)
 
   return (
   <div className='testcard'>
-    { card }
+    
   </div> 
   );
 };
