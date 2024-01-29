@@ -14,11 +14,15 @@ export class User {
   @Column()
   password: string;
 
-  @ManyToOne(() => Organization, organization => organization.users, {eager: true})
-  @JoinColumn()
-  organization: Organization;
+  @Column()
+  email:string;
+
 
   @ManyToOne(() => Role, role => role.users, {eager: true})
   @JoinColumn()
   role: Role;
+
+  @ManyToOne(() => Organization, organization => organization.users, {eager: true})
+  @JoinColumn()
+  organization: Organization;
 }

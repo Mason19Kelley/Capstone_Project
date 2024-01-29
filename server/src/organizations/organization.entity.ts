@@ -9,7 +9,7 @@ export class Organization {
 
   @Column()
   orgName: string;
-
+  
   @OneToMany(() => User, user => user.organization)
   users: User[];
 

@@ -6,6 +6,8 @@ import { DeleteResult, Equal, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+
+
 // user business logic class
 @Injectable()
 export class UsersService {
@@ -23,13 +25,21 @@ export class UsersService {
   async findUserById(id: number): Promise<User | undefined> {
     return this.usersRepository.findOneBy({id});
   }
-  async getUsersByOrg(orgId: number): Promise<User[] | undefined>{
+
+    async getUsersByOrg(orgId: number): Promise<User[] | undefined>{
     return this.usersRepository.find({ where: { organization: Equal(orgId) } });
   }
 
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
   }
+
+  async insert(data) {
+    const dataEntity = this.usersRepository.create(data)
+    await this.usersRepository.insert(dataEntity)
+    console.log("inserted user")
+  }
+  
   // inserts a default users into db
   async seedUsers() {
 
@@ -47,12 +57,14 @@ export class UsersService {
     const regularRole = await this.rolesService.findRole(3);
 
     const usersToSeed = [
-      { username: 'username', password: hashedPass, organization: organization1, role: superAdmin},
-      { username: 'admin', password: hashedPass, organization: organization1, role: admin},
-      { username: 'user', password: hashedPass, organization: organization1, role: regularRole},
-      { username: 'user2', password: hashedPass, organization: organization2, role: regularRole}
+      //{ username: 'username', password: hashedPass, organization: organization, role:role, email: "email", orgName: "orgName"}
+      { username: 'username', email: 'mkk020@latech.edu', password: hashedPass, organization: organization1, role: superAdmin},
+      { username: 'admin', email: 'mkk020+a@latech.edu', password: hashedPass, organization: organization1, role: admin},
+      { username: 'user', email: 'mkk020+b@latech.edu', password: hashedPass, organization: organization1, role: regularRole},
+      { username: 'user2', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
+    
     const newUsers = this.usersRepository.create(usersToSeed);
     console.log(newUsers)
     await this.usersRepository.insert(newUsers);

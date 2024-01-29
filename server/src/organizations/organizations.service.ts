@@ -15,6 +15,20 @@ export class OrganizationsService {
         return this.orgsRepository.findOneBy({id: id })
     }
 
+    findOrgByName(orgName: string) {
+        return this.orgsRepository.findOneBy({orgName: orgName })
+    }
+
+    getOrgsRepository(): Repository<Organization> {
+      return this.orgsRepository;
+    }
+
+    async insert(data) {
+        const dataEntity = this.orgsRepository.create(data)
+        await this.orgsRepository.insert(dataEntity)
+        console.log("inserted org")
+      }
+
     async renameOrg(orgRename: OrgRenameDto) {
       let id: number = orgRename.id
       const org = await this.orgsRepository.findOneBy( { id } );
@@ -39,7 +53,7 @@ export class OrganizationsService {
     
     
         const orgsToSeed = [
-          { orgName: 'Big Pharma'},
+          { orgName: 'Big Pharma' },
           { orgName: 'Amazon' }
           
         ];
