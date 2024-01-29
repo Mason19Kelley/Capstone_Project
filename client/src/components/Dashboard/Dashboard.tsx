@@ -2,7 +2,6 @@
 import './Dashboard.css'
 import { Card, ConfigProvider, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { AlignLeftOutlined, BoxPlotFilled } from '@ant-design/icons';
 import { Box, ThemeProvider } from '@mui/system';
 
 const cards: string[] = [

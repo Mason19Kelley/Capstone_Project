@@ -1,0 +1,45 @@
+services:
+  frontend:
+    container_name: frontend
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.frontend
+    depends_on: 
+      - backend
+    ports:
+      - 5173:80
+    networks:
+      - app_network
+
+  backend:
+    container_name: server
+    build: 
+      context: ./server
+      dockerfile: Dockerfile.backend
+    environment:
+      ENVIRONMENT: prod
+    depends_on: 
+      - postgres
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+
+  postgres:
+    container_name: postgres
+    build: 
+      context: .
+      dockerfile: Dockerfile.pg
+    ports:
+      - 5432:5432
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "surge", "-U", "surge-user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+ app_network:
+    driver: bridge
