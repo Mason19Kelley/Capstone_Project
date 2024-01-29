@@ -21,6 +21,9 @@ export const AdminAPI = {
         }
         const { data } = await api.delete(`/users/deleteUser/${userId}`)
         return data
-    }
+    },
+
+    // updateUser: async ()
+
 
 }

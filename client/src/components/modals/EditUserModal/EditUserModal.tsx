@@ -9,12 +9,14 @@ import { UserTable } from '../../../models/userTable.model';
 function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; selectedUser: UserTable | undefined }) {
   const [ loading, setLoading ] = useState(false);
   const [username, setUserName] = useState("")
+  const [userId, setUserId] = useState<number | undefined>();
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
 
   useEffect(() => {
     if (props.isModalOpen) {
       setUserName(props.selectedUser?.username || "");
+      setUserId(props.selectedUser?.id)
       setEmail(props.selectedUser?.email || "");
       setRole(props.selectedUser?.role || "");
     }

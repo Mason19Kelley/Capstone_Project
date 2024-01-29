@@ -6,6 +6,7 @@ import { DeleteResult, Equal, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { UpdateUser } from './UpdateUser.model';
 
 
 // user business logic class
@@ -38,6 +39,17 @@ export class UsersService {
     const dataEntity = this.usersRepository.create(data)
     await this.usersRepository.insert(dataEntity)
     console.log("inserted user")
+  }
+
+  async updateUser(updatedUser: UpdateUser){
+    let user = await this.findUserById(updatedUser.id)
+
+    user.username = updatedUser.username
+    user.email = updatedUser.email
+    user.role = await this.rolesService.findRoleByName(updatedUser.role)
+
+    console.log(user)
+    return true
   }
   
   // inserts a default users into db
