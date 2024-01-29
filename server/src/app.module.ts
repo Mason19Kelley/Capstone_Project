@@ -13,6 +13,7 @@ import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
+import { CreateOrgModule } from './createOrg/createOrg.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -40,6 +41,7 @@ import { ConfigService } from '@nestjs/config';
      UsersModule,
      OrganizationsModule,
      RolesModule,
+     CreateOrgModule
   ],
   controllers: [AppController],
   providers: [AppService, SeedService],
