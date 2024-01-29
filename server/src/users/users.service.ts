@@ -33,6 +33,13 @@ export class UsersService {
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
   }
+
+  async insert(data) {
+    const dataEntity = this.usersRepository.create(data)
+    await this.usersRepository.insert(dataEntity)
+    console.log("inserted user")
+  }
+  
   // inserts a default users into db
   async seedUsers() {
 
