@@ -8,6 +8,7 @@ import { UserTable } from '../../models/userTable.model';
 import { User } from '../../models/user.model';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import DeleteModal from '../modals/DeleteModal/DeleteModal';
+import EditUserModal from '../modals/EditUserModal/EditUserModal';
 
 
 
@@ -20,6 +21,8 @@ function Admin() {
   const [areUsersLoading, setAreUsersLoading] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState<number | undefined>();
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const openDeleteModal = (userid: number | undefined) => {
     setSelectedUserId(userid)
     console.log(userid)
@@ -28,6 +31,15 @@ function Admin() {
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
+   };
+
+   const openEditModal = (userid: number | undefined) => {
+    setSelectedUserId(userid)
+    setIsEditModalOpen(true);
+  }
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
    };
 
   const columns: TableProps<UserTable>['columns'] = [
@@ -56,7 +68,7 @@ function Admin() {
                 {
                     key: '1',
                     label: (
-                        <a>
+                        <a onClick={() => openEditModal(user.id)}>
                             Edit
                         </a>
                     ),
@@ -143,6 +155,7 @@ function Admin() {
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUserId} refetchUsers={fetchUsers}></DeleteModal>
+      <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal}></EditUserModal>
    </div>
     
   )
