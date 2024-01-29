@@ -12,8 +12,8 @@ export class AuthService {
 
     // validates user login
     // used by auth guard
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findUser(username);
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findUser(email);
     const hashedPassMatches = await bcrypt.compare(pass, user.password);
     if (user && hashedPassMatches) {
       const { password, ...result } = user;
@@ -23,7 +23,7 @@ export class AuthService {
   }
   // generates auth token in login endpoint
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    const payload = { username: user.email, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
     };

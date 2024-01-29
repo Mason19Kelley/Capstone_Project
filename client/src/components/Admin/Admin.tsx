@@ -45,8 +45,8 @@ function Admin() {
   const columns: TableProps<UserTable>['columns'] = [
     {
       title: 'Name',
-      dataIndex: 'username',
-      key: 'username',
+      dataIndex: 'fullName',
+      key: 'fullName',
       render: (text) => <a>{text}</a>,
     },
     {
@@ -123,7 +123,7 @@ function Admin() {
         let userEntry: UserTable = {
           id: User.id,
           role: User.role?.roleName,
-          username: User.username,
+          fullName: User.fullName,
           email: User.email
         }
         usersInTable.push(userEntry)

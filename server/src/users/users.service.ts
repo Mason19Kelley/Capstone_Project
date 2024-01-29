@@ -19,8 +19,8 @@ export class UsersService {
         private usersRepository: Repository<User>,    
       ) {}
   // finds user by username
-  async findUser(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOneBy({username})
+  async findUser(email: string): Promise<User | undefined> {
+    return this.usersRepository.findOneBy({email})
   }
 
   async findUserById(id: number): Promise<User | undefined> {
@@ -44,7 +44,7 @@ export class UsersService {
   async updateUser(updatedUser: UpdateUser){
     let user = await this.findUserById(updatedUser.id)
 
-    user.username = updatedUser.username
+    user.fullName = updatedUser.fullName
     user.email = updatedUser.email
     user.role = await this.rolesService.findRoleByName(updatedUser.role)
 
@@ -70,10 +70,10 @@ export class UsersService {
 
     const usersToSeed = [
       //{ username: 'username', password: hashedPass, organization: organization, role:role, email: "email", orgName: "orgName"}
-      { username: 'username', email: 'mkk020@latech.edu', password: hashedPass, organization: organization1, role: superAdmin},
-      { username: 'admin', email: 'mkk020+a@latech.edu', password: hashedPass, organization: organization1, role: admin},
-      { username: 'user', email: 'mkk020+b@latech.edu', password: hashedPass, organization: organization1, role: regularRole},
-      { username: 'user2', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
+      { fullName: 'John Smith', email: 'mkk020@latech.edu', password: hashedPass, organization: organization1, role: superAdmin},
+      { fullName: 'Martha Johnson', email: 'mkk020+a@latech.edu', password: hashedPass, organization: organization1, role: admin},
+      { fullName: 'Mason Kelley', email: 'mkk020+b@latech.edu', password: hashedPass, organization: organization1, role: regularRole},
+      { fullName: 'Jacob Roberts', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
     

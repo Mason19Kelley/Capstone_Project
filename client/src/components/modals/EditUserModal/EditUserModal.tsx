@@ -8,14 +8,14 @@ import { UserTable } from '../../../models/userTable.model';
 
 function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; selectedUser: UserTable | undefined; refetchUsers: () => void; }) {
   const [ loading, setLoading ] = useState(false);
-  const [username, setUserName] = useState("")
+  const [fullName, setFullName] = useState("")
   const [userId, setUserId] = useState<number | undefined>();
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
 
   useEffect(() => {
     if (props.isModalOpen) {
-      setUserName(props.selectedUser?.username || "");
+      setFullName(props.selectedUser?.fullName || "");
       setUserId(props.selectedUser?.id)
       setEmail(props.selectedUser?.email || "");
       setRole(props.selectedUser?.role || "");
@@ -29,7 +29,7 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
   const saveUser = () => {
     const updatedUser: UserTable = {
       id: userId,
-      username: username,
+      fullName: fullName,
       email: email,
       role: role
     }
@@ -55,8 +55,8 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
       </div>
     ]}>
         <div>
-            <p>Username</p>
-            <Input value={username} onChange={e => setUserName(e.target.value)}/>
+            <p>Full Name</p>
+            <Input value={fullName} onChange={e => setFullName(e.target.value)}/>
         </div>
         <div>
             <p>Email</p>

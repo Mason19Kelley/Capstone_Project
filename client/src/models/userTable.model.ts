@@ -2,7 +2,7 @@
 
 export interface UserTable {
     id: number | undefined;
-    username: string | undefined;
+    fullName: string | undefined;
     email: string | undefined;
     role: string | undefined;
 }
