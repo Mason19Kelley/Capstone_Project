@@ -9,6 +9,7 @@ import { User } from '../../models/user.model';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import DeleteModal from '../modals/DeleteModal/DeleteModal';
 import EditUserModal from '../modals/EditUserModal/EditUserModal';
+import CreateUserModal from '../modals/CreateUserModal/CreateUserModal';
 
 
 
@@ -22,6 +23,7 @@ function Admin() {
   const [selectedUser, setSelectedUser] = useState<UserTable | undefined>();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const openDeleteModal = (user: UserTable | undefined) => {
     setSelectedUser(user)
@@ -40,6 +42,14 @@ function Admin() {
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
+   };
+
+   const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  }
+
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
    };
 
   const columns: TableProps<UserTable>['columns'] = [
@@ -151,11 +161,12 @@ function Admin() {
       </Card>
       : null
       }
-      <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />}></Button>}>
+      <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />} onClick={openCreateModal}></Button>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
       <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser} refetchUsers={fetchUsers}></EditUserModal>
+      <CreateUserModal isModalOpen={isCreateModalOpen} closeModal={closeCreateModal} refetchUsers={fetchUsers}/>
    </div>
     
   )
