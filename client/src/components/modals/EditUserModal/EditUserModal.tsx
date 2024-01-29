@@ -41,6 +41,14 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
     })
     props.closeModal()
   }
+
+  function isValidEmail() {
+    return /\S+@\S+\.\S+/.test(email);
+   }
+
+   const canSubmit = () => {
+    return isValidEmail() && fullName.length > 0 && role.length > 0
+   }
   
   return (
     <Modal title="Edit User" open={props.isModalOpen} onCancel={props.closeModal}
@@ -49,7 +57,7 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
         <Button key="back" onClick={closeModal}>
           Cancel
         </Button>
-        <Button key="submit" className="save-button" loading={loading} onClick={saveUser}>
+        <Button key="submit" className="save-button" loading={loading} onClick={saveUser} disabled={!canSubmit()}>
           Save
         </Button>
       </div>
@@ -61,6 +69,7 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
         <div>
             <p>Email</p>
             <Input value={email} onChange={e => setEmail(e.target.value)}/>
+            {!isValidEmail() && email.length > 0 ? <p style={{color: "red"}}>You must submit a valid email</p> : <></>}
         </div>
         <div>
             <p>Role</p>
