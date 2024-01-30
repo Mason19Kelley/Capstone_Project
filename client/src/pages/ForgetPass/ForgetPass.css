@@ -24,6 +24,7 @@
     border-radius: 20px;
     backdrop-filter: blur(15px);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
@@ -136,3 +137,17 @@
   .register p a:hover {
     text-decoration: underline;
   }
+
+  .align-top-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+   }
+
+.link {
+  display: flex; 
+  justify-content: start;
+  align-items: start; 
+  width: 100%;
+  margin-left: 10%;
+}

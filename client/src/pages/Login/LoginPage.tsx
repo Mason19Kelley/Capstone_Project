@@ -82,14 +82,15 @@ const LoginPage: React.FC = () => {
             <div className={`hidden-text ${incorrect ? 'hidden' : 'visible'}`}>
               <p>Incorrect Username or Password</p>
             </div>
-            {/* <div className="forget">
-              <label>
+            <div className="forget">
+              {/* <label>
                 <input type="checkbox" /> Remember me
-              </label>
+              </label> */}
+              <div></div>
               <label>
-                <a href="#">Forgot password?</a>
+                <a href="/forget">Forgot password?</a>
               </label>
-            </div> */}
+            </div>
             <button type="submit" >Login</button>
             <div className="register">
               <p>
