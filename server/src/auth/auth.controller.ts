@@ -20,9 +20,11 @@ export class AuthController {
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
+        console.log(credentials)
         const token = (await this.authService.login(credentials)).access_token;
+        console.log(token)
         let user: User = null;
-        user = (await this.userService.findUser(credentials.username))
+        user = (await this.userService.findUser(credentials.email))
         response.cookie('token', token)
         return {token: token, user: user}
     }
@@ -31,8 +33,8 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @Get('profile')
     async getProfile(@Request() req) {
-        const userName = req.user.username;
-        const user = await this.userService.findUser(userName);
+        const email = req.user.email;
+        const user = await this.userService.findUser(email);
         return user
     }
 }

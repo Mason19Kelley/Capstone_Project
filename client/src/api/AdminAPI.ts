@@ -1,4 +1,5 @@
 import { Organization } from "../models/organization.model";
+import { UserTable } from "../models/userTable.model";
 import { api } from "./axiosConfig";
 
 export const AdminAPI = {
@@ -21,6 +22,12 @@ export const AdminAPI = {
         }
         const { data } = await api.delete(`/users/deleteUser/${userId}`)
         return data
+    },
+
+    updateUser: async (user: UserTable) => {
+        const { data } = await api.post(`/users/updateUser`, user)
+        return data
     }
+
 
 }

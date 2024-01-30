@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 // login type validation
 export class createOrgDto {
-    @ApiProperty({ example: 'username', description: 'Admin username' })
-    username: string;
+    @ApiProperty({ example: 'John Smith', description: 'Admin name' })
+    fullName: string;
 
     @ApiProperty({ example: 'password', description: 'Admin password' })
     password: string;

@@ -6,6 +6,7 @@ import { DeleteResult, Equal, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { UpdateUser } from './UpdateUser.model';
 
 
 // user business logic class
@@ -18,8 +19,8 @@ export class UsersService {
         private usersRepository: Repository<User>,    
       ) {}
   // finds user by username
-  async findUser(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOneBy({username})
+  async findUser(email: string): Promise<User | undefined> {
+    return this.usersRepository.findOneBy({email})
   }
 
   async findUserById(id: number): Promise<User | undefined> {
@@ -38,6 +39,17 @@ export class UsersService {
     const dataEntity = this.usersRepository.create(data)
     await this.usersRepository.insert(dataEntity)
     console.log("inserted user")
+  }
+
+  async updateUser(updatedUser: UpdateUser){
+    let user = await this.findUserById(updatedUser.id)
+
+    user.fullName = updatedUser.fullName
+    user.email = updatedUser.email
+    user.role = await this.rolesService.findRoleByName(updatedUser.role)
+
+    this.usersRepository.save(user)
+    return true
   }
   
   // inserts a default users into db
@@ -58,10 +70,10 @@ export class UsersService {
 
     const usersToSeed = [
       //{ username: 'username', password: hashedPass, organization: organization, role:role, email: "email", orgName: "orgName"}
-      { username: 'username', email: 'mkk020@latech.edu', password: hashedPass, organization: organization1, role: superAdmin},
-      { username: 'admin', email: 'mkk020+a@latech.edu', password: hashedPass, organization: organization1, role: admin},
-      { username: 'user', email: 'mkk020+b@latech.edu', password: hashedPass, organization: organization1, role: regularRole},
-      { username: 'user2', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
+      { fullName: 'John Smith', email: 'mkk020@latech.edu', password: hashedPass, organization: organization1, role: superAdmin},
+      { fullName: 'Martha Johnson', email: 'mkk020+a@latech.edu', password: hashedPass, organization: organization1, role: admin},
+      { fullName: 'Mason Kelley', email: 'mkk020+b@latech.edu', password: hashedPass, organization: organization1, role: regularRole},
+      { fullName: 'Jacob Roberts', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
     

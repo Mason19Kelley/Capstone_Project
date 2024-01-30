@@ -13,7 +13,7 @@ interface LoginResponse {
 }
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
@@ -29,7 +29,6 @@ const LoginPage: React.FC = () => {
     const token = Cookies.get("token");
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
-
       setUser(response)
       setLoggedIn(true)  
       navigate("/home")
@@ -43,8 +42,7 @@ const LoginPage: React.FC = () => {
 //When the login button is pressed an api call sends the username and password input by user to be authenticated. 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("waiting")
-    AuthAPI.login(username, password)
+    AuthAPI.login(email, password)
       .then((response: LoginResponse) => {
         setLoggedIn(true)
         setUser(response.user)
@@ -74,8 +72,8 @@ const LoginPage: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <h2>Login</h2>
             <div className="inputbox">
-              <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-              <label>Username</label>
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <label>Email</label>
             </div>
             <div className="inputbox">
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
