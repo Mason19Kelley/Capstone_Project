@@ -5,14 +5,9 @@ import { CreateOrgAPI } from '../../api/CreateOrgAPI';
 
 
 const ForgetPass: React.FC = () => {
-  //Didn't know what you might need, so left them commented out
   //Basic page that prompts user to enter email and then 
-  //routes them to login. Can be changed when we know where we 
-  //want to send the user and if more pages need to be created.
+  //routes them to login.
 
-  //const [username, setUsername] = useState('');
-  //const [password, setPassword] = useState('');
-  //const [organization, setOrgname] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
@@ -21,12 +16,7 @@ const ForgetPass: React.FC = () => {
     
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    //CreateOrgAPI.createOrg(username, password, email, organization)
-    //.then(response => {
-    //  console.log("here")
-    //  console.log(response)
-    //})    
+  const handleSubmit = (e: React.FormEvent) => {  
     navigate("/login")
   };
     
