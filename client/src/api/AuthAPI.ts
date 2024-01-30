@@ -25,5 +25,17 @@ export const AuthAPI = {
     requestPasswordReset: async (email: string) => {
       const { data } = await api.post("/auth/requestResetPassword", { email })
       return data
+    },
+
+    resetPassword: async(userId: string | null, token: string | null, password: string) => {
+      if(userId === null || token === null){
+        return
+      }
+      const { data } = await api.post("/auth/resetPassword", { 
+        token: token,
+        userId: userId,
+        password: password
+       })
+      return data
     }
 }

@@ -20,9 +20,7 @@ export class UsersService {
       ) {}
   // finds user by username
   async findUser(email: string): Promise<User | undefined> {
-    console.log(email)
     const user = this.usersRepository.findOneBy({email})
-    console.log(user)
     return user
   }
 

@@ -18,7 +18,6 @@ export class createOrgService {
 
     const hashedPass = await bcrypt.hash(data.password, 10);
 
-    console.log("inserting")
 
 
     const orgsToSeed = [
@@ -32,7 +31,7 @@ export class createOrgService {
     const usersToSeed = [
       { fullName: data.fullName, password: hashedPass, email: data.email, organization: organization,  role: role}
     ];
-    console.log(usersToSeed)
+
     await this.usersService.insert(usersToSeed);
   }
 

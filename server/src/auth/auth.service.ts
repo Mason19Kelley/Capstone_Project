@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { PostmarkService } from 'src/postmark/postmark.service';
 import { Mail } from 'src/postmark/mail.model'
+import * as dayjs from 'dayjs'
 // auth business logic service
 @Injectable()
 export class AuthService {
@@ -35,7 +36,6 @@ export class AuthService {
 
   async requestResetPassword(email: string) {
     const user = await this.usersService.findUser(email);
-    console.log(user)
     if (!user) {
       return
     }
@@ -50,7 +50,6 @@ export class AuthService {
     try {
       await this.usersService.saveUserEntity(user);
       const link = `${process.env.CLIENT_URL}/passwordReset?token=${resetToken}&userId=${user.id}`;
-      console.log(link)
       // create email template for sendgrid client
       const mail: Mail = {
         From: "mkk020@latech.edu", 
@@ -64,7 +63,6 @@ export class AuthService {
         `,
         MessageStream: "reset-password"
       };
-      console.log(mail)
       // call sendgridClient after user email validation.
       await this.emailService.sendEmail(mail);
       return link;
@@ -73,6 +71,37 @@ export class AuthService {
     }
   }
 
+  async resetPassword(userId: number, token: string, password: string) {
+    const bcryptSalt = 10;
+    try {
+      const user = await this.usersService.findUserById(userId);
+      if (!user.resetPasswordToken) {
+        return
+      }
+      // compare token received by server with database
+      const isValid = await bcrypt.compare(token, user.resetPasswordToken);
+      if (!isValid) {
+        return
+      }
+      // If the token creation exceeds a 5-minute threshold, the request will be invalid.
+      const tokenCreatedAt = user.resetPasswordExpires;
+      const getTimeLapse = dayjs().diff(dayjs(tokenCreatedAt), "day");
+      if (getTimeLapse > 1) {
+        return
+      }
+      // updating the new password.
+      const hashNewPassword = await bcrypt.hash(password, Number(bcryptSalt));
+      user.password = hashNewPassword;
+      user.resetPasswordToken = null;
+      user.resetPasswordExpires = null;
+      await this.usersService.saveUserEntity(user);
+
+      return { success: true, message: "Password Updated Successfully" };
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
   
 
-}
