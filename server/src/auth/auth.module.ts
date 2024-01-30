@@ -7,9 +7,10 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { PostmarkModule } from 'src/postmark/postmark.module';
 
 @Module({
-  imports: [UsersModule, PassportModule,
+  imports: [UsersModule, PassportModule, PostmarkModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '3600s' },

@@ -37,4 +37,9 @@ export class AuthController {
         const user = await this.userService.findUser(email);
         return user
     }
+
+    @Post('requestResetPassword')
+    async requestResetPassword(@Body('email') email: string){
+        this.authService.requestResetPassword(email)
+    }
 }

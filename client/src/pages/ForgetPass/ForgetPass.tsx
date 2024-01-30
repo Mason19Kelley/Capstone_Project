@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ForgetPass.css';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-
+import { AuthAPI } from '../../api/AuthAPI';
 
 const ForgetPass: React.FC = () => {
   //Basic page that prompts user to enter email and then 
@@ -12,11 +12,11 @@ const ForgetPass: React.FC = () => {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    
-  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {  
+    AuthAPI.requestPasswordReset(email).then(response => {
+      console.log(response)
+    }).catch(error => console.log(error))
     navigate("/login")
   };
     

@@ -20,7 +20,10 @@ export class UsersService {
       ) {}
   // finds user by username
   async findUser(email: string): Promise<User | undefined> {
-    return this.usersRepository.findOneBy({email})
+    console.log(email)
+    const user = this.usersRepository.findOneBy({email})
+    console.log(user)
+    return user
   }
 
   async findUserById(id: number): Promise<User | undefined> {
@@ -39,6 +42,10 @@ export class UsersService {
     const dataEntity = this.usersRepository.create(data)
     await this.usersRepository.insert(dataEntity)
     console.log("inserted user")
+  }
+
+  async saveUserEntity(user: User){
+    await this.usersRepository.save(user)
   }
 
   async updateUser(updatedUser: UpdateUser){

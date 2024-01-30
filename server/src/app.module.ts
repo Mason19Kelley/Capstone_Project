@@ -14,6 +14,8 @@ import { SeedService } from './seed/seed.service';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { CreateOrgModule } from './createOrg/createOrg.module';
+import { PostmarkService } from './postmark/postmark.service';
+import { PostmarkModule } from './postmark/postmark.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -34,17 +36,18 @@ import { CreateOrgModule } from './createOrg/createOrg.module';
        }),
      }),
      ConfigModule.forRoot({
-       ignoreEnvFile: true,
+       ignoreEnvFile: false,
        isGlobal: true
      }),
      AuthModule,
      UsersModule,
      OrganizationsModule,
      RolesModule,
-     CreateOrgModule
+     CreateOrgModule,
+     PostmarkModule
   ],
   controllers: [AppController],
-  providers: [AppService, SeedService],
+  providers: [AppService, SeedService, PostmarkService],
  })
 export class AppModule implements OnApplicationBootstrap  {
   constructor(private readonly seedService: SeedService) {}

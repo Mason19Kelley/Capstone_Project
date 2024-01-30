@@ -20,5 +20,10 @@ export const AuthAPI = {
     getUser: async (id: number) => {
       const { data } = await api.get(`/users/getUser/${id}`)
       return data
+    },
+
+    requestPasswordReset: async (email: string) => {
+      const { data } = await api.post("/auth/requestResetPassword", { email })
+      return data
     }
 }
