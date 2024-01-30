@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CreateOrg.css';
 import { CreateOrgAPI } from '../../api/CreateOrgAPI';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 
 const CreateOrg: React.FC = () => {
@@ -29,6 +30,7 @@ const CreateOrg: React.FC = () => {
   return (
     <section>
       <div className="org-box">
+      <div className='back-link'><Link to={'/login'}><ArrowLeftOutlined /></Link></div>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
             <h2>Create an Organization</h2>

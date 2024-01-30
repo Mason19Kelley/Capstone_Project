@@ -136,3 +136,11 @@
   .register p a:hover {
     text-decoration: underline;
   }
+
+  .back-link {
+    display: flex; 
+    justify-content: start;
+    align-items: start; 
+    width: 100%;
+    margin-left: 1%;
+  }

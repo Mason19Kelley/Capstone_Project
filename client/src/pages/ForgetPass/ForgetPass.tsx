@@ -24,7 +24,7 @@ const ForgetPass: React.FC = () => {
   return (
     <section>
       <div className="forgetform-box ">
-        <div className='link  '><Link to={'/login'}><ArrowLeftOutlined /></Link></div>
+        <div className='link'><Link to={'/login'}><ArrowLeftOutlined /></Link></div>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
             <h2>Forgot Password?</h2>
