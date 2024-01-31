@@ -13,9 +13,10 @@ interface LoginResponse {
 }
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
+  const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,9 +29,8 @@ const LoginPage: React.FC = () => {
     const token = Cookies.get("token");
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
-      console.log(response)
       setUser(response)
-      setLoggedIn(true)
+      setLoggedIn(true)  
       navigate("/home")
     }).catch(error => 
       console.log(error)
@@ -39,10 +39,10 @@ const LoginPage: React.FC = () => {
 
 
 
-
+//When the login button is pressed an api call sends the username and password input by user to be authenticated. 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    AuthAPI.login(username, password)
+    AuthAPI.login(email, password)
       .then((response: LoginResponse) => {
         setLoggedIn(true)
         setUser(response.user)
@@ -50,12 +50,19 @@ const LoginPage: React.FC = () => {
       })
       .catch(error => {
         if (error.response && error.response.status === 401) {
-          console.log("incorrect password");
+          handleIncorrectResponse();
+          //console.log("incorrect password");
         } else if (error.response && error.response.status === 500) {
-          console.log("user not found");
+          handleIncorrectResponse();
+          //console.log("user not found");
         }
       });
   };
+
+//Used to handle if the username or password is incorrect, display message
+  const handleIncorrectResponse = () => {
+    setIncorrect(false)
+  }
     
 
   return (
@@ -65,25 +72,28 @@ const LoginPage: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <h2>Login</h2>
             <div className="inputbox">
-              <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-              <label>Username</label>
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <label>Email</label>
             </div>
             <div className="inputbox">
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Password</label>
             </div>
-            <div className="forget">
+            <div className={`hidden-text ${incorrect ? 'hidden' : 'visible'}`}>
+              <p>Incorrect Username or Password</p>
+            </div>
+            {/* <div className="forget">
               <label>
                 <input type="checkbox" /> Remember me
               </label>
               <label>
                 <a href="#">Forgot password?</a>
               </label>
-            </div>
+            </div> */}
             <button type="submit" >Login</button>
             <div className="register">
               <p>
-                Don't have an account ? <Link to="/createacct">Register</Link>
+                Don't have an account ? <Link to="/createorg">Register</Link>
               </p>
             </div>
           </form>

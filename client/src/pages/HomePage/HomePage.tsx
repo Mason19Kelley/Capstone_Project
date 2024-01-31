@@ -3,12 +3,13 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
 import Cookies from 'js-cookie';
+import Admin from '../../components/Admin/Admin';
 
 
 
@@ -37,27 +38,7 @@ const siderStyle: React.CSSProperties = {
   overflowY: 'auto', 
 };
 
-type MenuItem = Required<MenuProps>['items'][number];
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group',
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-}
-
-const items: MenuProps['items'] = [
-  getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), getItem('Logout', 'Logout', <LogoutOutlined />)
-];
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
@@ -71,6 +52,8 @@ function HomePage() {
         return <div>Courses Page</div>;
       case 'Account':
         return <Account />;
+      case 'Admin':
+        return <Admin />
       case 'Logout':
         logOut()
         return null;
@@ -90,6 +73,28 @@ function HomePage() {
     setPage(key);
     console.log(page)
   };
+
+  type MenuItem = Required<MenuProps>['items'][number];
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+    type?: 'group',
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    } as MenuItem;
+  }
+
+  const items: MenuProps['items'] = [
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+  ];
 
   return (
     <div>

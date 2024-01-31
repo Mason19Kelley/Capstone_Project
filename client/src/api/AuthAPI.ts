@@ -3,9 +3,9 @@ import { api } from "./axiosConfig";
 // login functions
 export const AuthAPI = {
     // logs in using credentials
-    login: async (username: string, password: string) => {
+    login: async (email: string, password: string) => {
         const { data } = await api.post("/auth/login", {
-            username: username,
+            email: email,
             password: password
           });
         // sets auth token to jwt

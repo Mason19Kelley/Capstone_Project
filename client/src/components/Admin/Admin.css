@@ -1,0 +1,48 @@
+.header {
+    color: black;
+    margin-left: 1%;
+    align-self: self-start;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-title {
+    color: black;
+    font-size: 1.5rem;
+}
+
+.org-management {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%
+}
+
+.user-management {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.ant-card-head {
+    width: 100%;
+    text-align: left;
+}
+
+.org-name {
+    text-align: left;
+}
+
+.ant-card-body {
+    width: 100%;
+}
+
+
+.rename-button {
+    background-color: blue !important;
+    border-color: blue !important;
+}
