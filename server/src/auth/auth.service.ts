@@ -7,16 +7,18 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   saltRounds = 10; // don't change
   constructor(private usersService: UsersService,
-    private jwtService: JwtService
-    ) {}
-
+    private jwtService: JwtService,
+  ) {}
+ 
     // validates user login
     // used by auth guard
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findUser(email);
     const hashedPassMatches = await bcrypt.compare(pass, user.password);
+    console.log(hashedPassMatches)
     if (user && hashedPassMatches) {
       const { password, ...result } = user;
+
       return result;
     }
     return null;

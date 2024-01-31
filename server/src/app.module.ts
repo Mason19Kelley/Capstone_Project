@@ -11,6 +11,8 @@ import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
+import { LoginLog } from './loginlogs/loginlogs.entity';
+import { LoginlogsModule } from './loginlogs/loginlogs.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { CreateOrgModule } from './createOrg/createOrg.module';
@@ -28,7 +30,7 @@ import { CreateOrgModule } from './createOrg/createOrg.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role],
+         entities: [User, Organization, Role, LoginLog],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),
@@ -41,7 +43,8 @@ import { CreateOrgModule } from './createOrg/createOrg.module';
      UsersModule,
      OrganizationsModule,
      RolesModule,
-     CreateOrgModule
+     CreateOrgModule,
+     LoginlogsModule
   ],
   controllers: [AppController],
   providers: [AppService, SeedService],
