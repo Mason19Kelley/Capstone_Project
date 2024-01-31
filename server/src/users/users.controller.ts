@@ -37,4 +37,9 @@ export class UsersController {
     async deleteUserInCourse(@Param('cid') cid: number, @Param('uid') uid: number){
         return this.usersService.deleteUserInCourse(cid, uid)
     }
+
+    @Get('getCourses/:uid')
+    async getCourse(@Param('uid') uid: number){
+        return await this.usersService.getCoursesById(uid)
+    }
 }

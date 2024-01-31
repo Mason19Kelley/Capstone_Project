@@ -8,6 +8,7 @@ import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { Courses } from 'src/courses/courses.entity';
+import e from 'express';
 // user business logic class
 @Injectable()
 export class UsersService {
@@ -37,14 +38,24 @@ export class UsersService {
 
   // insert user into course
   async insertUserInCourse(cid: number, id: number) {
-    //console.log(cid)
-    const user = await this.usersRepository.findOneBy({id});
-    const course = await this.courseService.findCourseById(cid)
+    const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: id}});
+    const course = await this.courseService.findCourseById(cid);
     
-    user.courses = user.courses || [];
+    // return if one doesnt exsist
+    if(!user || !course){
+      return;
+    }
 
-    user.courses.push(course)
-    await this.usersRepository.save(user);
+    // check to see if user is in the course already
+    const alreadyIn = user.courses && user.courses.some((c) => c.cid === cid);
+    if(!alreadyIn) {
+      user.courses = user.courses || [];
+
+      user.courses = [...user.courses, course]
+      await this.usersRepository.save(user);
+    } else {
+      console.log("User is already in the course")
+    }
   }
 
   // delete user from course
@@ -59,7 +70,17 @@ export class UsersService {
 
       await this.usersRepository.save(user)
     }
+  }
 
+  // get courses a user is in
+  async getCoursesById(uid: number): Promise<Courses[]> {
+    const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}});
+
+    if(!user) {
+      return
+    }
+
+    return user.courses
   }
 
   async insert(data) {
@@ -92,8 +113,8 @@ export class UsersService {
       { username: 'user2', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
-    
     const newUsers = this.usersRepository.create(usersToSeed);
+
     console.log(newUsers)
     await this.usersRepository.insert(newUsers);
    

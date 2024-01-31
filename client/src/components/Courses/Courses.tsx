@@ -35,20 +35,19 @@ const Courses: React.FC = () => {
   const { user } = useContext(AuthContext)
   const { id } = user || {}
 
-  let uid = id ?? 0;
-
-  if(uid != undefined) {
-    
-    CourseAPI.insertUser(2, uid ?? 0)
-    CourseAPI.insertUser(1, 2)
-    CourseAPI.insertUser(1, 3)
+  // created for testing purposes, inserting user into courses
+  if(id != undefined) {
+    CourseAPI.insertUser(2, id ?? 0)
+    CourseAPI.insertUser(1, id ?? 0)
+    CourseAPI.insertUser(3, id ?? 0)
   }
 
-  //console.log(ids)
+  const courses = CourseAPI.getCoursesFromUser(id ?? 0)
+  console.log(courses)
 
+  
   return (
   <div className='testcard'>
-    
   </div> 
   );
 };

@@ -1,4 +1,5 @@
 import { api } from "./axiosConfig"
+import { Courses } from "../models/courses.model";
 
 export const CourseAPI = {
 
@@ -9,7 +10,7 @@ export const CourseAPI = {
     },
 
     insertUser: async (cid: number, uid: number) => {
-        console.log(cid)
+        //console.log(cid)
         const { data } = await api.post(`/users/insertUser/${cid}/${uid}`);
         console.log(data);
         return data
@@ -19,6 +20,12 @@ export const CourseAPI = {
         //console.log(cid)
         const { data } = await api.delete(`/users/deleteUserInCourse/${cid}/${uid}`);
         console.log(data);
+        return data
+    },
+
+    getCoursesFromUser: async (uid: number) => {
+        const { data } = await api.get(`/users/getCourses/${uid}`);
+        //console.log(data);
         return data
     }
 }
