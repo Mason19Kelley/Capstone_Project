@@ -3,7 +3,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoginDto } from './auth.model';
+import { LoginDto, ResetPasswordRequestDto } from './auth.model';
 import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
@@ -21,9 +21,7 @@ export class AuthController {
     @ApiBody({ type: LoginDto })
     @Post('login')
     async login(@Res({ passthrough: true }) response: Response, @Body() credentials: LoginDto) {
-        console.log(credentials)
         const token = (await this.authService.login(credentials)).access_token;
-        console.log(token)
         let user: User = null;
         user = (await this.userService.findUser(credentials.email))
         response.cookie('token', token)
@@ -38,5 +36,16 @@ export class AuthController {
         const email = req.user.email;
         const user = await this.userService.findUser(email);
         return user
+    }
+
+    @Post('requestResetPassword')
+    async requestResetPassword(@Body('email') email: string){
+        this.authService.requestResetPassword(email)
+    }
+
+    @Post("resetPassword")
+    async resetPassword(@Body() body: ResetPasswordRequestDto) {
+        const { userId, token, password } = body;
+        return this.authService.resetPassword(userId as unknown as number, token, password);
     }
 }

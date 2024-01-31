@@ -7,3 +7,10 @@ export class LoginDto {
     @ApiProperty({ example: 'password', description: 'User password' })
     password: string;
 }
+
+
+export class ResetPasswordRequestDto{
+    token: string;
+    userId: string;
+    password: string;
+}

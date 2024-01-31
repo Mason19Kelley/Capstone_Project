@@ -150,3 +150,8 @@
   .hidden {
     display: none;
   }
+
+  .forgot-password {
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
