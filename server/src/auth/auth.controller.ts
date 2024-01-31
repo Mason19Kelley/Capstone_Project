@@ -8,6 +8,7 @@ import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { ConfigService } from '@nestjs/config';
+
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
@@ -26,6 +27,7 @@ export class AuthController {
         response.cookie('token', token)
         return {token: token, user: user}
     }
+
     // auth testing endpoint
     // will return username if login works
     @UseGuards(JwtAuthGuard)

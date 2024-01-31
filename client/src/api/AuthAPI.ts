@@ -1,4 +1,5 @@
 import { api } from "./axiosConfig";
+
 // login functions
 export const AuthAPI = {
     // logs in using credentials
