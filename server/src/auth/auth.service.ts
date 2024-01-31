@@ -2,17 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { LoginLogsService } from '../loginlogs/loginlogs.service';
-import { LoginLog } from '../loginlogs/loginlogs.entity';
 // auth business logic service
 @Injectable()
 export class AuthService {
   saltRounds = 10; // don't change
   constructor(private usersService: UsersService,
     private jwtService: JwtService,
-    private loginLogsService: LoginLogsService,
-    ) {}
-
+  ) {}
+ 
     // validates user login
     // used by auth guard
   async validateUser(email: string, pass: string): Promise<any> {
