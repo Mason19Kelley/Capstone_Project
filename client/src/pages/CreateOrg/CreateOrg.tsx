@@ -30,10 +30,13 @@ const CreateOrg: React.FC = () => {
   return (
     <section>
       <div className="org-box">
-      <div className='back-link'><Link to={'/login'}><ArrowLeftOutlined /></Link></div>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
-            <h2>Create an Organization</h2>
+            <div className='back-link'>
+              <Link to={'/login'}><ArrowLeftOutlined /></Link>
+              <h2>Create an Organization</h2>
+            </div>
+            
             <div className="inputbox">
               <input type="organization" required value={organization} onChange={(e) => setOrgname(e.target.value)} />
               <label>Organization Name</label>
