@@ -21,21 +21,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
     //If the user is valid, log the login attempt
-    this.handleLoginLog(email, true);
+    this.loginLogsService.handleLoginLog(email, true);
     return user;
   } catch (e) {
     //If the user is invalid, log the login attempt
-    this.handleLoginLog(email, false);
+    this.loginLogsService.handleLoginLog(email, false);
   }
  }
 
- //Function that logs the login attempt
- async handleLoginLog(username: string, success: boolean): Promise<void> {
-  const timestamp = new Date().toISOString();
-  const log = new LoginLog();
-  log.user = username;
-  log.Timestamp = timestamp;
-  log.success = success;
-  await this.loginLogsService.insertLog(log);
-}
+
 }

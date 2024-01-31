@@ -26,7 +26,15 @@ export class LoginLogsService {
       return this.logRepository.insert(logEntity)
     }
 
-
+     //Function that logs the login attempt
+  async handleLoginLog(username: string, success: boolean): Promise<void> {
+    const timestamp = new Date().toISOString();
+    const log = new LoginLog();
+    log.user = username;
+    log.Timestamp = timestamp;
+    log.success = success;
+    await this.insertLog(log);
+  }
 
     // inserts default log into seed
     async seedLoginLogs() {
