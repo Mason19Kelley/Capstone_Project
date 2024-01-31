@@ -13,13 +13,9 @@ export class CoursesService {
     ) {}
 
     // get course by id
-    findCourseById(id: number): Promise<Courses[] | undefined> {
-        return this.courseRepository.find({
-            relations: {
-                users: true,
-            },
-            where: {cid: id}
-        })
+    findCourseById(cid: number): Promise<Courses | undefined> {
+        //console.log(cid)
+        return this.courseRepository.findOneBy({cid})
     }
 
     // inserts default courses into seed

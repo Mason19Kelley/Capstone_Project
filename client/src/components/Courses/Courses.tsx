@@ -35,7 +35,14 @@ const Courses: React.FC = () => {
   const { user } = useContext(AuthContext)
   const { id } = user || {}
 
-  CourseAPI.deleteUser(1, 1)
+  let uid = id ?? 0;
+
+  if(uid != undefined) {
+    
+    CourseAPI.insertUser(2, uid ?? 0)
+    CourseAPI.insertUser(1, 2)
+    CourseAPI.insertUser(1, 3)
+  }
 
   //console.log(ids)
 

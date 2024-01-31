@@ -37,12 +37,13 @@ export class UsersService {
 
   // insert user into course
   async insertUserInCourse(cid: number, id: number) {
+    //console.log(cid)
     const user = await this.usersRepository.findOneBy({id});
     const course = await this.courseService.findCourseById(cid)
     
     user.courses = user.courses || [];
 
-    user.courses.push(...course);
+    user.courses.push(course)
     await this.usersRepository.save(user);
   }
 

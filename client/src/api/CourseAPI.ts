@@ -9,12 +9,14 @@ export const CourseAPI = {
     },
 
     insertUser: async (cid: number, uid: number) => {
-        const { data } = await api.post(`/users/insertUser`, {cid, uid});
+        console.log(cid)
+        const { data } = await api.post(`/users/insertUser/${cid}/${uid}`);
         console.log(data);
         return data
     },
 
     deleteUser: async (cid: number, uid: number) => {
+        //console.log(cid)
         const { data } = await api.delete(`/users/deleteUserInCourse/${cid}/${uid}`);
         console.log(data);
         return data

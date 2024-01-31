@@ -28,7 +28,7 @@ export class UsersController {
         return await this.usersService.deleteUser(id)
     }
     
-    @Post('insertUser')
+    @Post('insertUser/:cid/:uid')
     async insertUser(@Param( 'cid') cid: number, @Param('uid') uid: number) {
         return this.usersService.insertUserInCourse(cid, uid)
     }

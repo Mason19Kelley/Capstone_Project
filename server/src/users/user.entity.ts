@@ -1,8 +1,9 @@
 import { Organization } from '../organizations/organization.entity';
 import { Role } from '../roles/role.entity';
 import { Courses } from 'src/courses/courses.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinColumn, JoinTable, Unique } from 'typeorm';
 // user typeorm entity
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -22,7 +23,18 @@ export class User {
   @JoinColumn()
   role: Role;
 
-  @ManyToMany(() => Courses, (course) => course.users)
+  @ManyToMany(() => Courses, (course) => course.users, {cascade: true})
+  @JoinTable({
+      name: 'users_course',
+      joinColumn: {
+        name: 'userId',
+        referencedColumnName: 'id',
+      },
+      inverseJoinColumn: {
+        name: 'coursesCid',
+        referencedColumnName: 'cid'
+      },
+      })
   courses: Courses[];
 
   @ManyToOne(() => Organization, organization => organization.users, {eager: true})
