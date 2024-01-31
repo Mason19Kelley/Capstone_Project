@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
 import { CoursesService } from 'src/courses/courses.service';
+import { Courses } from 'src/courses/courses.entity';
 // user business logic class
 @Injectable()
 export class UsersService {
@@ -32,6 +33,32 @@ export class UsersService {
 
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
+  }
+
+  // insert user into course
+  async insertUserInCourse(cid: number, id: number) {
+    const user = await this.usersRepository.findOneBy({id});
+    const course = await this.courseService.findCourseById(cid)
+    
+    user.courses = user.courses || [];
+
+    user.courses.push(...course);
+    await this.usersRepository.save(user);
+  }
+
+  // delete user from course
+  async deleteUserInCourse(cid: number, id:number) {
+    const user = await this.usersRepository.findOneBy({id});
+    const course = await this.courseService.findCourseById(cid)
+
+    if (user && course) {
+      user.courses = user.courses || [];
+
+      user.courses = user.courses.filter(curCourse => curCourse.cid !== cid);
+
+      await this.usersRepository.save(user)
+    }
+
   }
 
   async insert(data) {

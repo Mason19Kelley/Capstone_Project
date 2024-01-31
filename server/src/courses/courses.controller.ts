@@ -1,4 +1,4 @@
-import { Controller, Request, Get, UseGuards, Param } from '@nestjs/common';
+import { Controller, Request, Get, UseGuards, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from 'src/auth/auth.model';
 import { User } from 'src/users/user.entity';
@@ -16,7 +16,6 @@ export class CoursesController {
     //@UseGuards(JwtAuthGuard)
     @Get('getCourses/:id')
     async getCoursesById(@Param('id') id: number) {
-        console.log(id)
         return await this.coursesService.findCourseById(id)
     }
 }

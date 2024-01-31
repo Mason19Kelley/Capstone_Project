@@ -32,8 +32,12 @@ function generateCard({courseName, instructor}: CardProps) {
 
 
 const Courses: React.FC = () => {
-  const ids = CourseAPI.getCourses(1)
-  console.log(ids)
+  const { user } = useContext(AuthContext)
+  const { id } = user || {}
+
+  CourseAPI.deleteUser(1, 1)
+
+  //console.log(ids)
 
   return (
   <div className='testcard'>

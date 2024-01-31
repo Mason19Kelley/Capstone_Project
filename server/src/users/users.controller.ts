@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Param, Delete } from '@nestjs/common';
+import { Controller, Get, UseGuards, Param, Delete, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
@@ -27,6 +27,14 @@ export class UsersController {
     async deleteUser(@Param('id') id: number) {
         return await this.usersService.deleteUser(id)
     }
-
     
+    @Post('insertUser')
+    async insertUser(@Param( 'cid') cid: number, @Param('uid') uid: number) {
+        return this.usersService.insertUserInCourse(cid, uid)
+    }
+
+    @Delete('deleteUserInCourse/:cid/:uid')
+    async deleteUserInCourse(@Param('cid') cid: number, @Param('uid') uid: number){
+        return this.usersService.deleteUserInCourse(cid, uid)
+    }
 }

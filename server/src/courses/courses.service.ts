@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Courses } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Equal, Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
 
 // logic for courses
 @Injectable()
@@ -12,11 +13,12 @@ export class CoursesService {
     ) {}
 
     // get course by id
-    findCourseById(userId: number): Promise<Courses[] | undefined> {
+    findCourseById(id: number): Promise<Courses[] | undefined> {
         return this.courseRepository.find({
             relations: {
                 users: true,
-            }
+            },
+            where: {cid: id}
         })
     }
 
@@ -27,7 +29,9 @@ export class CoursesService {
         if(courses > 0) return
 
         const coursesToSeed = [
-            { courseName: 'Default Name', instructor: 'Default Teacher'}
+            { courseName: 'Default Name', instructor: 'Default Teacher'},
+            { courseName: 'Test Course', instructor: 'Test Teacher'},
+            { courseName: 'Dummy Course', instructor: 'Dummy Teacher'}
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)
