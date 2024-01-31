@@ -23,8 +23,8 @@ export class LoginLogsService {
     async seedLoginLogs() {
     
         const logsToSeed = [
-          { user: 'SuperAdmin', success: true, Timestamp: '2020-04-20 12:00:00' },
-          { user: 'test', success: true, Timestamp: '2020-04-20 12:00:01' },
+          { user: 'SuperAdmin', success: true, Timestamp: "2020-04-20 12:00:00" },
+          { user: 'test', success: true, Timestamp: "2020-04-20 12:00:01" },
 
         ];
     
@@ -33,3 +33,4 @@ export class LoginLogsService {
         
       }
 }
+

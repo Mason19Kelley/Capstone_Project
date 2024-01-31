@@ -1,10 +1,7 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class LoginLog {
-  @PrimaryGeneratedColumn()
-    id: number;
-
   @PrimaryColumn()
     Timestamp: string;
 
