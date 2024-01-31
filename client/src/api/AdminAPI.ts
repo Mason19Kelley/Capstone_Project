@@ -7,6 +7,7 @@ export const AdminAPI = {
         if(orgId === undefined){
             return
         }
+        console.log(api.defaults)
       const { data } = await api.get(`/users/getUsersByOrg/${orgId}`);
       return data
     },

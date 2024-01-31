@@ -148,7 +148,7 @@ function Admin() {
   
   return (
    <div className="wrapper">
-      <h1 className="header">Organzation Administration</h1>
+      <h1 className="header">Organization Administration</h1>
       { user?.role?.roleName === 'Systems Admin' ?
       <Card title="Organization Settings" className='org-management'>
         <div>

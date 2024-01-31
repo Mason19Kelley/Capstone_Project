@@ -9,7 +9,7 @@ export const AuthAPI = {
             password: password
           });
         // sets auth token to jwt
-        api.defaults.headers['Authorization'] = `Bearer ${data}`;
+        api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
         return data;
       },
     // used to test that auth is working in app.tsx
