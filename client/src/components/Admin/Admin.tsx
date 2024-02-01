@@ -25,6 +25,8 @@ function Admin() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
+  const [textBoxValue, setTextBoxValue] = useState('');
+
   const openDeleteModal = (user: UserTable | undefined) => {
     setSelectedUser(user)
     setIsDeleteModalOpen(true);
@@ -122,6 +124,24 @@ function Admin() {
     
    }
 
+   const pullLogs = () => {
+    AdminAPI.pullLogs().then(response => {
+      if (response.length > 0) {
+        const firstLog = response[0];
+        const logProperties = Object.keys(firstLog);
+
+        const logsInfo = response.map((log) =>
+          logProperties.map((property) => `${property}: ${log[property]}`).join(', ')
+        );
+
+        setTextBoxValue(logsInfo.join('\n'));
+        console.log(response);
+      }
+    }).catch(error => 
+      console.log(error)
+    )
+   }
+
    const fetchUsers = () => {
     setAreUsersLoading(true)
     AdminAPI.getUsersByOrg(user?.organization?.id).then(response => {
@@ -145,6 +165,7 @@ function Admin() {
       console.log(error)
     )
    }
+
   
   return (
    <div className="wrapper">
@@ -167,6 +188,19 @@ function Admin() {
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
       <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser} refetchUsers={fetchUsers}></EditUserModal>
       <CreateUserModal isModalOpen={isCreateModalOpen} closeModal={closeCreateModal} refetchUsers={fetchUsers}/>
+      <Card title="Logs" className='org-management'>
+      <textarea
+        value={textBoxValue}
+        style={{
+          width: '100%',
+          height: '100px',
+          overflow: 'auto',
+          border: '1px solid #ccc',
+        }}
+        readOnly // Set the readOnly attribute
+      />
+         <Button type="primary" onClick={pullLogs} className='rename-button'>Pull Logs</Button>
+      </Card>
    </div>
     
   )

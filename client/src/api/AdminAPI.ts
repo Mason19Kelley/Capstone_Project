@@ -28,7 +28,12 @@ export const AdminAPI = {
     updateUser: async (user: UserTable) => {
         const { data } = await api.post(`/users/updateUser`, user)
         return data
-    }
+    },
+
+    pullLogs: async () => {
+        const { data } = await api.get(`/auth/getLogs`)
+        return data
+      }
 
 
 }
