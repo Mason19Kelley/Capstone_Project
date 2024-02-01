@@ -41,7 +41,7 @@ export class LoginLogsService {
       const timestamp1 = new Date().toISOString();
 
         const logsToSeed = [
-          { user: 'SuperAdmin', success: true, Timestamp: timestamp1 },
+          { user: 'SuperAdmin@example.com', success: true, Timestamp: timestamp1 },
         ];
     
         const voteEntities = this.logRepository.create(logsToSeed)

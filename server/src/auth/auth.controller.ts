@@ -8,13 +8,14 @@ import { Response } from 'express';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { ConfigService } from '@nestjs/config';
+import { LoginLogsService } from '../loginlogs/loginlogs.service';
 
 // controller for handling authentications
 @Controller('auth')
 @ApiTags('auth')
 @ApiBearerAuth()
 export class AuthController {
-    constructor(private authService: AuthService, private userService: UsersService, private configService: ConfigService) {}
+    constructor(private authService: AuthService, private userService: UsersService, private configService: ConfigService, private loginLogsService: LoginLogsService) {}
 
     // basic login endpoints
     @UseGuards(LocalAuthGuard)
@@ -48,4 +49,11 @@ export class AuthController {
         const { userId, token, password } = body;
         return this.authService.resetPassword(userId as unknown as number, token, password);
     }
+
+    @Get('getLogs')
+    async getLogs(){
+        const logOutput = await this.loginLogsService.findAllLogs()
+        return logOutput
+    }
+
 }
