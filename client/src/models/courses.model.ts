@@ -1,5 +1,5 @@
 export interface Courses {
-    id: number | undefined;
+    cid: number | undefined;
     instructor: string | undefined;
     courseName: string | undefined;
 }

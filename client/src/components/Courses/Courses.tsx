@@ -2,14 +2,15 @@ import { Box } from '@mui/system';
 import './Courses.css'
 import { Card } from 'antd';
 import { AuthContext } from '../../context/AuthContext';
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CourseAPI } from '../../api/CourseAPI';
+import { Courses } from '../../models/courses.model';
 
 const { Meta } = Card;
 
 interface CardProps {
-  courseName?: string;
-  instructor?: string;
+  courseName: string;
+  instructor: string;
 }
 
 // Generating the card
@@ -30,10 +31,11 @@ function generateCard({courseName, instructor}: CardProps) {
   );
 }
 
-
 const Courses: React.FC = () => {
   const { user } = useContext(AuthContext)
   const { id } = user || {}
+
+  const [courses, setCourses] = useState<Courses[]>([]);
 
   // created for testing purposes, inserting user into courses
   if(id != undefined) {
@@ -42,14 +44,35 @@ const Courses: React.FC = () => {
     CourseAPI.insertUser(3, id ?? 0)
   }
 
-  const courses = CourseAPI.getCoursesFromUser(id ?? 0)
-  console.log(courses)
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const coursesData = await CourseAPI.getCoursesFromUser(id ?? 0);
+        setCourses(coursesData);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
 
+    fetchData();
+ }, [id]);
+
+const cards: JSX.Element[] = [];
+ for (let index = 0; index < courses.length; index++) {
+  const courseName = courses?.[index]?.courseName || ''
+  const instructor = courses?.[index]?.instructor || ''
+
+  const params: CardProps = {courseName, instructor}
+
+  cards.push(generateCard(params))
+ }
   
   return (
   <div className='testcard'>
+    {cards.map(card => (card))}
   </div> 
   );
 };
   
+
 export default Courses;

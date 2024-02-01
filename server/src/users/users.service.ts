@@ -74,13 +74,15 @@ export class UsersService {
 
   // get courses a user is in
   async getCoursesById(uid: number): Promise<Courses[]> {
-    const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}});
+    const user = (await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}}));
 
     if(!user) {
       return
     }
 
-    return user.courses
+    const ret = user.courses;
+
+    return ret as Courses[]
   }
 
   async insert(data) {

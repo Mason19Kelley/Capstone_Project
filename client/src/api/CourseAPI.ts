@@ -1,5 +1,4 @@
 import { api } from "./axiosConfig"
-import { Courses } from "../models/courses.model";
 
 export const CourseAPI = {
 
@@ -26,6 +25,6 @@ export const CourseAPI = {
     getCoursesFromUser: async (uid: number) => {
         const { data } = await api.get(`/users/getCourses/${uid}`);
         //console.log(data);
-        return data
+        return data 
     }
 }

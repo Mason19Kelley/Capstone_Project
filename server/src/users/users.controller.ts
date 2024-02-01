@@ -2,6 +2,7 @@ import { Controller, Get, UseGuards, Param, Delete, Post } from '@nestjs/common'
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { Courses } from 'src/courses/courses.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -39,7 +40,7 @@ export class UsersController {
     }
 
     @Get('getCourses/:uid')
-    async getCourse(@Param('uid') uid: number){
-        return await this.usersService.getCoursesById(uid)
+    async getCourse(@Param('uid') uid: number): Promise<Courses[]>{
+        return await this.usersService.getCoursesById(uid) as Courses[]
     }
 }
