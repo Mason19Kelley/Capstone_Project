@@ -1,10 +1,11 @@
-import { Box } from '@mui/system';
+import { Box, bgcolor, color } from '@mui/system';
 import './Courses.css'
-import { Card } from 'antd';
+import { Card, ConfigProvider } from 'antd';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react'
 import { CourseAPI } from '../../api/CourseAPI';
 import { Courses } from '../../models/courses.model';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 
@@ -25,8 +26,8 @@ function generateCard({courseName, instructor}: CardProps) {
 
   // Building the Actual card, obtaining the name and instructor
   return (
-    <Card style={{ width: 300 }} cover={ <Box sx={ boxTemplate }/> }>
-      <Meta title = { courseName } description= { instructor }/>
+    <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
+      <Meta title = { courseName } description= { instructor } />
     </Card>
   );
 }
@@ -68,9 +69,13 @@ const cards: JSX.Element[] = [];
  }
   
   return (
-  <div className='testcard'>
-    {cards.map(card => (card))}
-  </div> 
+    <div className='testcard'>
+    {cards.map(card => <Box>{card}</Box>)}
+    </div>
+
+
+  
+   
   );
 };
   
