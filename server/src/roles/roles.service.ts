@@ -14,6 +14,10 @@ export class RolesService {
     findRole(id: number) {
       return this.rolesRepository.findOneBy({id: id })
     }
+
+    findRoleByName(roleName: string) {
+      return this.rolesRepository.findOneBy({ roleName })
+    }
     // inserts roles seeds into db
     async seedRoles() {
 

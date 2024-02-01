@@ -10,7 +10,7 @@ export class User {
   id: number;
 
   @Column()
-  username: string;
+  fullName: string;
 
   @Column()
   password: string;
@@ -40,4 +40,10 @@ export class User {
   @ManyToOne(() => Organization, organization => organization.users, {eager: true})
   @JoinColumn()
   organization: Organization;
+
+  @Column({ nullable: true })
+  resetPasswordToken: string;  
+
+  @Column({ nullable: true })
+  resetPasswordExpires: Date;
 }

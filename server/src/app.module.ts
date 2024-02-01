@@ -13,9 +13,13 @@ import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
 import { CoursesModule } from './courses/courses.module';
 import { Courses } from './courses/courses.entity';
+import { LoginLog } from './loginlogs/loginlogs.entity';
+import { LoginlogsModule } from './loginlogs/loginlogs.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { CreateOrgModule } from './createOrg/createOrg.module';
+import { PostmarkService } from './postmark/postmark.service';
+import { PostmarkModule } from './postmark/postmark.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -30,13 +34,13 @@ import { CreateOrgModule } from './createOrg/createOrg.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role, Courses],
+         entities: [User, Organization, Role, LoginLog, Courses],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),
      }),
      ConfigModule.forRoot({
-       ignoreEnvFile: true,
+       ignoreEnvFile: false,
        isGlobal: true
      }),
      AuthModule,
@@ -44,10 +48,12 @@ import { CreateOrgModule } from './createOrg/createOrg.module';
      OrganizationsModule,
      RolesModule,
      CreateOrgModule,
-     CoursesModule
+     CoursesModule,
+     PostmarkModule,
+     LoginlogsModule
   ],
   controllers: [AppController],
-  providers: [AppService, SeedService],
+  providers: [AppService, SeedService, PostmarkService],
  })
 export class AppModule implements OnApplicationBootstrap  {
   constructor(private readonly seedService: SeedService) {}

@@ -18,6 +18,7 @@ services:
       dockerfile: Dockerfile.backend
     environment:
       ENVIRONMENT: prod
+      CLIENT_URL: https://34.125.74.75
     depends_on: 
       - postgres
     ports:

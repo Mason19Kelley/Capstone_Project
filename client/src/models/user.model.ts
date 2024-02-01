@@ -3,8 +3,8 @@ import { Role } from "./role.model";
 import { Courses } from "./courses.model";
 
 export interface User {
-    id: number;
-    username: string | undefined;
+    id: number | undefined;
+    fullName: string | undefined;
     email: string | undefined;
     organization: Organization | undefined;
     role: Role | undefined;
