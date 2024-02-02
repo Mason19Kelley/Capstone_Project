@@ -32,50 +32,43 @@ function generateCard({courseName, instructor}: CardProps) {
   );
 }
 
-const Courses: React.FC = () => {
+function getCoursesCards(): JSX.Element[] {
+
   const { user } = useContext(AuthContext)
   const { id } = user || {}
 
   const [courses, setCourses] = useState<Courses[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+    try {
+      const coursesData = await CourseAPI.getCoursesFromUser(id ?? 0);
+      setCourses(coursesData);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }};
+    fetchData();
+  }, [id]);
 
-  // created for testing purposes, inserting user into courses
-  if(id != undefined) {
-    CourseAPI.insertUser(2, id ?? 0)
-    CourseAPI.insertUser(1, id ?? 0)
-    CourseAPI.insertUser(3, id ?? 0)
+  const cards: JSX.Element[] = [];
+  for (let index = 0; index < courses.length; index++) {
+    const courseName = courses?.[index]?.courseName || ''
+    const instructor = courses?.[index]?.instructor || ''
+
+    const params: CardProps = {courseName, instructor}
+
+    cards.push(generateCard(params))
   }
 
- useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const coursesData = await CourseAPI.getCoursesFromUser(id ?? 0);
-        setCourses(coursesData);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
-    };
+  return cards
+}
 
-    fetchData();
- }, [id]);
-
-const cards: JSX.Element[] = [];
- for (let index = 0; index < courses.length; index++) {
-  const courseName = courses?.[index]?.courseName || ''
-  const instructor = courses?.[index]?.instructor || ''
-
-  const params: CardProps = {courseName, instructor}
-
-  cards.push(generateCard(params))
- }
+const Courses: React.FC = () => {
   
+  const cards = getCoursesCards()
   return (
     <div className='testcard'>
     {cards.map(card => <Box>{card}</Box>)}
     </div>
-
-
-  
-   
   );
 };
   

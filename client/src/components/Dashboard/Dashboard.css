@@ -33,4 +33,19 @@
     padding-left: 30px;
     padding-right: 30px;
     align-items: center;
+    text-align: left;
+}
+
+.testcard {
+    box-sizing: border-box;
+    height: 146px;
+    display: flex;
+    gap: 2%;
+    flex-direction: row;
+    padding-left: 2%;
+    text-align: center;
+}
+
+.dashboardText {
+    padding-top: 0.1%;
 }
