@@ -1,5 +1,5 @@
 
-import { Button, Card, Dropdown, Input, MenuProps, Space, Table, TableProps } from 'antd';
+import { Button, Card, Dropdown, Input, Space, Table, TableProps } from 'antd';
 import './Admin.css'
 import { AdminAPI } from '../../api/AdminAPI';
 import { SetStateAction, useContext, useEffect, useState } from 'react';
@@ -130,7 +130,7 @@ function Admin() {
         const firstLog = response[0];
         const logProperties = Object.keys(firstLog);
 
-        const logsInfo = response.map((log) =>
+        const logsInfo = response.map((log: { [x: string]: any; }) =>
           logProperties.map((property) => `${property}: ${log[property]}`).join(', ')
         );
 

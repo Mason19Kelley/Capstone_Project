@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {  useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CreateOrg.css';
 import { CreateOrgAPI } from '../../api/CreateOrgAPI';
@@ -17,7 +17,7 @@ const CreateOrg: React.FC = () => {
     
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = () => {
     CreateOrgAPI.createOrg(username, password, email, organization)
     .then(response => {
       console.log("here")

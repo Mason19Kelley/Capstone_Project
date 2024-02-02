@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {  useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ForgetPass.css';
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -13,7 +13,7 @@ const ForgetPass: React.FC = () => {
 
 
 
-  const handleSubmit = (e: React.FormEvent) => {  
+  const handleSubmit = () => {  
     AuthAPI.requestPasswordReset(email).then(response => {
       console.log(response)
     }).catch(error => console.log(error))

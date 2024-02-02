@@ -10,7 +10,7 @@ function DeleteModal(props: { closeDeleteModal: () => void; isModalOpen: boolean
 
   const deleteUser = () => {
     setLoading(true)
-    AdminAPI.deleteUser(props.selectedUserId).then(response => {
+    AdminAPI.deleteUser(props.selectedUserId).then(() => {
       setLoading(false)
       props.closeDeleteModal()
       props.refetchUsers()

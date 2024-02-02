@@ -8,7 +8,7 @@ import { AuthAPI } from '../../api/AuthAPI';
 const ResetPassword: React.FC = () => {
     const [password1, setPassword1] = useState("")
     const [password2, setPassword2] = useState("")
-    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams] = useSearchParams();
     const [userId, setUserId] = useState<string | null>("");
     const [token, setToken] = useState<string | null>("")
 
@@ -34,7 +34,7 @@ const ResetPassword: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    AuthAPI.resetPassword(userId, token, password1).then(response => {
+    AuthAPI.resetPassword(userId, token, password1).then(() => {
       navigate('/login')
     }).catch(error => console.log(error))
   };

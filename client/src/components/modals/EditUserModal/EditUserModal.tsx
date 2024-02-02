@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
 import { AdminAPI } from '../../../api/AdminAPI';
 import { UserTable } from '../../../models/userTable.model';
@@ -34,7 +34,7 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
       role: role
     }
     setLoading(true)
-    AdminAPI.updateUser(updatedUser).then(response => {
+    AdminAPI.updateUser(updatedUser).then(() => {
       setLoading(false)
       props.refetchUsers()
       props.closeModal()

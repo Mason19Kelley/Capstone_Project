@@ -1,11 +1,10 @@
-import { Box, bgcolor, color } from '@mui/system';
+import { Box } from '@mui/system';
 import './Courses.css'
-import { Card, ConfigProvider } from 'antd';
+import { Card} from 'antd';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react'
 import { CourseAPI } from '../../api/CourseAPI';
 import { Courses } from '../../models/courses.model';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 
