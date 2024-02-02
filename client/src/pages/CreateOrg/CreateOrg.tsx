@@ -43,7 +43,7 @@ const CreateOrg: React.FC = () => {
             </div>
             <div className="inputbox">
               <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
-              <label>Administrator Username</label>
+              <label>Administrator Full Name</label>
             </div>
             <div className="inputbox">
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
