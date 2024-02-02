@@ -8,8 +8,10 @@ import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
+import Courses from '../../components/Courses/Courses';
 import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
+import { CourseAPI } from '../../api/CourseAPI';
 
 
 
@@ -38,18 +40,29 @@ const siderStyle: React.CSSProperties = {
   overflowY: 'auto', 
 };
 
-
+// Seeding the courses into the user (TODO: seed this in seed file
+function seedCourses(id: number | undefined) {
+  // created for testing purposes, inserting user into courses
+  if(id != undefined) {
+    CourseAPI.insertUser(2, id ?? 0)
+    CourseAPI.insertUser(1, id ?? 0)
+    CourseAPI.insertUser(3, id ?? 0)
+  }
+}
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
   const { setLoggedIn, user, setUser } = useContext(AuthContext)
+  const { fullName, id } = user || {};
+
+  seedCourses(id)
   const renderPage = () => {
     console.log(user)
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;
       case 'Courses':
-        return <div>Courses Page</div>;
+        return <Courses />;
       case 'Account':
         return <Account />;
       case 'Admin':
@@ -112,7 +125,7 @@ function HomePage() {
               <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
               <Typography.Title level={3} style={{ color: 'white' }}>
                 <div className='emName'>
-                  Employee Name
+                  { fullName }
                 </div>
               </Typography.Title>
             </div>

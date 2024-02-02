@@ -11,6 +11,8 @@ import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
 import { SeedService } from './seed/seed.service';
+import { CoursesModule } from './courses/courses.module';
+import { Courses } from './courses/courses.entity';
 import { LoginLog } from './loginlogs/loginlogs.entity';
 import { LoginlogsModule } from './loginlogs/loginlogs.module';
 import { ConfigModule } from '@nestjs/config';
@@ -32,7 +34,7 @@ import { PostmarkModule } from './postmark/postmark.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role, LoginLog],
+         entities: [User, Organization, Role, LoginLog, Courses],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),
@@ -46,6 +48,7 @@ import { PostmarkModule } from './postmark/postmark.module';
      OrganizationsModule,
      RolesModule,
      CreateOrgModule,
+     CoursesModule,
      PostmarkModule,
      LoginlogsModule
   ],

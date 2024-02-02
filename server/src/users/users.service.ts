@@ -6,6 +6,8 @@ import { DeleteResult, Equal, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { RolesService } from '../roles/roles.service';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { CoursesService } from 'src/courses/courses.service';
+import { Courses } from 'src/courses/courses.entity';
 import { UpdateUser } from './UpdateUser.model';
 
 
@@ -15,6 +17,7 @@ export class UsersService {
     constructor(
         private orgsService: OrganizationsService,
         private rolesService: RolesService,
+        private courseService: CoursesService,
         @InjectRepository(User)
         private usersRepository: Repository<User>,    
       ) {}
@@ -34,6 +37,55 @@ export class UsersService {
 
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
+  }
+
+  // insert user into course
+  async insertUserInCourse(cid: number, id: number) {
+    const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: id}});
+    const course = await this.courseService.findCourseById(cid);
+    
+    // return if one doesnt exsist
+    if(!user || !course){
+      return;
+    }
+
+    // check to see if user is in the course already
+    const alreadyIn = user.courses && user.courses.some((c) => c.cid === cid);
+    if(!alreadyIn) {
+      user.courses = user.courses || [];
+
+      user.courses = [...user.courses, course]
+      await this.usersRepository.save(user);
+    } else {
+      console.log("User is already in the course")
+    }
+  }
+
+  // delete user from course
+  async deleteUserInCourse(cid: number, id:number) {
+    const user = await this.usersRepository.findOneBy({id});
+    const course = await this.courseService.findCourseById(cid)
+
+    if (user && course) {
+      user.courses = user.courses || [];
+
+      user.courses = user.courses.filter(curCourse => curCourse.cid !== cid);
+
+      await this.usersRepository.save(user)
+    }
+  }
+
+  // get courses a user is in
+  async getCoursesById(uid: number): Promise<Courses[]> {
+    const user = (await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}}));
+
+    if(!user) {
+      return
+    }
+
+    const ret = user.courses;
+
+    return ret as Courses[]
   }
 
   async insert(data) {
@@ -81,8 +133,8 @@ export class UsersService {
       { fullName: 'Jacob Roberts', email: 'mkk020+c@latech.edu', password: hashedPass, organization: organization2, role: regularRole}
     ];
 
-    
     const newUsers = this.usersRepository.create(usersToSeed);
+
     console.log(newUsers)
     await this.usersRepository.insert(newUsers);
    

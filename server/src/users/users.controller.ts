@@ -1,8 +1,9 @@
 import { Controller, Get, UseGuards, Param, Delete, Post, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateUser } from './UpdateUser.model';
+import { Courses } from 'src/courses/courses.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -36,4 +37,18 @@ export class UsersController {
     }
 
     
+    @Post('insertUser/:cid/:uid')
+    async insertUser(@Param( 'cid') cid: number, @Param('uid') uid: number) {
+        return this.usersService.insertUserInCourse(cid, uid)
+    }
+
+    @Delete('deleteUserInCourse/:cid/:uid')
+    async deleteUserInCourse(@Param('cid') cid: number, @Param('uid') uid: number){
+        return this.usersService.deleteUserInCourse(cid, uid)
+    }
+
+    @Get('getCourses/:uid')
+    async getCourse(@Param('uid') uid: number): Promise<Courses[]>{
+        return await this.usersService.getCoursesById(uid) as Courses[]
+    }
 }
