@@ -3,7 +3,7 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
@@ -12,6 +12,7 @@ import Courses from '../../components/Courses/Courses';
 import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import { CourseAPI } from '../../api/CourseAPI';
+import Management from '../../components/Course_Management/Management';
 
 
 
@@ -67,6 +68,8 @@ function HomePage() {
         return <Account />;
       case 'Admin':
         return <Admin />
+      case 'Management':
+        return <Management />
       case 'Logout':
         logOut()
         return null;
@@ -106,7 +109,7 @@ function HomePage() {
   }
 
   const items: MenuProps['items'] = [
-    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null, getItem('Course Management', 'Management', <SettingOutlined />), getItem('Logout', 'Logout', <LogoutOutlined />)
   ];
 
   return (
