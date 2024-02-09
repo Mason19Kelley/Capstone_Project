@@ -1,6 +1,7 @@
 import { Box } from '@mui/system';
 import './Courses.css'
-import { Card} from 'antd';
+import { Card, Image } from 'antd';
+import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react'
 import { CourseAPI } from '../../api/CourseAPI';
@@ -65,8 +66,23 @@ const Courses: React.FC = () => {
   
   const cards = getCoursesCards()
   return (
-    <div className='testcard'>
-    {cards.map(card => <Box>{card}</Box>)}
+    <div className='wrapper'>
+      <div className='headerImage'>
+        <Image
+          width= '100%'
+          height = '98%'
+          src = {headerImg}
+          preview = {false}
+        />
+      </div>
+      <h1 className='header' style= {{
+        color:'#0c2245', 
+        fontFamily: 'Playfair-Display', 
+        paddingLeft: 50, paddingTop: 10}}>
+          Courses Dashboard</h1>
+      <div className='testcard'>
+      {cards.map(card => <Box>{card}</Box>)}
+      </div>
     </div>
   );
 };
