@@ -5,5 +5,11 @@
     flex-direction: column;
 }
 
+.noHover:hover{
+    background-color: transparent;
+    color: #ffffff;
+    /* Repeat other styles as needed */
+}
+
 
 
