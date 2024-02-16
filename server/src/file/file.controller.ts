@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param, Res, ServiceUnavailableException, } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Post, Res, ServiceUnavailableException, } from '@nestjs/common';
 import { StorageFile } from 'src/storage/storage-file';
 import { Response } from 'express';
 import { StorageService } from 'src/storage/storage.service';
@@ -43,6 +43,20 @@ export class FileController {
         res.setHeader("Content-Type", storageFile.contentType);
         res.setHeader("Cache-Control", "max-age=60d");
         res.end(storageFile.buffer);
+    }
+
+    @Post("createBucket/:bucketName")
+    async createBucket(@Param("bucketName") bucketName: string, @Res() res: Response) {
+        try {
+            // let bucket = await this.storageService.createBucket(bucketName)
+            await this.storageService.listBuckets()
+        } catch (e) {
+            if (e.message.toString().includes("No such object")) {
+                throw new NotFoundException("file not found");
+            } else {
+                throw new ServiceUnavailableException("internal error");
+            }
+        }
     }
 
 }

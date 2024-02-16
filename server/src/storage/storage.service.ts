@@ -2,22 +2,16 @@ import { StorageFile } from "src/storage/storage-file";
 import { DownloadResponse, Storage } from "@google-cloud/storage";
 import { Injectable } from "@nestjs/common";
 import StorageConfig from "./storage-config";
+import * as path from 'path';
 
 @Injectable()
 export class StorageService {
   private storage: Storage;
 
   constructor() {
-    console.log(process.env)
-    console.log(StorageConfig)
     this.storage = new Storage({
-      projectId: StorageConfig.projectId,
-      credentials: {
-        client_email: StorageConfig.client_email,
-        private_key: StorageConfig.private_key,
-      },
+      credentials: JSON.parse(process.env.GOOGLE_JSON_KEY)
     });
-
   }
 
   async save(
@@ -45,18 +39,47 @@ export class StorageService {
       .delete({ ignoreNotFound: true });
   }
 
-  async get(bucket: string, path: string): Promise<StorageFile> {
-    console.log(this.storage)
-    const fileResponse: DownloadResponse = await this.storage
+  async get(bucket: string, path: string): Promise<any> {
+
+    console.log(await this.storage
+      .bucket(bucket))
+    const fileResponse = await this.storage
       .bucket(bucket)
-      .file(path)
+      .file('SpeedRunner_MKK020.txt')
       .download();
-      console.log(fileResponse)
-    const [buffer] = fileResponse;
-    const storageFile = new StorageFile();
-    storageFile.buffer = buffer;
-    storageFile.metadata = new Map<string, string>();
-    return storageFile;
+    console.log('success')
+    console.log(fileResponse)
+    // const [buffer] = fileResponse;
+    // const storageFile = new StorageFile();
+    // storageFile.buffer = buffer;
+    // storageFile.metadata = new Map<string, string>();
+    // return storageFile;
+  }
+
+  async createBucket(bucketName: string) {
+    // Creates a new bucket in the Asia region with the coldline default storage
+    // class. Leave the second argument blank for default settings.
+    //
+    // For default values see: https://cloud.google.com/storage/docs/locations and
+    // https://cloud.google.com/storage/docs/storage-classes
+    console.log('creating')
+    // console.log(this.storage)
+    const [bucket] = await this.storage.createBucket(bucketName);
+    console.log(bucket)
+    console.log(`Bucket ${bucket.name} created.`);
+  }
+
+  async listBuckets() {
+    try {
+      const [buckets] = await this.storage.getBuckets();
+  
+      console.log('Buckets:');
+      buckets.forEach(bucket => {
+        console.log(bucket.name);
+      });
+    } catch (error) {
+      console.error('ERROR:', error);
+    }
   }
 
   // async getWithMetaData(bucket: string, path: string): Promise<StorageFile> {
