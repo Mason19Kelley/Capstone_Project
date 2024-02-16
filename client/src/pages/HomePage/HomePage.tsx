@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import { CourseAPI } from '../../api/CourseAPI';
 import Management from '../../components/Course_Management/Management';
+import EditCourse from '../../components/Course_Management/Editcourse';
 
 
 
@@ -56,6 +57,7 @@ function HomePage() {
   const { setLoggedIn, user, setUser } = useContext(AuthContext)
   const { fullName, id } = user || {};
 
+
   seedCourses(id)
   const renderPage = () => {
     console.log(user)
@@ -70,6 +72,8 @@ function HomePage() {
         return <Admin />
       case 'Management':
         return <Management />
+      case 'editCourse':
+        return <EditCourse />
       case 'Logout':
         logOut()
         return null;

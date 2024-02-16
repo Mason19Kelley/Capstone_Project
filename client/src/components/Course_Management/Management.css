@@ -11,5 +11,11 @@
     /* Repeat other styles as needed */
 }
 
+.Courses{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
 
 
