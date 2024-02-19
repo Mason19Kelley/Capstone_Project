@@ -41,11 +41,9 @@ export class StorageService {
 
   async get(bucket: string, path: string): Promise<any> {
 
-    console.log(await this.storage
-      .bucket(bucket))
     const fileResponse = await this.storage
       .bucket(bucket)
-      .file('SpeedRunner_MKK020.txt')
+      .file(path)
       .download();
     const [buffer] = fileResponse;
     const storageFile = new StorageFile();

@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
+import { FileAPI } from '../../api/FileAPI';
+import ReactPlayer from 'react-player';
 
 const cards: string[] = [
     'My Courses',
@@ -55,6 +57,7 @@ function getCoursesCards(): JSX.Element[] {
     }};
     fetchData();
   }, [id]);
+  
 
   const cards: JSX.Element[] = [];
   for (let index = 0; index < courses.length; index++) {
@@ -70,6 +73,19 @@ function getCoursesCards(): JSX.Element[] {
 }
 
 function Dashboard() {
+  const [ videoURL, setVideoURL ] = useState("");
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        const response = await FileAPI.getFile('sample-5s.mp4');
+        setVideoURL(URL.createObjectURL(response));
+      } catch (error) {
+        console.error('Error fetching video:', error);
+      }
+    };
+
+    fetchVideo();
+  }, []);
 
   const Coursecards = getCoursesCards();
   
@@ -114,7 +130,9 @@ function Dashboard() {
             height:350,
             borderRadius: 1,
             bgcolor: 'primary.main'
-          }}/>
+          }}>
+            <ReactPlayer url={videoURL} controls={true} />
+            </Box>
         </ThemeProvider>
       </div>
     </div>
