@@ -90,7 +90,7 @@ function Dashboard() {
   const Coursecards = getCoursesCards();
   
   return (
-    <div className='wrapper'>
+    <div className='dashboard-wrapper'>
       <div className='headerImage'>
         <Image
           width= '100%'
