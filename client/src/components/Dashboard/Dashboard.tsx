@@ -9,7 +9,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { FileAPI } from '../../api/FileAPI';
-import ReactPlayer from 'react-player';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 const cards: string[] = [
     'My Courses',
@@ -131,10 +131,10 @@ function Dashboard() {
             borderRadius: 1,
             bgcolor: 'primary.main'
           }}>
-            <ReactPlayer url={videoURL} controls={true} />
             </Box>
         </ThemeProvider>
       </div>
+      <VideoPlayer></VideoPlayer>
     </div>
     
   )
