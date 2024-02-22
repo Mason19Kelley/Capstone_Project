@@ -10,6 +10,15 @@ export const FileAPI = {
       return data
     },
 
+    uploadFile: async(file: FormData) => {
+      const { data } = await api.post('http://localhost:3000/file/uploadFile', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(data)
+    }
+
     
 
 
