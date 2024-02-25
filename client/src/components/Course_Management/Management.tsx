@@ -12,6 +12,7 @@ const content: string[] = ['1', '2', '3', '4']
 
 
 function Management () {
+
   const navigate = useNavigate();
   const [classList, setClassList] = useState(['Cyber', 'OSHA', 'Python', 'Forklift'])
 
