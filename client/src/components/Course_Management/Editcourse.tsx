@@ -154,6 +154,16 @@ const cyberInfo: course = {
         }]
   }
 
+  const tempContent = {
+    contentType : "temp",
+    fileType : null,
+    fileLocation :null,
+    fileName : null,
+    quizID : null,
+    Description : null
+  }
+
+  
 
 
 function EditCourse() {
@@ -164,6 +174,16 @@ function EditCourse() {
   const navigate = useNavigate();
 
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
+
+  useEffect(() => {
+    if( id == "OSHA" ){
+      setselectedCourse(oshaInfo);
+    }
+    else if( id == "Cyber" ){
+      setselectedCourse(cyberInfo);
+      console.log("here")
+    }
+  }, [])
   
 
   //const { courseModules, setcourseModules } = useState()
@@ -196,23 +216,31 @@ function EditCourse() {
 
   const { id } = useParams();
 
-  useEffect(() => {
-    if( id == "OSHA" ){
-      setselectedCourse(oshaInfo);
-    }
-    else if( id == "Cyber" ){
-      setselectedCourse(cyberInfo);
-    }
-  })
 
-  const addModule = (module: any) => {
-    console.log('here')
-    console.log(module)
-    module.push(tempModule);
-    
+
+  const addModule = (selectedCourse: any) => {
+    const newModules = [...selectedCourse.modules, tempModule];
+    setselectedCourse({ ...selectedCourse, modules: newModules });
   }
 
-  const displayContent = (content: any) => {
+  const deleteModule = (selectedCourse: any, module: any) => {
+    const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleName !== module.moduleName);
+    setselectedCourse({ ...selectedCourse, modules: newModules });
+  }
+
+  const addContent = (selectedCourse: any, module: any) => {
+    const newContent = [...module.content, tempContent];
+    const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
+    setselectedCourse({ ...selectedCourse, modules: newModules });
+  }
+
+  const deleteContent = (selectedCourse: any, module: any, content: any) => {
+    const newContent = module.content.filter((con: any) => con.contentType !== content.contentType);
+    const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
+    setselectedCourse({ ...selectedCourse, modules: newModules });
+  }
+
+  const displayContent = (module: any, content: any) => {
 
     return (
         <Card
@@ -236,7 +264,7 @@ function EditCourse() {
                 <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
                   <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                 </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)}>
                   <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                 </Button>
               </div>
@@ -273,10 +301,10 @@ function EditCourse() {
                   <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
                     <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => addContent(selectedCourse, module)}>
                     <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)}>
                     <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
                 </div>
@@ -285,7 +313,7 @@ function EditCourse() {
             bordered={true}
           >
           {module['content'].map((content: any) => (
-              displayContent(content)
+              displayContent(module, content)
           ))}
           </Card>
         </div>
@@ -363,13 +391,13 @@ function EditCourse() {
                   }}
                 >
                   <Typography.Title level={3} style={{ textAlign: 'left' }}>
-                    <div className='dashboardText'>{id}</div>
+                    <div className='dashboardText'>{selectedCourse['courseName']}</div>
                   </Typography.Title>
                   <div style = {{display:'flex'}}>
                     <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} >
                       <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule(selectedCourse['courseName'])} >
+                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule(selectedCourse)} >
                       <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
                   </div>
