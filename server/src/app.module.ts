@@ -20,6 +20,8 @@ import { ConfigService } from '@nestjs/config';
 import { CreateOrgModule } from './createOrg/createOrg.module';
 import { PostmarkService } from './postmark/postmark.service';
 import { PostmarkModule } from './postmark/postmark.module';
+import { StorageModule } from './storage/storage.module';
+import { FileModule } from './file/file.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -50,7 +52,9 @@ import { PostmarkModule } from './postmark/postmark.module';
      CreateOrgModule,
      CoursesModule,
      PostmarkModule,
-     LoginlogsModule
+     LoginlogsModule,
+     StorageModule,
+     FileModule
   ],
   controllers: [AppController],
   providers: [AppService, SeedService, PostmarkService],
