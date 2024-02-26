@@ -3,7 +3,6 @@ import './CourseModule.css';
 import  PDFViewer  from './PDFView';
 //import "./assets/test.pdf";
 import { Button, message, Steps, theme } from 'antd';
-import Courses from '../../components/Courses/Courses';
 import { Link } from 'react-router-dom';
 
 const steps = [

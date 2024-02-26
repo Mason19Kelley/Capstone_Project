@@ -4,7 +4,7 @@ import { Card, ConfigProvider, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import Meta from 'antd/es/card/Meta';
-import { ChangeEvent, FormEvent, SetStateAction, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
@@ -73,7 +73,6 @@ function getCoursesCards(): JSX.Element[] {
 }
 
 function Dashboard() {
-  const [ videoURL, setVideoURL ] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -82,18 +81,7 @@ function Dashboard() {
     }
   };
   
-  useEffect(() => {
-    const fetchVideo = async () => {
-      try {
-        const response = await FileAPI.getFile('sample-5s.mp4');
-        setVideoURL(URL.createObjectURL(response));
-      } catch (error) {
-        console.error('Error fetching video:', error);
-      }
-    };
-
-    fetchVideo();
-  }, []);
+  
 
   const Coursecards = getCoursesCards();
 
@@ -108,7 +96,7 @@ function Dashboard() {
     formData.append('file', file);
 
     try {
-      const response = await FileAPI.uploadFile(formData)
+      await FileAPI.uploadFile(formData)
     } catch (error) {
       console.error('Upload error:', error);
     }
