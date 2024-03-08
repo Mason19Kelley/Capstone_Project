@@ -196,10 +196,10 @@ function Edit_Course() {
                   <Popover
                     key={module}
                     content={<a onClick={hide}>Close</a>}
-                    title="Title"
+                    title="Add Content"
                     trigger="click"
-                    visible={popOverOpen === module}
-                    onVisibleChange={(visible) => createCourseContent(visible ? module : null)}
+                    open={popOverOpen === module}
+                    onOpenChange={(visible) => createCourseContent(visible ? module : null)}
                     >
                     <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)}>
                         <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
