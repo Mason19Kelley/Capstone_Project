@@ -79,6 +79,8 @@ export class UsersService {
   async getCoursesById(uid: number): Promise<Courses[]> {
     const user = (await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}}));
 
+    console.log(user)
+    
     if(!user) {
       return
     }

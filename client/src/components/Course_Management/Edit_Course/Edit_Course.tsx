@@ -1,41 +1,13 @@
 import React, { useEffect } from 'react';
 import { Button, Card, ConfigProvider, Image, Typography } from 'antd';
 import { useParams } from 'react-router-dom';
-import { Avatar, Layout, Menu, MenuProps } from 'antd'
-import { Content } from 'antd/es/layout/layout'
-import Sider from 'antd/es/layout/Sider'
-import headerImg from '../../assets/Dashboard/DashboardHeader.png'
 import { UserOutlined, TeamOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../../context/AuthContext';
 import { Box, ThemeProvider } from '@mui/system'
-
-const layoutStyle = {
-  width: '100%',
-  height: '100vh', 
-  display: 'flex', 
-};
-
-const contentStyle: React.CSSProperties = {
-  flex: 1, 
-  overflowY: 'auto', 
-  padding: '20px',
-  backgroundColor: '#dbdbdb',
-  backgroundSize: '100%',
-  textAlign: 'center',
-  lineHeight: '120px',
-};
-
-const siderStyle: React.CSSProperties = {
-  textAlign: 'center',
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#002F8B',
-  width: '17%', 
-  overflowY: 'auto', 
-};
-
+import { CourseAPI } from '../../../api/CourseAPI';
+import EditCourseModal from '../../modals/EditCourseModal/EditCourseModal';
 
 interface course {
   courseName : string,
@@ -71,76 +43,6 @@ modules : [
     }]
 }
 
-const cyberInfo: course = {
-  courseName: "Cyber",
-  modules: [
-      {
-          moduleName: "Cyber 1",
-          content: [
-              {
-                  contentType: "Quiz",
-                  fileType: null,
-                  fileLocation: null,
-                  fileName: null,
-                  quizID: 7,
-                  Description: null,
-              },
-              {
-                  contentType: "Media",
-                  fileType: "pdf",
-                  fileLocation: "/here/there/everywhere",
-                  fileName: "Sample pdf",
-                  quizID: null,
-                  Description: "This is a sample video",
-              },
-          ],
-      },
-      {
-          moduleName: "Cyber 2",
-          content: [
-              {
-                  contentType: "Media",
-                  fileType: "pdf",
-                  fileLocation: "/here/there/everywhere",
-                  fileName: "Sample pdf",
-                  quizID: null,
-                  Description: "This is a sample video",
-              },
-          ],
-      },
-  ],
-};
-
-  const oshaInfo : course = {
-    courseName : "OSHA",
-    modules : [
-        {
-            moduleName : "OSHA 1",
-            content : [
-                {
-                    contentType : "Quiz",
-                    fileType : null,
-                    fileLocation :null,
-                    fileName : null,
-                    quizID : 7,
-                    Description : null
-                }]
-        },
-        {
-          moduleName : "OSHA 2",
-          content : [
-              {
-                  contentType : "Media",
-                  fileType : "mp4",
-                  fileLocation : "/here/there/everywhere",
-                  fileName : "Sample Video",
-                  quizID : null,
-                  Description : "This is a sample video"
-              }]
-        }
-    ]
-  }
-
   const tempModule = {
     moduleName : "temp",
     content : [
@@ -166,57 +68,28 @@ const cyberInfo: course = {
   
 
 
-function EditCourse() {
-  const {user, setUser } = useContext(AuthContext)
-  const { fullName } = user || {};
+function Edit_Course() {
+  const {user, organization, setEditCourseContext } = useContext(AuthContext)
   
-
-  const navigate = useNavigate();
-
+  const { id } = useParams();
+  
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
+  const [instructor, setInstructor] = useState<string>('')
+
+  const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
+
 
   useEffect(() => {
-    if( id == "OSHA" ){
-      setselectedCourse(oshaInfo);
-    }
-    else if( id == "Cyber" ){
-      setselectedCourse(cyberInfo);
-      console.log("here")
+
+    if(id && organization ){
+      CourseAPI.getOneCourse(id, organization).then((data: any) => {
+        const jsonInformation = JSON.parse(data['jsonInformation']);
+        setInstructor(data['instructor']);
+        setselectedCourse(jsonInformation);
+      })
     }
   }, [])
   
-
-  //const { courseModules, setcourseModules } = useState()
-
-  type MenuItem = Required<MenuProps>['items'][number];
-
-  function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[],
-    type?: 'group',
-  ): MenuItem {
-    return {
-      key,
-      icon,
-      children,
-      label,
-      type,
-    } as MenuItem;
-  }
-
-  const items: MenuProps['items'] = [
-    getItem('Home', 'home', <TeamOutlined />)
-  ];
-
-  const handleMenuClick = () => {
-    navigate(`/home`)
-  };
-
-  const { id } = useParams();
-
-
 
   const addModule = (selectedCourse: any) => {
     const newModules = [...selectedCourse.modules, tempModule];
@@ -239,6 +112,17 @@ function EditCourse() {
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
     setselectedCourse({ ...selectedCourse, modules: newModules });
   }
+
+  const EditCourseInformation = () => {
+    setisEditCourseOpen(true);
+  }
+  const closeEditModal = () => {
+    setisEditCourseOpen(false);
+   };
+
+   const createQuiz = () => {
+    setEditCourseContext('Create_Quiz');
+}
 
   const displayContent = (module: any, content: any) => {
 
@@ -275,8 +159,6 @@ function EditCourse() {
 
   const displayModules = (module: any) => {
 
-    //console.log(module['content'][0]['contentType'])
-
     return (
 
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
@@ -298,7 +180,7 @@ function EditCourse() {
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
                 <div style={{ display: 'flex' }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createQuiz()}>
                     <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
                   <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => addContent(selectedCourse, module)}>
@@ -322,7 +204,8 @@ function EditCourse() {
   }
 
   const listModules = (id: any) => {
-
+    console.log("here")
+    console.log(initialCourse)
     return (
       <div>
       {id['modules'].map((module: any) => (
@@ -333,44 +216,9 @@ function EditCourse() {
     )
   }
 
-  //console.log(selectedCourse['courseName'])
+
+  
   return (
-    <div>
-      <Layout style={layoutStyle}>
-        <Layout>
-          <Sider width="17%" style={siderStyle}>
-            <div className="title">
-              <Typography.Title level={2} className='text-left align-middle'>
-                <div className = "brand">
-                Surge
-                </div>
-              </Typography.Title>
-            </div>
-            <div className="user">
-              <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
-              <Typography.Title level={3} style={{ color: 'white' }}>
-                <div className='emName'>
-                  { fullName }
-                </div>
-              </Typography.Title>
-              <Menu
-              style={{ width: '100%', backgroundColor: '#002F8B' }}
-              defaultSelectedKeys={['Dashboard']}
-              mode="vertical"
-              onClick={handleMenuClick}
-              items={items}
-            />
-            </div>
-          </Sider>
-          <Content style={contentStyle}>
-          <div className='headerImage'>
-            <Image
-              width= '100%'
-              height = '98%'
-              src = {headerImg}
-              preview = {false}
-            />
-          </div>
             <div>
               <Typography.Title level={2} style={{ textAlign: 'left' }}>
                 <div className='dashboardText'>Edit Course</div>
@@ -392,9 +240,10 @@ function EditCourse() {
                 >
                   <Typography.Title level={3} style={{ textAlign: 'left' }}>
                     <div className='dashboardText'>{selectedCourse['courseName']}</div>
+                    <div style={{fontSize:'15px'}}>{instructor}</div>
                   </Typography.Title>
                   <div style = {{display:'flex'}}>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} >
+                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => EditCourseInformation()}>
                       <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
                     <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule(selectedCourse)} >
@@ -403,14 +252,11 @@ function EditCourse() {
                   </div>
                 </Box>
               </ThemeProvider>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor}></EditCourseModal>
               <div>{listModules(selectedCourse)}</div>
               </div>
             </div>
-          </Content>
-        </Layout>
-      </Layout>
-    </div>
   )
 }
 
-export default EditCourse
+export default Edit_Course

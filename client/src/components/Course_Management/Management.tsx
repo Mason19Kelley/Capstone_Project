@@ -4,35 +4,69 @@ import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { CourseAPI } from '../../api/CourseAPI';
+import { AuthContext } from '../../context/AuthContext';
 
-const temp: string[] = ['Cyber', 'OSHA', 'Python', 'Forklift']
-const content: string[] = ['1', '2', '3', '4']
+
+
+const tempCourse = {
+  courseName: 'temp',
+  modules: [
+    {
+      moduleName : "temp",
+      content : [
+        {
+            contentType : null,
+            fileType : null,
+            fileLocation :null,
+            fileName : null,
+            quizID : null,
+            Description : null
+        }]
+  }]
+}
 
 
 
 function Management () {
+  const [courseList, setCourseList] = useState<string[]>([]);
+  
+  const { organization, setEditCourseContext } = useContext(AuthContext);
+  console.log(organization)
+
+  useEffect(() => {
+    CourseAPI.getAllCourses().then((data: any[]) => {
+      const names = data.map((course: {courseName: string}) => course.courseName);
+      setCourseList(names);
+
+    });
+  }, [])
 
   const navigate = useNavigate();
-  const [classList, setClassList] = useState(['Cyber', 'OSHA', 'Python', 'Forklift'])
 
   const addCourse = () => {
-    length = classList.length;
+    const length = courseList.length + 1;
     var newCourse = 'Course ' + length;
-    //temp.push(newCourse);
-    setClassList([...classList, newCourse]);
-    console.log(newCourse);
-    console.log(classList);
+    tempCourse.courseName = newCourse;
+    console.log(tempCourse)
+    setCourseList([...courseList, newCourse]);
+    console.log(courseList)
+    if (organization !== null) {
+      CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', organization)
+    }
   }
 
   const removeCourse = (classtoRemove: string) => {
-    const updatedClassList = classList.filter(item => item !== classtoRemove);
-    setClassList(updatedClassList);
-    console.log(classList);
+    CourseAPI.deleteCourse(classtoRemove);
+    const updatedcoursesList = courseList.filter(item => item !== classtoRemove);
+    setCourseList(updatedcoursesList);
+    console.log(courseList);
   }
 
-  const buttonPress = (course: string) => {
+  const editCourse = (course: string) => {
     console.log(course); 
+    setEditCourseContext('Edit_Course');
     navigate(`/editCourse/${course}`);
   };
   
@@ -40,7 +74,7 @@ function Management () {
   const cards = () => {
     return (
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
-        {classList.map((course) => (
+        {courseList.map((course) => (
         <div className='courses'>
           <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
             <Box
@@ -59,7 +93,7 @@ function Management () {
                 <div className='dashboardText'>{course}</div>
               </Typography.Title>
               <div style = {{display:'flex'}}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => buttonPress(course)}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)}>
                   <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                 </Button>
                 <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)}>

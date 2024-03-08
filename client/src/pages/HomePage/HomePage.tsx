@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import { CourseAPI } from '../../api/CourseAPI';
 import Management from '../../components/Course_Management/Management';
-import EditCourse from '../../components/Course_Management/Editcourse';
+import EditCourse from '../EditPage/Editcourse';
 
 
 
@@ -44,6 +44,7 @@ const siderStyle: React.CSSProperties = {
 
 // Seeding the courses into the user (TODO: seed this in seed file
 function seedCourses(id: number | undefined) {
+  console.log("called")
   // created for testing purposes, inserting user into courses
   if(id != undefined) {
     CourseAPI.insertUser(2, id ?? 0)
@@ -54,13 +55,16 @@ function seedCourses(id: number | undefined) {
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
-  const { setLoggedIn, user, setUser } = useContext(AuthContext)
-  const { fullName, id } = user || {};
+  const { setLoggedIn, user, setUser, setOrganization } = useContext(AuthContext)
+  const { fullName, id } = user || {}
 
+  setOrganization(user?.organization?.orgName || null)
 
   seedCourses(id)
+  
+
   const renderPage = () => {
-    console.log(user)
+
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;

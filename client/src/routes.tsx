@@ -7,7 +7,7 @@ import NotFound from './pages/NotFound/NotFound';
 import { ProtectedRoute } from './ProtectedRoute';
 import ForgetPass from './pages/ForgetPass/ForgetPass';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
-import EditCourse from './components/Course_Management/Editcourse';
+import EditCourse from './pages/EditPage/Editcourse';
 //import PrivateRoute from './PrivateRoute'
 
 

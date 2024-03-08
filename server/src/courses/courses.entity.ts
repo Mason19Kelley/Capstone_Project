@@ -14,4 +14,10 @@ export class Courses {
 
   @ManyToMany(() => User, (user) => user.courses)
   users: User[]
+
+  @Column()
+  jsonInformation: string;
+
+  @Column()
+  organization: string;
 }
