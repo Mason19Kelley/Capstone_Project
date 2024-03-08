@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Card, ConfigProvider, Image, Typography } from 'antd';
+import { Button, Card, ConfigProvider, Image, Typography, Popover } from 'antd';
 import { useParams } from 'react-router-dom';
 import { UserOutlined, TeamOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
@@ -77,6 +77,7 @@ function Edit_Course() {
   const [instructor, setInstructor] = useState<string>('')
 
   const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
+  const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
 
 
   useEffect(() => {
@@ -122,7 +123,17 @@ function Edit_Course() {
 
    const createQuiz = () => {
     setEditCourseContext('Create_Quiz');
-}
+    }
+
+ 
+
+    const createCourseContent = (module: any) => {
+        setPopOverOpen(popOverOpen === module ? null : module);
+    };
+
+    const hide = () => {
+        setPopOverOpen(null);
+    }
 
   const displayContent = (module: any, content: any) => {
 
@@ -158,7 +169,6 @@ function Edit_Course() {
   }
 
   const displayModules = (module: any) => {
-
     return (
 
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
@@ -183,9 +193,18 @@ function Edit_Course() {
                   <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createQuiz()}>
                     <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => addContent(selectedCourse, module)}>
-                    <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
-                  </Button>
+                  <Popover
+                    key={module}
+                    content={<a onClick={hide}>Close</a>}
+                    title="Title"
+                    trigger="click"
+                    visible={popOverOpen === module}
+                    onVisibleChange={(visible) => createCourseContent(visible ? module : null)}
+                    >
+                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)}>
+                        <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                    </Button>
+                </Popover>
                   <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)}>
                     <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
