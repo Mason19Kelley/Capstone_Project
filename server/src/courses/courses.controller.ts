@@ -20,18 +20,19 @@ export class CoursesController {
     }
 
     @Post('insertCourse/:course/:jsonInformation/:instructor/:organization')
-    async insertCourse(@Param('course') course: string, @Param('jsonInformation') jsonInformation: string, @Param('instructor') instructor: string, @Param('organization') organization: string){
+    async insertCourse(@Param('course') course: string, @Param('jsonInformation') jsonInformation: string, @Param('instructor') instructor: string, @Param('organization') organization: number){
         console.log('inserting course')
         return await this.coursesService.insertCourse(course, jsonInformation, instructor, organization)
     }
 
-    @Get('getAllCourses')
-    async getAllCourses() {
-        return await this.coursesService.getAllCourses()
+    @Get('getAllCourses/:org_ID')
+    async getAllCourses(@Param('org_ID') org_ID: number){
+        return await this.coursesService.getAllCourses(org_ID)
+    
     }
 
     @Get('getOneCourse/:course/:org')
-    async getOneCourse(@Param('course') course: string, @Param('org') org: string) {
+    async getOneCourse(@Param('course') course: string, @Param('org') org: number) {
         return await this.coursesService.getOneCourse(course, org)
     }
 

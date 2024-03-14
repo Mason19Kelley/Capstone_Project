@@ -32,11 +32,11 @@ const tempCourse = {
 function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
   
-  const { organization, setEditCourseContext } = useContext(AuthContext);
+  const { user, organization, setEditCourseContext } = useContext(AuthContext);
   console.log(organization)
 
   useEffect(() => {
-    CourseAPI.getAllCourses().then((data: any[]) => {
+    CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {
       const names = data.map((course: {courseName: string}) => course.courseName);
       setCourseList(names);
 
@@ -52,9 +52,11 @@ function Management () {
     console.log(tempCourse)
     setCourseList([...courseList, newCourse]);
     console.log(courseList)
-    if (organization !== null) {
-      CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', organization)
-    }
+
+
+
+    CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', user?.organization?.id)
+
   }
 
   const removeCourse = (classtoRemove: string) => {

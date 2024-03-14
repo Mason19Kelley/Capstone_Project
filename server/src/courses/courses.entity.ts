@@ -19,5 +19,5 @@ export class Courses {
   jsonInformation: string;
 
   @Column()
-  organization: string;
+  organization_ID: number;
 }

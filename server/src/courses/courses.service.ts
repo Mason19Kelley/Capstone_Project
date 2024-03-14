@@ -18,28 +18,30 @@ export class CoursesService {
         return this.courseRepository.findOneBy({cid})
     }
 
-    insertCourse(course: string, jsonInformation: string, instructor: string, organization: string){
-        const courseEntity = this.courseRepository.create({courseName: course, jsonInformation: jsonInformation, instructor: instructor, organization: organization})
+    insertCourse(course: string, jsonInformation: string, instructor: string, organization: number){
+        const courseEntity = this.courseRepository.create({courseName: course, jsonInformation: jsonInformation, instructor: instructor, organization_ID: organization})
         return this.courseRepository.insert(courseEntity)
     }
 
     // get all courses
-    getAllCourses() {
+
+    getAllCourses(org_ID: number) {
 
         const courseNames = this.courseRepository
         .createQueryBuilder('course') // 'course' is an alias for the Course entity
         .select(['course.courseName'])
+        .where('course.organization_ID = :org_ID', {org_ID: org_ID})
         .getMany();
 
         return courseNames
     }
 
     //get one course
-    async getOneCourse(course: string, org: string) {
+    async getOneCourse(course: string, org: number) {
         const courseEntity =  await this.courseRepository
         .createQueryBuilder('course')
         .select(['course.jsonInformation', 'course.instructor'])
-        .where('course.courseName = :course AND course.organization = :org', {course: course, org: org})
+        .where('course.courseName = :course AND course.organization_ID = :org', {course: course, org: org})
         .getOne()
 
         console.log(courseEntity)
@@ -120,10 +122,10 @@ export class CoursesService {
         if(courses > 0) return
 
         const coursesToSeed = [
-            { courseName: 'Cyber', instructor: 'Mason', jsonInformation: JSON.stringify(cyberInfo), organization: 'Big Pharma' },
-            { courseName: 'OSHA', instructor: 'Abigail', jsonInformation: JSON.stringify(oshaInfo), organization: 'Big Pharma' },
-            { courseName: 'Forklift', instructor: 'Jacob', jsonInformation: JSON.stringify(cyberInfo),  organization: 'Big Pharma' },
-            { courseName: 'Safety', instructor: 'Gabe', jsonInformation: JSON.stringify(oshaInfo),  organization: 'Amazon'}
+            { courseName: 'Cyber', instructor: 'Mason', jsonInformation: JSON.stringify(cyberInfo), organization_ID: 1 },
+            { courseName: 'OSHA', instructor: 'Abigail', jsonInformation: JSON.stringify(oshaInfo), organization_ID: 1 },
+            { courseName: 'Forklift', instructor: 'Jacob', jsonInformation: JSON.stringify(cyberInfo),  organization_ID: 1 },
+            { courseName: 'Safety', instructor: 'Gabe', jsonInformation: JSON.stringify(oshaInfo),  organization_ID: 2 },
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)

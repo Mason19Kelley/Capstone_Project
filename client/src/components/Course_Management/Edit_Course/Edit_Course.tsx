@@ -82,8 +82,8 @@ function Edit_Course() {
 
   useEffect(() => {
 
-    if(id && organization ){
-      CourseAPI.getOneCourse(id, organization).then((data: any) => {
+    if(id && user?.organization?.id){
+      CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
         const jsonInformation = JSON.parse(data['jsonInformation']);
         setInstructor(data['instructor']);
         setselectedCourse(jsonInformation);

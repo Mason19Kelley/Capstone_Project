@@ -8,7 +8,7 @@ export const CourseAPI = {
         return data
     },
 
-    getOneCourse: async (course: string, org: string) => {
+    getOneCourse: async (course: string, org: number) => {
         const { data } = await api.get(`/courses/getOneCourse/${course}/${org}`);
         console.log(data);
         return data
@@ -37,14 +37,14 @@ export const CourseAPI = {
         return data 
     },
 
-    insertCourse: async (course: string, jsonInformation: string, instructor: string, organization: string) => {
+    insertCourse: async (course: string, jsonInformation: string, instructor: string, organization: number | undefined) => {
         const { data } = await api.post(`/courses/insertCourse/${course}/${jsonInformation}/${instructor}/${organization}`);
         console.log(data);
         return data
     },
 
-    getAllCourses: async () => {
-        const { data } = await api.get(`/courses/getAllCourses`);
+    getAllCourses: async (org_ID: number) => {
+        const { data } = await api.get(`/courses/getAllCourses/${org_ID}`);
         console.log(data);
         return data
     },
