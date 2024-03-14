@@ -44,7 +44,6 @@ const siderStyle: React.CSSProperties = {
 
 // Seeding the courses into the user (TODO: seed this in seed file
 function seedCourses(id: number | undefined) {
-  console.log("called")
   // created for testing purposes, inserting user into courses
   if(id != undefined) {
     CourseAPI.insertUser(2, id ?? 0)
@@ -95,7 +94,6 @@ function HomePage() {
 
   const handleMenuClick = ({ key }: { key: string }) => {
     setPage(key);
-    console.log(page)
   };
 
   type MenuItem = Required<MenuProps>['items'][number];

@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Edit_Course  from '../../components/Course_Management/Edit_Course/Edit_Course';
 import Create_Quiz from '../../components/Course_Management/Edit_Course/Create_Quiz';
+import Create_Media from '../../components/Course_Management/Edit_Course/Create_Media';
 
 const layoutStyle = {
   width: '100%',
@@ -43,8 +44,6 @@ function EditCourse() {
   const { fullName } = user || {};
   
   const { id } = useParams();
-  
-  //console.log(user)
 
   const navigate = useNavigate();
 
@@ -82,6 +81,8 @@ function EditCourse() {
         return <Edit_Course />;
       case 'Create_Quiz':
         return <Create_Quiz />;
+      case 'Create_Media':
+        return <Create_Media />;
       default:
         return null
 

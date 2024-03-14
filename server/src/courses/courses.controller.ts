@@ -40,4 +40,9 @@ export class CoursesController {
     async deleteCourse(@Param('course') course: string) {
         return await this.coursesService.deleteCourse(course)
     }
+
+    @Post('updateCourse/:courseName/:oldCourseName/:instructor/:oldInstructorName')
+    async updateCourse(@Param('courseName') courseName: string, @Param('oldCourseName') oldCourseName: string, @Param('instructor') instructor: string, @Param('oldInstructorName') oldInstructorName: string){
+        return await this.coursesService.updateCourse(courseName, oldCourseName, instructor, oldInstructorName)
+    }
 }

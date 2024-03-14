@@ -44,14 +44,34 @@ export class CoursesService {
         .where('course.courseName = :course AND course.organization_ID = :org', {course: course, org: org})
         .getOne()
 
-        console.log(courseEntity)
-
         return courseEntity
     }
 
     // delete course
     deleteCourse(course: string) {
         return this.courseRepository.delete({courseName: course})
+    }
+
+    // update course
+    async updateCourse(courseName: string, oldCourseName:string, instructor: string, oldInstructorName: string): Promise<void> {
+        const updateJSON = await this.courseRepository
+        .createQueryBuilder('course')
+        .select(['course.jsonInformation'])
+        .where('course.courseName = :course', {course: oldCourseName})
+        .getOne()
+
+        const json = JSON.parse(updateJSON.jsonInformation)
+
+        json.courseName = courseName
+
+
+        const updateCourse = await this.courseRepository
+            .createQueryBuilder()
+            .update(Courses)
+            .set({ instructor: instructor, courseName: courseName, jsonInformation: JSON.stringify(json)})
+            .where("courseName = :oldcourseName AND instructor = :oldInstructorName", { oldcourseName: oldCourseName, oldInstructorName: oldInstructorName })
+            .execute();
+
     }
 
     // inserts default courses into seed

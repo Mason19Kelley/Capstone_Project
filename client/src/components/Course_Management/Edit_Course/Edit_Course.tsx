@@ -81,7 +81,7 @@ function Edit_Course() {
 
 
   useEffect(() => {
-
+    
     if(id && user?.organization?.id){
       CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
         const jsonInformation = JSON.parse(data['jsonInformation']);
@@ -122,7 +122,7 @@ function Edit_Course() {
    };
 
    const createQuiz = () => {
-    setEditCourseContext('Create_Quiz');
+    setEditCourseContext('Create_Media');
     }
 
  
@@ -222,12 +222,11 @@ function Edit_Course() {
     )
   }
 
-  const listModules = (id: any) => {
-    console.log("here")
-    console.log(initialCourse)
+  const listModules = (course: any) => {
+    
     return (
       <div>
-      {id['modules'].map((module: any) => (
+      {course['modules'].map((module: any) => (
         displayModules(module)
       ))}
       
@@ -271,10 +270,11 @@ function Edit_Course() {
                   </div>
                 </Box>
               </ThemeProvider>
-              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor}></EditCourseModal>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
               <div>{listModules(selectedCourse)}</div>
               </div>
             </div>
+            
   )
 }
 

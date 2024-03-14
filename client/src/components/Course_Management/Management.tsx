@@ -33,7 +33,6 @@ function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
   
   const { user, organization, setEditCourseContext } = useContext(AuthContext);
-  console.log(organization)
 
   useEffect(() => {
     CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {
@@ -49,25 +48,19 @@ function Management () {
     const length = courseList.length + 1;
     var newCourse = 'Course ' + length;
     tempCourse.courseName = newCourse;
-    console.log(tempCourse)
     setCourseList([...courseList, newCourse]);
-    console.log(courseList)
-
-
 
     CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', user?.organization?.id)
-
   }
 
   const removeCourse = (classtoRemove: string) => {
     CourseAPI.deleteCourse(classtoRemove);
     const updatedcoursesList = courseList.filter(item => item !== classtoRemove);
     setCourseList(updatedcoursesList);
-    console.log(courseList);
+
   }
 
   const editCourse = (course: string) => {
-    console.log(course); 
     setEditCourseContext('Edit_Course');
     navigate(`/editCourse/${course}`);
   };

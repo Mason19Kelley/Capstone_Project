@@ -1,27 +1,36 @@
-
 import { useEffect, useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
+import { CourseAPI } from '../../../api/CourseAPI';
 
-function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; courseName: string | undefined; instructorName: string | undefined}) {
+function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; courseName: string | undefined; instructorName: string | undefined; courseJSON: any; }) {
   const [ loading, setLoading ] = useState(false);
   const [CourseName, setCourseName] = useState("")
   const [instructorName, setinstructorName] = useState("")
+  const [courseJSON, setCourseJSON] = useState<any>({})
+  
 
   useEffect(() => {
+    //setOldCourseName(CourseName)
     if (props.isModalOpen) {
         setCourseName(props.courseName || "");
         setinstructorName(props.instructorName || "");
+        setCourseJSON(props.courseJSON || {});
     }
- }, [props.isModalOpen, props.courseName, props.instructorName]);
+ }, [props.isModalOpen, props.courseName, props.instructorName, props.courseJSON]);
 
   const closeModal = () => {
     props.closeModal()
   }
 
   const saveCourseInformation = () => {
+    //console.log(props.courseName)
+    courseJSON.courseName = CourseName
+
+    CourseAPI.updateCourse(CourseName, props.courseName ?? "", instructorName, props.instructorName ?? "")
     props.closeModal()
   }
 
+  
   return (
     <Modal title="Edit Course Information" open={props.isModalOpen} onCancel={props.closeModal}
       footer={[
