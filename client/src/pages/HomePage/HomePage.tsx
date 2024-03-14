@@ -26,7 +26,7 @@ const layoutStyle = {
 const contentStyle: React.CSSProperties = {
   flex: 1, 
   overflowY: 'auto', 
-  padding: '20px',
+  padding: '0px',
   backgroundColor: '#dbdbdb',
   backgroundSize: '100%',
   textAlign: 'center',
