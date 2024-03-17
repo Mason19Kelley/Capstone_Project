@@ -7,7 +7,7 @@ import * as path from 'path';
 @Injectable()
 export class StorageService {
   private storage: Storage;
-
+  
   constructor() {
     this.storage = new Storage({
       credentials: JSON.parse(process.env.GOOGLE_JSON_KEY)

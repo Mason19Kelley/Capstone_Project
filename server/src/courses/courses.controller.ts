@@ -45,4 +45,9 @@ export class CoursesController {
     async updateCourse(@Param('courseName') courseName: string, @Param('oldCourseName') oldCourseName: string, @Param('instructor') instructor: string, @Param('oldInstructorName') oldInstructorName: string){
         return await this.coursesService.updateCourse(courseName, oldCourseName, instructor, oldInstructorName)
     }
+
+    @Post('updateCourseJSON/:courseName/:courseJSON')
+    async updateCourseJSON(@Param('courseName') courseName: string, @Param('courseJSON') courseJSON: string){
+        return await this.coursesService.updateCourseJSON(courseName, courseJSON)
+    }
 }

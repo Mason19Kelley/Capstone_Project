@@ -74,6 +74,16 @@ export class CoursesService {
 
     }
 
+    // update course json
+    async updateCourseJSON(courseName: string, courseJSON: string): Promise<void> {
+        const updateCourse = await this.courseRepository
+            .createQueryBuilder()
+            .update(Courses)
+            .set({ jsonInformation: courseJSON})
+            .where("courseName = :courseName", { courseName: courseName })
+            .execute();
+    }
+
     // inserts default courses into seed
     async seedCourses() {
         let courses = await this.courseRepository.count();

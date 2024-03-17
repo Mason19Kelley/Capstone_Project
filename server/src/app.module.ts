@@ -22,6 +22,7 @@ import { PostmarkService } from './postmark/postmark.service';
 import { PostmarkModule } from './postmark/postmark.module';
 import { StorageModule } from './storage/storage.module';
 import { FileModule } from './file/file.module';
+import { QuizModule } from './quiz/quiz.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -54,7 +55,8 @@ import { FileModule } from './file/file.module';
      PostmarkModule,
      LoginlogsModule,
      StorageModule,
-     FileModule
+     FileModule,
+     QuizModule
   ],
   controllers: [AppController],
   providers: [AppService, SeedService, PostmarkService],
