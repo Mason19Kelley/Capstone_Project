@@ -28,23 +28,32 @@ export const CourseAPI = {
         return data 
     },
 
+    //used to insert a course with appropriate information: course Name, JSON, instructor Name, and organization ID
     insertCourse: async (course: string, jsonInformation: string, instructor: string, organization: number | undefined) => {
         const { data } = await api.post(`/courses/insertCourse/${course}/${jsonInformation}/${instructor}/${organization}`);
         return data
     },
 
+    //used to get all courses based on organization ID
     getAllCourses: async (org_ID: number) => {
         const { data } = await api.get(`/courses/getAllCourses/${org_ID}`);
         return data
     },
 
+    //used to a delete course
     deleteCourse: async (course: string) => {
         const { data } = await api.post(`/courses/deleteCourse/${course}`);
         return data
     },
 
+    //used to update course name and instructor
     updateCourse: async (courseName: string, oldCourseName:string, instructor: string, oldInstructorName: string) => {
         const { data } = await api.post(`/courses/updateCourse/${courseName}/${oldCourseName}/${instructor}/${oldInstructorName}`);
+        return data
+    },
+
+    updateCourseJSON: async (courseName: string, courseJSON: string) => {
+        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}/${courseJSON}`);
         return data
     }
 }

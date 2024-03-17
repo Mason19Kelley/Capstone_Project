@@ -93,8 +93,10 @@ function Edit_Course() {
   
 
   const addModule = (selectedCourse: any) => {
+    console.log(selectedCourse)
     const newModules = [...selectedCourse.modules, tempModule];
     setselectedCourse({ ...selectedCourse, modules: newModules });
+    CourseAPI.updateCourseJSON(selectedCourse.courseName, JSON.stringify(selectedCourse));
   }
 
   const deleteModule = (selectedCourse: any, module: any) => {
