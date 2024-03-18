@@ -8,6 +8,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import { Box, ThemeProvider } from '@mui/system'
 import { CourseAPI } from '../../../api/CourseAPI';
 import EditCourseModal from '../../modals/EditCourseModal/EditCourseModal';
+import EditCourse from '../../../pages/EditPage/Editcourse';
 
 interface course {
   courseName : string,
@@ -69,7 +70,7 @@ modules : [
 
 
 function Edit_Course() {
-  const {user, organization, setEditCourseContext } = useContext(AuthContext)
+  const {user, organization, EditCourseContext, setEditCourseContext } = useContext(AuthContext)
   
   const { id } = useParams();
   
@@ -123,9 +124,13 @@ function Edit_Course() {
     setisEditCourseOpen(false);
    };
 
-   const createQuiz = () => {
-    setEditCourseContext('Create_Media');
+   const createMedia= () => {
+      setEditCourseContext('Create_Media');
     }
+
+  const createQuiz = () => {
+    setEditCourseContext('Create_Quiz');
+  }
 
  
 
@@ -192,12 +197,21 @@ function Edit_Course() {
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
                 <div style={{ display: 'flex' }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createQuiz()}>
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} >
                     <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
                   <Popover
                     key={module}
-                    content={<a onClick={hide}>Close</a>}
+                    content={
+                      <div style={{display: 'flex'}} >
+                        <Button style={{flex: 1}} onClick={() => createQuiz()} >
+                            Quiz
+                        </Button>
+                        <Button style={{flex: 1}} onClick={() => createMedia()}>
+                            Media
+                        </Button>
+                      </div>
+                    }
                     title="Add Content"
                     trigger="click"
                     open={popOverOpen === module}

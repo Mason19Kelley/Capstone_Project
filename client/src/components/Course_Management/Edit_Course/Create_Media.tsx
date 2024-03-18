@@ -1,12 +1,41 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Card, Upload, message, UploadProps, Button } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { FileAPI } from '../../../api/FileAPI';
+import { CourseAPI } from '../../../api/CourseAPI';
+import { AuthContext } from '../../../context/AuthContext';
+import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+
 
 function Create_Media() {
     const [file, setFile] = useState<File | null>(null);
     const [fileList, setFileList] = useState<any[]>([]);
+    const [description, setDescription] = useState<string>('');
+    const [jsonInformation, setJsonInformation] = useState<any>(null);
+    const { user } = useContext(AuthContext);
+    const { id } = useParams();
+
+    const tempMediaJSON = {
+        contentType : "Media",
+        fileType : "temp",
+        fileName : "Sample Video",
+        quizID : null,
+        Description : "This is a sample video"
+    }
+
+    useEffect(() => {
+        if(id && user?.organization?.id){
+          CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
+            setJsonInformation(JSON.parse(data['jsonInformation']))
+          })
+        }
+      }, [])
+
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setDescription(event.target.value);
+    }
 
     const handleFileChange = (info: UploadChangeParam<UploadFile<any>>) => {
         const { status, originFileObj } = info.file;
@@ -38,8 +67,12 @@ function Create_Media() {
         formData.append('file', file);
 
         try {
-            console.log(file)
-            console.log(formData)
+            tempMediaJSON.fileType = file.type;
+            tempMediaJSON.fileName = file.name;
+            tempMediaJSON.Description = description;
+            console.log(tempMediaJSON);
+            console.log(jsonInformation);
+            console.log(formData);
             const response = await FileAPI.uploadFile(formData);
             console.log('Upload response:', response);
             // Perform further actions if needed
@@ -47,6 +80,7 @@ function Create_Media() {
             console.error('Upload error:', error);
         }
     };
+
 
     const props: UploadProps = {
         name: 'file',
@@ -67,37 +101,28 @@ function Create_Media() {
                     banned files.
                 </p>
             </Upload>
+            <br></br>
+            <br></br>
+            Description: <textarea 
+                value = {description}
+                onChange={handleChange}
+                style={{
+                    background: 'white', 
+                    outlineColor: 'black', 
+                    outlineWidth: 1,
+                    outlineStyle: 'solid',
+                    border: 'none', // To remove default input border
+                    padding: '5px', // Adjust padding as needed
+                    width: '50%',
+                    height: '100px',
+                    verticalAlign: 'top',
+                    textAlign: 'justify',
+                    resize: 'vertical'
+                }}  />
+            <div></div>
             <button onClick={handleSubmit}>Submit</button>
         </Card>
     );
 }
 
 export default Create_Media;
-
-
-        // <Card>
-        //     <Dragger {...props}>
-        //         <p className="ant-upload-drag-icon">
-        //             <InboxOutlined />
-        //         </p>
-        //         <p className="ant-upload-text">Click or drag file to this area to upload</p>
-        //         <p className="ant-upload-hint">
-        //             Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-        //             banned files.
-        //         </p>
-                
-        //     </Dragger>
-        //     <button type="submit">Submit</button>
-        // </Card>
-
-        // <div>
-        //     <form onSubmit={handleSubmit}>
-        //         <h1>File Upload</h1>
-        //         <input type="file" onChange={handleFileChange} />
-        //         <button type="submit">Submit</button>
-        //     </form>
-//         // </div> 
-//     )
-// }
-
-// export default Create_Media;

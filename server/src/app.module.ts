@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
+import { Quiz } from './quiz/quiz.entity';
 import { SeedService } from './seed/seed.service';
 import { CoursesModule } from './courses/courses.module';
 import { Courses } from './courses/courses.entity';
@@ -37,7 +38,7 @@ import { QuizModule } from './quiz/quiz.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role, LoginLog, Courses],
+         entities: [User, Organization, Role, LoginLog, Courses, Quiz],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),
