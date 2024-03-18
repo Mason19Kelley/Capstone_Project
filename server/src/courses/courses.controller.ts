@@ -1,11 +1,11 @@
-import { Controller, Request, Get, UseGuards, Param, Post } from '@nestjs/common';
+import { Controller, Request, Get, UseGuards, Param, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from 'src/auth/auth.model';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { inflate } from 'pako'
+import pako from 'pako'
 
 @ApiTags('courses')
 @Controller('courses')
@@ -47,11 +47,11 @@ export class CoursesController {
         return await this.coursesService.updateCourse(courseName, oldCourseName, instructor, oldInstructorName)
     }
 
-    @Post('updateCourseJSON/:courseName/:courseJSON')
-    async updateCourseJSON(@Param('courseName') courseName: string, @Param('courseJSON') courseJSON: any){
-        //const decompressed = pako.inflate(courseJSON);
-        const decompressed = inflate(courseJSON, { to: 'string' });
+    @Post('updateCourseJSON/:courseName')
+    async updateCourseJSON(@Param('courseName') courseName: string,@Body() courseJSON: string){
         console.log(courseJSON)
+        console.log("success")
         return await this.coursesService.updateCourseJSON(courseName, courseJSON)
     }
 }
+
