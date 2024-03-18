@@ -4,10 +4,12 @@ import { Card, ConfigProvider, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import Meta from 'antd/es/card/Meta';
-import { useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
+import { FileAPI } from '../../api/FileAPI';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
 
 const cards: string[] = [
     'My Courses',
@@ -55,6 +57,7 @@ function getCoursesCards(): JSX.Element[] {
     }};
     fetchData();
   }, [id]);
+  
 
   const cards: JSX.Element[] = [];
   for (let index = 0; index < courses.length; index++) {
@@ -70,8 +73,34 @@ function getCoursesCards(): JSX.Element[] {
 }
 
 function Dashboard() {
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
+  };
+  
+  
 
   const Coursecards = getCoursesCards();
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      await FileAPI.uploadFile(formData)
+    } catch (error) {
+      console.error('Upload error:', error);
+    }
+  };
   
   return (
     <div className='dashboard-wrapper'>
@@ -114,8 +143,17 @@ function Dashboard() {
             height:350,
             borderRadius: 1,
             bgcolor: 'primary.main'
-          }}/>
+          }}>
+            </Box>
         </ThemeProvider>
+      </div>
+      <VideoPlayer></VideoPlayer>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <h1>File Upload</h1>
+          <input type="file" onChange={handleFileChange} />
+          <button type="submit">Upload</button>
+        </form>
       </div>
     </div>
     
