@@ -9,6 +9,7 @@ import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { LoginLogsService } from '../loginlogs/loginlogs.service';
+import { CreateUserArgs } from 'src/users/CreateUserArgs.model';
 
 // controller for handling authentications
 @Controller('auth')
@@ -54,6 +55,12 @@ export class AuthController {
     async getLogs(){
         const logOutput = await this.loginLogsService.findAllLogs()
         return logOutput
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('createUser')
+    async createUser(@Body() createUserArgs: CreateUserArgs) {
+        return await this.authService.createUser(createUserArgs)
     }
 
 }

@@ -1,10 +1,13 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
+import { AdminAPI } from '../../../api/AdminAPI';
+import { AuthContext } from '../../../context/AuthContext';
 
 
 
 function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; refetchUsers: () => void; }) {
+  const { user } = useContext(AuthContext)
   const [ loading, setLoading ] = useState(false);
   const [fullName, setFullName ] = useState("");
   const [email, setEmail] = useState("");
@@ -24,11 +27,14 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
 
   const saveUser = () => {
     setLoading(true)
-    console.log(fullName)
-    console.log(email)
-    console.log(role)
-    props.refetchUsers()
-    props.closeModal()
+    AdminAPI.createUser({fullName: fullName, email: email, role: role, orgId: user?.organization?.id}).then(() => {
+      props.refetchUsers()
+      props.closeModal()
+    }).catch((error) => {
+      console.log(error)
+      props.closeModal()
+    })
+    
   }
 
   function isValidEmail() {
