@@ -1,4 +1,5 @@
 import { api } from "./axiosConfig"
+import pako from 'pako'
 
 export const CourseAPI = {
 
@@ -53,7 +54,9 @@ export const CourseAPI = {
     },
 
     updateCourseJSON: async (courseName: string, courseJSON: string) => {
-        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}/${courseJSON}`);
-        return data
+        const compressed = pako.deflate(JSON.stringify(courseJSON));
+        console.log(compressed)
+        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}/${compressed}`);
+        return data;
     }
 }

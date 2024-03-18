@@ -5,6 +5,7 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { inflate } from 'pako'
 
 @ApiTags('courses')
 @Controller('courses')
@@ -47,7 +48,10 @@ export class CoursesController {
     }
 
     @Post('updateCourseJSON/:courseName/:courseJSON')
-    async updateCourseJSON(@Param('courseName') courseName: string, @Param('courseJSON') courseJSON: string){
+    async updateCourseJSON(@Param('courseName') courseName: string, @Param('courseJSON') courseJSON: any){
+        //const decompressed = pako.inflate(courseJSON);
+        const decompressed = inflate(courseJSON, { to: 'string' });
+        console.log(courseJSON)
         return await this.coursesService.updateCourseJSON(courseName, courseJSON)
     }
 }

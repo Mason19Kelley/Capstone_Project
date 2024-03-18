@@ -82,6 +82,7 @@ export class CoursesService {
             .set({ jsonInformation: courseJSON})
             .where("courseName = :courseName", { courseName: courseName })
             .execute();
+        console.log(updateCourse)
     }
 
     // inserts default courses into seed

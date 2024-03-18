@@ -95,10 +95,16 @@ function Edit_Course() {
 
   const addModule = (selectedCourse: any) => {
     console.log(selectedCourse)
-    const newModules = [...selectedCourse.modules, tempModule];
-    setselectedCourse({ ...selectedCourse, modules: newModules });
-    CourseAPI.updateCourseJSON(selectedCourse.courseName, JSON.stringify(selectedCourse));
+    setselectedCourse(prevCourse => {
+      const newModules = [...prevCourse.modules, tempModule];
+      // Return the updated state object
+      return { ...prevCourse, modules: newModules };
+  });
+    const courseJSON = JSON.stringify(selectedCourse);
+    console.log(courseJSON)
+    CourseAPI.updateCourseJSON(selectedCourse.courseName, courseJSON);
   }
+
 
   const deleteModule = (selectedCourse: any, module: any) => {
     const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleName !== module.moduleName);
