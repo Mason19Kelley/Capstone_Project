@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound/NotFound';
 import { ProtectedRoute } from './ProtectedRoute';
 import ForgetPass from './pages/ForgetPass/ForgetPass';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
+import CoursePage from './pages/CoursePage/CoursePage';
 //import PrivateRoute from './PrivateRoute'
 
 
@@ -25,6 +26,11 @@ const AppRoutes: React.FC = () => {
       <Route path="/home" element={
         <ProtectedRoute>
           <HomePage />
+        </ProtectedRoute>
+      }/>
+      <Route path="/courses/:id" element={
+        <ProtectedRoute>
+          <CoursePage />
         </ProtectedRoute>
       }/>
     </Routes>

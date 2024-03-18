@@ -14,4 +14,7 @@ export class Courses {
 
   @ManyToMany(() => User, (user) => user.courses)
   users: User[]
+
+  @Column()
+  content: string;
 }

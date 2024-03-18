@@ -6,16 +6,18 @@ import { AuthContext } from '../../context/AuthContext';
 import { useContext, useEffect, useState } from 'react'
 import { CourseAPI } from '../../api/CourseAPI';
 import { Courses } from '../../models/courses.model';
+import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
 
 interface CardProps {
   courseName: string;
   instructor: string;
+  cid: number;
 }
 
 // Generating the card
-function generateCard({courseName, instructor}: CardProps) {
+function generateCard({courseName, instructor, cid}: CardProps) {
   // Template for the image on the top of the card
   const boxTemplate = {
     width: 1,
@@ -26,9 +28,11 @@ function generateCard({courseName, instructor}: CardProps) {
 
   // Building the Actual card, obtaining the name and instructor
   return (
+    <Link to={`/courses/${cid}`}>
     <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
       <Meta title = { courseName } description= { instructor } />
     </Card>
+    </Link>
   );
 }
 
@@ -53,8 +57,9 @@ function getCoursesCards(): JSX.Element[] {
   for (let index = 0; index < courses.length; index++) {
     const courseName = courses?.[index]?.courseName || ''
     const instructor = courses?.[index]?.instructor || ''
+    const cid = courses?.[index]?.cid || 0
 
-    const params: CardProps = {courseName, instructor}
+    const params: CardProps = {courseName, instructor, cid}
 
     cards.push(generateCard(params))
   }

@@ -22,12 +22,30 @@ export class CoursesService {
     async seedCourses() {
         let courses = await this.courseRepository.count();
 
+        const data = {
+            courseName : 'Course Name',
+            modules : [
+                {
+                    moduleName : 'Module 1',
+                    content : [
+                        {
+                            contentType : null,
+                            fileType : null,
+                            fileLocation : null,
+                            fileName : null,
+                            quizID : null,
+                            Description : null
+                        }]
+                }
+            ]
+        }
+
         if(courses > 0) return
 
         const coursesToSeed = [
-            { courseName: 'Default Name', instructor: 'Default Teacher'},
-            { courseName: 'Test Course', instructor: 'Test Teacher'},
-            { courseName: 'Dummy Course', instructor: 'Dummy Teacher'}
+            { courseName: 'Default Name', instructor: 'Default Teacher', content: JSON.stringify(data)},
+            { courseName: 'Test Course', instructor: 'Test Teacher', content: JSON.stringify(data)},
+            { courseName: 'Dummy Course', instructor: 'Dummy Teacher', content: JSON.stringify(data)}
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)
