@@ -17,11 +17,11 @@ interface course {
   modules :
       {
           moduleName : string,
+          moduleID: string,
           content :
               {
                   contentType : string | null,
                   fileType : string | null,
-                  fileLocation : string | null,
                   fileName : string | null,
                   quizID : number | null,
                   Description : string | null
@@ -37,11 +37,11 @@ function Edit_Course() {
     modules : [
         {
             moduleName : 'temp1',
+            moduleID : uniqueID,
             content : [
                 {
                     contentType : null,
                     fileType : null,
-                    fileLocation :null,
                     fileName : null,
                     quizID : null,
                     Description : null
