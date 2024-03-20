@@ -95,11 +95,11 @@ export class CoursesService {
             modules : [
                 {
                     moduleName : "OSHA 1",
+                    moduleID : '7c4b8214-42bb-4cc3-8015-3ad6f0874702',
                     content : [
                         {
                             contentType : "Quiz",
                             fileType : null,
-                            fileLocation :null,
                             fileName : null,
                             quizID : 7,
                             Description : null
@@ -107,11 +107,11 @@ export class CoursesService {
                 },
                 {
                   moduleName : "OSHA 2",
+                  moduleID : '55642e05-40c5-4af9-a50f-c3cf4a20a0c3',
                   content : [
                       {
                           contentType : "Media",
                           fileType : "mp4",
-                          fileLocation : "/here/there/everywhere",
                           fileName : "Sample Video",
                           quizID : null,
                           Description : "This is a sample video"
@@ -125,11 +125,11 @@ export class CoursesService {
             modules : [
                 {
                     moduleName : "Cyber 1",
+                    moduleID : '1e6e19d8-e517-48f8-a556-161bb5d50c34',
                     content : [
                         {
                             contentType : "Media",
                             fileType : 'mp4',
-                            fileLocation :'somewhere/over/the/rainbow',
                             fileName : 'this is hard work',
                             quizID : null,
                             Description : null
@@ -137,11 +137,11 @@ export class CoursesService {
                 },
                 {
                   moduleName : "Cyber 2",
+                  moduleID : 'b082427f-14d7-4623-b519-448c8325098d',
                   content : [
                       {
                           contentType : "Media",
                           fileType : "mp4",
-                          fileLocation : "/here/there/everywhere",
                           fileName : "Sample Video",
                           quizID : null,
                           Description : "This is a sample video"

@@ -45,7 +45,7 @@ async seedOrganizations() {
     
 
     const quizToSeed = [
-      { Quiz_Name: 'Test Quiz', Quiz_JSON: JSON.stringify(quizJson) },
+      { id: '95352491-342e-480b-b05e-c4a4e94d96b7', Quiz_Name: 'Test Quiz', Quiz_JSON: JSON.stringify(quizJson) },
     ];
 
     const voteEntities = this.quizRepository.create(quizToSeed)

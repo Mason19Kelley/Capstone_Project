@@ -24,7 +24,7 @@ export class SeedService {
     await this.rolesService.seedRoles();
     await this.orgsService.seedOrganizations();
     await this.usersService.seedUsers();
-    await this.coursesService.seedCourses();
+    //await this.coursesService.seedCourses();
     await this.logsService.seedLoginLogs();
     await this.quizService.seedOrganizations();
     

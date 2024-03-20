@@ -22,7 +22,7 @@ const defaultAuthContextValue: AuthContextProps = {
   organization: '',
   setOrganization: () => {},
   EditCourseContext : '',
-  setEditCourseContext : () => {}
+  setEditCourseContext : () => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(defaultAuthContextValue);
@@ -38,7 +38,7 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   const [EditCourseContext, setEditCourseContext] = useState<string | null>('Edit_Course');
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn, user, setUser, organization, setOrganization, EditCourseContext, setEditCourseContext }}>
+    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn, user, setUser, organization, setOrganization, EditCourseContext, setEditCourseContext}}>
       {children}
     </AuthContext.Provider>
   );

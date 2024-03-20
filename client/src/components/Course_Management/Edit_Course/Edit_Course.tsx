@@ -8,7 +8,9 @@ import { AuthContext } from '../../../context/AuthContext';
 import { Box, ThemeProvider } from '@mui/system'
 import { CourseAPI } from '../../../api/CourseAPI';
 import EditCourseModal from '../../modals/EditCourseModal/EditCourseModal';
-import EditCourse from '../../../pages/EditPage/Editcourse';
+import { v4 as uuidv4 } from 'uuid';
+import { contentContext } from '../../../context/contentContext';
+import { FileAPI } from '../../../api/FileAPI';
 
 interface course {
   courseName : string,
@@ -27,58 +29,62 @@ interface course {
       }[]
 }
 
-const initialCourse: course = {
-courseName : 'temp',
-modules : [
-    {
-        moduleName : 'temp1',
-        content : [
-            {
-                contentType : null,
-                fileType : null,
-                fileLocation :null,
-                fileName : null,
-                quizID : null,
-                Description : null
-            }]
-    }]
-}
-
-  const tempModule = {
-    moduleName : "temp",
-    content : [
+function Edit_Course() {
+ const uniqueID = uuidv4();
+  
+  const initialCourse: course = {
+    courseName : 'temp',
+    modules : [
         {
+            moduleName : 'temp1',
+            content : [
+                {
+                    contentType : null,
+                    fileType : null,
+                    fileLocation :null,
+                    fileName : null,
+                    quizID : null,
+                    Description : null
+                }]
+        }]
+    }
+    
+    const { contentID, setContentID } = useContext(contentContext);
+
+  const {user, organization, EditCourseContext, setEditCourseContext} = useContext(AuthContext)
+  const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
+
+  const { id } = useParams();
+  
+  const [instructor, setInstructor] = useState<string>('')
+
+  const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
+  const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
+
+    
+      const tempModule = {
+        moduleName : "temp",
+        moduleID : uniqueID,
+        content : [
+          {
             contentType : null,
             fileType : null,
             fileLocation :null,
             fileName : null,
             quizID : null,
             Description : null
-        }]
-  }
-
-  const tempContent = {
-    contentType : "temp",
-    fileType : null,
-    fileLocation :null,
-    fileName : null,
-    quizID : null,
-    Description : null
-  }
-
-  
-
-
-function Edit_Course() {
-  const {user, organization, EditCourseContext, setEditCourseContext } = useContext(AuthContext)
-  
-  const { id } = useParams();
-  
-  const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
-  const [instructor, setInstructor] = useState<string>('')
-
-  const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
-  const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
+          }]
+      }
+    
+      const tempContent = {
+        contentType : "temp",
+        fileType : null,
+        fileLocation :null,
+        fileName : null,
+        quizID : null,
+        Description : null
+      }
+    
 
 
   useEffect(() => {
@@ -92,22 +98,26 @@ function Edit_Course() {
     }
   }, [])
   
+  useEffect(() => {
+    updateJSON();
+  }, [selectedCourse]);
+  
+  const updateJSON = () => {
+    CourseAPI.updateCourseJSON(selectedCourse.courseName, selectedCourse);
+  }
 
-  const addModule = (selectedCourse: any) => {
-    console.log(selectedCourse)
+
+  const addModule = () => {
     setselectedCourse(prevCourse => {
       const newModules = [...prevCourse.modules, tempModule];
-      // Return the updated state object
       return { ...prevCourse, modules: newModules };
-  });
-    const courseJSON = JSON.stringify(selectedCourse);
-    console.log(courseJSON)
-    CourseAPI.updateCourseJSON(selectedCourse.courseName, courseJSON);
+    });
   }
 
 
   const deleteModule = (selectedCourse: any, module: any) => {
-    const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleName !== module.moduleName);
+    console.log(module.moduleID)
+    const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleID !== module.moduleID);
     setselectedCourse({ ...selectedCourse, modules: newModules });
   }
 
@@ -118,9 +128,10 @@ function Edit_Course() {
   }
 
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
-    const newContent = module.content.filter((con: any) => con.contentType !== content.contentType);
+    const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
     setselectedCourse({ ...selectedCourse, modules: newModules });
+
   }
 
   const EditCourseInformation = () => {
@@ -130,7 +141,10 @@ function Edit_Course() {
     setisEditCourseOpen(false);
    };
 
-   const createMedia= () => {
+
+   const createMedia= (module: any) => {
+      setContentID(module.moduleID)
+      console.log(contentID)
       setEditCourseContext('Create_Media');
     }
 
@@ -138,7 +152,6 @@ function Edit_Course() {
     setEditCourseContext('Create_Quiz');
   }
 
- 
 
     const createCourseContent = (module: any) => {
         setPopOverOpen(popOverOpen === module ? null : module);
@@ -165,7 +178,7 @@ function Edit_Course() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography.Title level={3} style={{ textAlign: 'left', margin: 0 }}>
                 <div className='dashboardText'>
-                  {content['contentType']}
+                  {content['fileName']}
                 </div>
               </Typography.Title>
               <div style={{ display: 'flex' }}>
@@ -213,7 +226,7 @@ function Edit_Course() {
                         <Button style={{flex: 1}} onClick={() => createQuiz()} >
                             Quiz
                         </Button>
-                        <Button style={{flex: 1}} onClick={() => createMedia()}>
+                        <Button style={{flex: 1}} onClick={() => createMedia(module)}>
                             Media
                         </Button>
                       </div>
@@ -286,7 +299,7 @@ function Edit_Course() {
                     <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => EditCourseInformation()}>
                       <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule(selectedCourse)} >
+                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule()} >
                       <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
                   </div>

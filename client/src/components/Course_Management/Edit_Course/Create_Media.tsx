@@ -7,6 +7,7 @@ import { CourseAPI } from '../../../api/CourseAPI';
 import { AuthContext } from '../../../context/AuthContext';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { contentContext } from '../../../context/contentContext';
 
 
 function Create_Media() {
@@ -16,6 +17,7 @@ function Create_Media() {
     const [jsonInformation, setJsonInformation] = useState<any>(null);
     const { user } = useContext(AuthContext);
     const { id } = useParams();
+    const { contentID } = useContext(contentContext);
 
     const tempMediaJSON = {
         contentType : "Media",
@@ -29,9 +31,11 @@ function Create_Media() {
         if(id && user?.organization?.id){
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
             setJsonInformation(JSON.parse(data['jsonInformation']))
-          })
+        })
         }
-      }, [])
+      }, [jsonInformation])
+
+
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(event.target.value);
@@ -57,6 +61,7 @@ function Create_Media() {
     };
 
     const handleSubmit = async (event: FormEvent) => {
+        console.log(jsonInformation)
         event.preventDefault();
         if (!file) {
             console.error('No file selected');
@@ -67,14 +72,16 @@ function Create_Media() {
         formData.append('file', file);
 
         try {
+            const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
             tempMediaJSON.fileType = file.type;
             tempMediaJSON.fileName = file.name;
             tempMediaJSON.Description = description;
-            console.log(tempMediaJSON);
-            console.log(jsonInformation);
-            console.log(formData);
+            moduleToEdit.content.push(tempMediaJSON);
             const response = await FileAPI.uploadFile(formData);
             console.log('Upload response:', response);
+            if (id){
+                CourseAPI.updateCourseJSON(id, jsonInformation);
+            }
             // Perform further actions if needed
         } catch (error) {
             console.error('Upload error:', error);
