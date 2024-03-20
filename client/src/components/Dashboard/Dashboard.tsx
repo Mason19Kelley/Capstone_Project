@@ -112,10 +112,10 @@ function Dashboard() {
           preview = {false}
         />
       </div>
-      <h1 className='self-start' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingLeft: 50, paddingTop: 10}}>Dashboard</h1>
+      <h1 style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
       <div className='cards'>
         <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
-            {cards.map(card => <Card style={{width: '100%'}}><Typography.Text>{card}</Typography.Text></Card>)}
+            {cards.map(card => <Card style={{width: '100%', minWidth: "202px"}} className="course-card"><Typography.Text>{card}</Typography.Text></Card>)}
         </ConfigProvider>
       </div>
 
@@ -123,7 +123,7 @@ function Dashboard() {
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
           <Box sx={{
             width:1,
-            height:400,
+            height: "fit-content",
             borderRadius: 1,
             bgcolor: 'primary.main',
           }}>
@@ -132,28 +132,9 @@ function Dashboard() {
               Learning Dashboard
               </div>
             </Typography.Title>
-            <div className='testcard'>{Coursecards.map(c => <Box>{c}</Box>)}</div>
+            <div className='test-card'>{Coursecards.map(c => <Box>{c}</Box>)}</div>
           </Box>
         </ThemeProvider>
-      </div>
-      <div className='learningDashboard'>
-        <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-          <Box sx={{
-            width: 1,
-            height:350,
-            borderRadius: 1,
-            bgcolor: 'primary.main'
-          }}>
-            </Box>
-        </ThemeProvider>
-      </div>
-      <VideoPlayer></VideoPlayer>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <h1>File Upload</h1>
-          <input type="file" onChange={handleFileChange} />
-          <button type="submit">Upload</button>
-        </form>
       </div>
     </div>
     

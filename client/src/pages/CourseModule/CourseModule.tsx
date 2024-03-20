@@ -61,17 +61,17 @@ const CourseModule: React.FC = () => {
             </div>
             <div style={{ marginTop: 24 }}>
               {current < steps.length - 1 && (
-                <Button type="default" onClick={() => next()}>
+                <Button type="default" onClick={() => next()} className="course-button">
                   Next
                 </Button>
               )}
               {current === steps.length - 1 && (
-                <Button type="default" onClick={() => message.success('Module Complete!')}>
+                <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
                   Done
                 </Button>
               )}
               {current > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                <Button style={{ margin: '0 8px' }} onClick={() => prev()} className="course-button">
                   Previous
                 </Button>
               )}
