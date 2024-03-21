@@ -10,6 +10,7 @@ import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { FileAPI } from '../../api/FileAPI';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import { Link } from 'react-router-dom';
 
 const cards: string[] = [
     'My Courses',
@@ -22,9 +23,10 @@ const cards: string[] = [
   interface CardProps {
     courseName: string;
     instructor: string;
+    cid: number;
   }
 
-  function generateCard({courseName, instructor}: CardProps) {
+  function generateCard({courseName, instructor, cid}: CardProps) {
     // Template for the image on the top of the card
     const boxTemplate = {
       width: 1,
@@ -35,9 +37,11 @@ const cards: string[] = [
   
     // Building the Actual card, obtaining the name and instructor
     return (
+      <Link to={`/courses/${cid}`}>
       <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
         <Meta title = { courseName } description= { instructor } />
       </Card>
+      </Link>
     );
 }
 
@@ -63,8 +67,9 @@ function getCoursesCards(): JSX.Element[] {
   for (let index = 0; index < courses.length; index++) {
     const courseName = courses?.[index]?.courseName || ''
     const instructor = courses?.[index]?.instructor || ''
+    const cid = courses?.[index]?.cid || 0
 
-    const params: CardProps = {courseName, instructor}
+    const params: CardProps = {courseName, instructor, cid}
 
     cards.push(generateCard(params))
   }

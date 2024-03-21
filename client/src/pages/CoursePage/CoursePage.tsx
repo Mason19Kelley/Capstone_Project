@@ -1,12 +1,10 @@
 import { Image, Layout, theme, Card, ConfigProvider } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { json, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
-import { Courses } from "../../models/courses.model";
 import { useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
-import { minHeight } from "@mui/system";
 
 const { Header, Content } = Layout;
 
@@ -29,19 +27,37 @@ interface course {
 
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
   if (inner && mIndex != undefined){
-    if(jsonInfo?.modules[mIndex].content[index].Description == null){
-      return(
-        <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh'}}>
-          <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
-        </Card>
-      )
+    if(jsonInfo?.modules[mIndex].content[index].contentType == 'Quiz'){
+      console.log('here')
+      if(jsonInfo?.modules[mIndex].content[index].Description == null){
+        return(
+          <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left" }}>
+            <Meta title="Quiz"/>
+          </Card>
+        )
+      } else {
+        return (
+          <Card type="inner" title="Quiz" style={{background: '#fafafa', marginBottom: '1vh'}}>
+            {jsonInfo.modules[mIndex].content[index].Description}
+          </Card>
+        )
+      }
     } else {
-      return (
-        <Card type="inner" title={jsonInfo?.modules[mIndex].content[index].fileName} style={{marginBottom: '1vh'}}>
-          {jsonInfo.modules[mIndex].content[index].Description}
-        </Card>
-      )
+      if(jsonInfo?.modules[mIndex].content[index].Description == null){
+        return(
+          <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left"}}>
+            <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
+          </Card>
+        )
+      } else {
+        return (
+          <Card type="inner" title={jsonInfo?.modules[mIndex].content[index].fileName} style={{marginBottom: '1vh'}}>
+            {jsonInfo.modules[mIndex].content[index].Description}
+          </Card>
+        )
+      }
     }
+
   } else {
     const cards: JSX.Element[] = [];
     if(jsonInfo?.modules[index].content.length || 1 > 0){
@@ -55,8 +71,6 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       </Card>
     )
   }
-  
-  
 }
 
 function createModule(jsonInfo: course | undefined): JSX.Element[] {
@@ -88,8 +102,6 @@ const CoursePage: React.FC = () => {
     }
   }, [id])
     
-
-
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -125,18 +137,16 @@ const CoursePage: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
+        <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+          {courseName}
+        </h1>
+        <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+          Taught by: {instructor}
+        </h2>
         <div className="modules" >
-        <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
+        <ConfigProvider>
             {module.map(card => <div>{card}</div>)}
         </ConfigProvider>
-        </div>
-        <div className='wrapper'>
-          <h1 className='header' style= {{
-            fontFamily: 'Playfair-Display', 
-            paddingLeft: 50, paddingTop: 10}}>
-              Course Name: {courseName} <br /> 
-              Course Instructor: {instructor} <br />
-              Course id: {id}</h1>
         </div>
       </div>
       </Content>
