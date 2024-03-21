@@ -1,7 +1,7 @@
 import { Image, Layout, theme, Card, ConfigProvider } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
 import { Courses } from "../../models/courses.model";
 import { useEffect, useState } from "react";
@@ -29,19 +29,29 @@ interface course {
 
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
   if (inner && mIndex != undefined){
-    return (
-      <Card type="inner" title={jsonInfo?.modules[mIndex].content[0].fileName}></Card>
-    )
+    if(jsonInfo?.modules[mIndex].content[index].Description == null){
+      return(
+        <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh'}}>
+          <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
+        </Card>
+      )
+    } else {
+      return (
+        <Card type="inner" title={jsonInfo?.modules[mIndex].content[index].fileName} style={{marginBottom: '1vh'}}>
+          {jsonInfo.modules[mIndex].content[index].Description}
+        </Card>
+      )
+    }
   } else {
     const cards: JSX.Element[] = [];
     if(jsonInfo?.modules[index].content.length || 1 > 0){
       for (let ind = 0; ind < (jsonInfo?.modules[index].content.length || 1); ind++){
-        cards.push(generateModule(true, index, jsonInfo, ind))
+        cards.push(generateModule(true, ind, jsonInfo, index))
       }
     }
     return(
-      <Card title={jsonInfo?.modules[index].moduleName} style={{ width: '90%',  }}>
-        {cards.map(card => <Card style={{width: '100%'}}>{card}</Card>)}
+      <Card title={jsonInfo?.modules[index].moduleName} style={{ width: '80vw', marginBottom: '5vh'}}>
+        {cards.map(card => <div>{card}</div>)}
       </Card>
     )
   }
@@ -117,7 +127,7 @@ const CoursePage: React.FC = () => {
         >
         <div className="modules" >
         <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
-            {module.map(card => <Card style={{width: '100%'}}>{card}</Card>)}
+            {module.map(card => <div>{card}</div>)}
         </ConfigProvider>
         </div>
         <div className='wrapper'>
