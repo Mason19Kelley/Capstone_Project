@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CourseModule.css';
-import  PDFViewer  from './PDFView';
-//import "./assets/test.pdf";
+import PDFViewer from './PDFView';
+import QuizComponent from './Quiz'; // Import the QuizComponent
 import { Button, message, Steps, theme } from 'antd';
 import { Link } from 'react-router-dom';
 
@@ -12,17 +12,18 @@ const steps = [
   },
   {
     title: 'Second',
-    content: 'Second-content',
+    content: <QuizComponent />, // Use the QuizComponent here
   },
   {
     title: 'Last',
-    content: 'Last-content',
+    content: 'Check out this text. It rocks!',
   },
 ];
 
 const CourseModule: React.FC = () => {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
+  //const [quizCompleted, setQuizCompleted] = useState(false); // State to track quiz completion
 
   const next = () => {
     setCurrent(current + 1);
@@ -44,16 +45,20 @@ const CourseModule: React.FC = () => {
     marginTop: 1,
   };
 
+  //const handleQuizFinish = (isCompleted: boolean) => {
+  //  setQuizCompleted(isCompleted); // Update quiz completion state
+  //};
+
   return (
     <div className="cmod-container">
       <div className="back-button">
         <Link to="/home">
-          <button type="button" >Back</button>
+          <button type="button">Back</button>
         </Link>
-      </div>  
+      </div>
       <div className="cmod-box">
-      <h3>Example Course Module</h3>
-        <div className="content-box">  
+        <h3>Example Course Module</h3>
+        <div className="content-box">
           <>
             <Steps current={current} items={items} />
             <div style={contentStyle}>
@@ -61,9 +66,9 @@ const CourseModule: React.FC = () => {
             </div>
             <div style={{ marginTop: 24 }}>
               {current < steps.length - 1 && (
-                <Button type="default" onClick={() => next()} className="course-button">
-                  Next
-                </Button>
+                <Button type="default" onClick={() => next()}>
+                Next
+              </Button>
               )}
               {current === steps.length - 1 && (
                 <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
@@ -71,7 +76,7 @@ const CourseModule: React.FC = () => {
                 </Button>
               )}
               {current > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => prev()} className="course-button">
+                <Button style={{ margin: '0 8px' }} onClick={prev}>
                   Previous
                 </Button>
               )}
@@ -80,8 +85,6 @@ const CourseModule: React.FC = () => {
         </div>
       </div>
     </div>
-
-  
   );
 };
 
