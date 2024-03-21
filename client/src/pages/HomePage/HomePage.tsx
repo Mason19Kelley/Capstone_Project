@@ -55,7 +55,7 @@ function HomePage() {
   const { setLoggedIn, user, setUser } = useContext(AuthContext)
   const { fullName, id } = user || {};
 
-  seedCourses(id);
+  //seedCourses(id);
   const renderPage = () => {
     console.log(user)
     switch (page) {

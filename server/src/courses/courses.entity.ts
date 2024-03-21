@@ -16,5 +16,8 @@ export class Courses {
   users: User[]
 
   @Column()
-  content: string;
+  jsonInformation: string;
+
+  @Column()
+  organization_ID: number;
 }
