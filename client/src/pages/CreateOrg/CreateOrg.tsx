@@ -53,7 +53,7 @@ const CreateOrg: React.FC = () => {
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Administrator Password</label>
             </div>
-            <button type="submit" >Create</button>
+            <button type="submit" className="create-org-button">Create</button>
           </form>
         </div>
       </div>

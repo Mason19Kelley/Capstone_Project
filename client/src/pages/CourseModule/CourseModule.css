@@ -135,7 +135,7 @@
     text-decoration: underline;
   }
   
-  button {
+  .course-button {
     width: 10%;
     height: 40px;
     border-radius: 40px;

@@ -32,7 +32,7 @@ const ForgetPass: React.FC = () => {
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
               <label>Enter your email</label>
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" className='forget-pass-button'>Submit</button>
           </form>
         </div>
       </div>

@@ -71,7 +71,7 @@ const CourseModule: React.FC = () => {
               </Button>
               )}
               {current === steps.length - 1 && (
-                <Button type="default" onClick={() => message.success('Module Complete!')}>
+                <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
                   Done
                 </Button>
               )}
