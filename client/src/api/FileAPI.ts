@@ -15,8 +15,12 @@ export const FileAPI = {
         },
       });
       console.log(data)
-    }
+    },
 
+    deleteFile: async (fileName: string) => {
+      const { data } = await api.post(`/file/deleteFile/${fileName}`);
+      return data
+    }
     
 
 

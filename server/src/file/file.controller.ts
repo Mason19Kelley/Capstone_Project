@@ -40,5 +40,11 @@ export class FileController {
         res.send(storageFile.buffer);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Post("deleteFile/:fileName")
+    async deleteMedia(@Param("fileName") fileName: string) {
+        await this.storageService.delete("surge-videos", fileName);
+    }
+
 
 }

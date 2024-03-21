@@ -4,6 +4,8 @@ import { UsersService } from '../users/users.service';
 import { OrganizationsService } from '../organizations/organizations.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { LoginLogsService } from '../loginlogs/loginlogs.service';
+import { QuizService } from 'src/quiz/quiz.service';
+
 // seed service to store seed business logic
 @Injectable()
 export class SeedService {
@@ -13,6 +15,7 @@ export class SeedService {
         private orgsService: OrganizationsService,
         private coursesService: CoursesService,
         private logsService: LoginLogsService,
+        private quizService: QuizService
       ) {}
 
   // individually calls each service to seed their tables
@@ -21,8 +24,9 @@ export class SeedService {
     await this.rolesService.seedRoles();
     await this.orgsService.seedOrganizations();
     await this.usersService.seedUsers();
-    await this.coursesService.seedCourses();
+    //await this.coursesService.seedCourses();
     await this.logsService.seedLoginLogs();
+    await this.quizService.seedOrganizations();
     
   }
 }

@@ -78,6 +78,7 @@ function getCoursesCards(): JSX.Element[] {
 }
 
 function Dashboard() {
+
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +86,6 @@ function Dashboard() {
       setFile(event.target.files[0]);
     }
   };
-  
-  
 
   const Coursecards = getCoursesCards();
 

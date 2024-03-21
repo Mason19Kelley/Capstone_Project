@@ -15,7 +15,7 @@ interface LoginResponse {
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
+  const { isLoggedIn, setLoggedIn,user, setUser, organization, setOrganization } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 
@@ -30,6 +30,7 @@ const LoginPage: React.FC = () => {
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
       setUser(response)
+      setOrganization(response.organization.orgName)
       setLoggedIn(true)  
       navigate("/home")
     }).catch(error => 
@@ -46,6 +47,7 @@ const LoginPage: React.FC = () => {
       .then((response: LoginResponse) => {
         setLoggedIn(true)
         setUser(response.user)
+        setOrganization(response.user.organization?.orgName || null)
         navigate("/home")
       })
       .catch(error => {

@@ -37,7 +37,6 @@ function Admin() {
    };
 
    const openEditModal = (user: UserTable | undefined) => {
-    console.log(user)
     setSelectedUser(user)
     setIsEditModalOpen(true);
   }
