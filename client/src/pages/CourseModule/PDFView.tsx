@@ -52,6 +52,7 @@ export default function PDFViewer() {
             <Page
                 key={`page_${index + 1}`}
                 pageNumber={index + 1}
+                renderTextLayer={false}
             />
             ),
         )}

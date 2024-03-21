@@ -24,7 +24,6 @@ export class CoursesService {
     }
 
     // get all courses
-
     getAllCourses(org_ID: number) {
 
         const courseNames = this.courseRepository

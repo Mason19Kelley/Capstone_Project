@@ -8,6 +8,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import ForgetPass from './pages/ForgetPass/ForgetPass';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import EditCourse from './pages/EditPage/Editcourse';
+import CoursePage from './pages/CoursePage/CoursePage';
 import CourseModule from './pages/CourseModule/CourseModule';
 import PDFViewer from './pages/CourseModule/PDFView';
 //import PrivateRoute from './PrivateRoute'
@@ -30,6 +31,11 @@ const AppRoutes: React.FC = () => {
       <Route path="/home" element={
         <ProtectedRoute>
           <HomePage />
+        </ProtectedRoute>
+      }/>
+      <Route path="/courses/:id" element={
+        <ProtectedRoute>
+          <CoursePage />
         </ProtectedRoute>
       }/>
       <Route path="/editCourse/:id" element={

@@ -39,6 +39,7 @@ const siderStyle: React.CSSProperties = {
   color: '#fff',
   backgroundColor: '#002F8B',
   width: '17%', 
+  minWidth: "215px",
   overflowY: 'auto', 
 };
 
@@ -59,9 +60,7 @@ function HomePage() {
 
   setOrganization(user?.organization?.orgName || null)
 
-  seedCourses(id)
-  
-
+  //seedCourses(id);
   const renderPage = () => {
 
     switch (page) {
@@ -122,7 +121,7 @@ function HomePage() {
     <div>
       <Layout style={layoutStyle}>
         <Layout>
-          <Sider width="17%" style={siderStyle}>
+          <Sider width="17%" style={siderStyle} className="sider">
             <div className="title">
               <Typography.Title level={2} className='text-left align-middle'>
                 <div className = "brand">

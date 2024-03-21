@@ -10,6 +10,7 @@ import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { FileAPI } from '../../api/FileAPI';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import { Link } from 'react-router-dom';
 
 const cards: string[] = [
     'My Courses',
@@ -22,9 +23,10 @@ const cards: string[] = [
   interface CardProps {
     courseName: string;
     instructor: string;
+    cid: number;
   }
 
-  function generateCard({courseName, instructor}: CardProps) {
+  function generateCard({courseName, instructor, cid}: CardProps) {
     // Template for the image on the top of the card
     const boxTemplate = {
       width: 1,
@@ -35,9 +37,11 @@ const cards: string[] = [
   
     // Building the Actual card, obtaining the name and instructor
     return (
+      <Link to={`/courses/${cid}`}>
       <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
         <Meta title = { courseName } description= { instructor } />
       </Card>
+      </Link>
     );
 }
 
@@ -63,8 +67,9 @@ function getCoursesCards(): JSX.Element[] {
   for (let index = 0; index < courses.length; index++) {
     const courseName = courses?.[index]?.courseName || ''
     const instructor = courses?.[index]?.instructor || ''
+    const cid = courses?.[index]?.cid || 0
 
-    const params: CardProps = {courseName, instructor}
+    const params: CardProps = {courseName, instructor, cid}
 
     cards.push(generateCard(params))
   }
@@ -111,10 +116,10 @@ function Dashboard() {
           preview = {false}
         />
       </div>
-      <h1 className='self-start' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingLeft: 50, paddingTop: 10}}>Dashboard</h1>
+      <h1 style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
       <div className='cards'>
         <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
-            {cards.map(card => <Card style={{width: '100%'}}><Typography.Text>{card}</Typography.Text></Card>)}
+            {cards.map(card => <Card style={{width: '100%', minWidth: "202px"}} className="course-card"><Typography.Text>{card}</Typography.Text></Card>)}
         </ConfigProvider>
       </div>
 
@@ -122,7 +127,7 @@ function Dashboard() {
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
           <Box sx={{
             width:1,
-            height:400,
+            height: "fit-content",
             borderRadius: 1,
             bgcolor: 'primary.main',
           }}>
@@ -131,23 +136,10 @@ function Dashboard() {
               Learning Dashboard
               </div>
             </Typography.Title>
-            <div className='testcard'>{Coursecards.map(c => <Box>{c}</Box>)}</div>
+            <div className='test-card'>{Coursecards.map(c => <Box>{c}</Box>)}</div>
           </Box>
         </ThemeProvider>
       </div>
-      <div className='learningDashboard'>
-        <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-          <Box sx={{
-            width: 1,
-            height:350,
-            borderRadius: 1,
-            bgcolor: 'primary.main'
-          }}>
-            </Box>
-        </ThemeProvider>
-      </div>
-      <VideoPlayer></VideoPlayer>
-
     </div>
     
   )
