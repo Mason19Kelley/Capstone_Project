@@ -66,11 +66,11 @@ const LoginPage: React.FC = () => {
     
 
   return (
-    <section>
+    <section className="login-box">
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            <h2 className="login-header">Login</h2>
             <div className="inputbox">
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
               <label>Email</label>
@@ -83,15 +83,11 @@ const LoginPage: React.FC = () => {
               <p>Incorrect Username or Password</p>
             </div>
             <div className="forget">
-              {/* <label>
-                <input type="checkbox" /> Remember me
-              </label> */}
-              <div></div>
               <label>
                 <a href="/forget">Forgot password?</a>
               </label>
             </div>
-            <button type="submit" >Login</button>
+            <button className="login-button" type="submit" >Login</button>
             <div className="register">
               <p>
                 Don't have an account ? <Link to="/createorg">Register</Link>
