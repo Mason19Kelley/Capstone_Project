@@ -11,6 +11,7 @@ import EditCourseModal from '../../modals/EditCourseModal/EditCourseModal';
 import { v4 as uuidv4 } from 'uuid';
 import { contentContext } from '../../../context/contentContext';
 import { FileAPI } from '../../../api/FileAPI';
+import  EditModuleModal  from '../../modals/EditModuleModal/EditModuleModal';
 
 interface course {
   courseName : string,
@@ -49,7 +50,7 @@ function Edit_Course() {
         }]
     }
     
-    const { contentID, setContentID } = useContext(contentContext);
+  const { contentID, setContentID } = useContext(contentContext);
 
   const {user, organization, EditCourseContext, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
@@ -61,7 +62,11 @@ function Edit_Course() {
   const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
   const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
 
-    
+  const [ editModuleOpen, setEditModuleOpen ] = useState<boolean>(false);
+  const [ editModulePopOverOpen, setEditModulePopOverOpen ] =  useState<any | null>(null);
+  const [selectedModuleID, setSelectedModuleID] = useState(null);
+
+
       const tempModule = {
         moduleName : "temp",
         moduleID : uniqueID,
@@ -106,7 +111,6 @@ function Edit_Course() {
     CourseAPI.updateCourseJSON(selectedCourse.courseName, selectedCourse);
   }
 
-
   const addModule = () => {
     setselectedCourse(prevCourse => {
       const newModules = [...prevCourse.modules, tempModule];
@@ -114,24 +118,18 @@ function Edit_Course() {
     });
   }
 
-
   const deleteModule = (selectedCourse: any, module: any) => {
     console.log(module.moduleID)
     const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleID !== module.moduleID);
     setselectedCourse({ ...selectedCourse, modules: newModules });
   }
 
-  const addContent = (selectedCourse: any, module: any) => {
-    const newContent = [...module.content, tempContent];
-    const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
-    setselectedCourse({ ...selectedCourse, modules: newModules });
-  }
-
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
+    console.log(content.fileName)
+    FileAPI.deleteFile(content.fileName);
     const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
     setselectedCourse({ ...selectedCourse, modules: newModules });
-
   }
 
   const EditCourseInformation = () => {
@@ -141,25 +139,46 @@ function Edit_Course() {
     setisEditCourseOpen(false);
    };
 
+   const editModuleInformation = (module: any) => {
+    console.log(module.moduleID)
+    setSelectedModuleID(module.moduleID)
+    setEditModuleOpen(true);
+   }
 
-   const createMedia= (module: any) => {
-      setContentID(module.moduleID)
-      console.log(contentID)
-      setEditCourseContext('Create_Media');
+   const closeEditModuleModal = () => {
+    setEditModuleOpen(false);
+   };
+
+  const createMedia= (module: any) => {
+    setContentID(module.moduleID)
+    console.log(contentID)
+    setEditCourseContext('Create_Media');
     }
 
   const createQuiz = () => {
     setEditCourseContext('Create_Quiz');
   }
 
+  const createCourseContent = (module: any) => {
+    setPopOverOpen(popOverOpen === module ? null : module);
+  };
 
-    const createCourseContent = (module: any) => {
-        setPopOverOpen(popOverOpen === module ? null : module);
-    };
-
-    const hide = () => {
-        setPopOverOpen(null);
+  const EditContent = (module: any, content: any) => {
+    console.log(content.contentType)
+    if(content.contentType === 'Media'){
+      const information = {
+        module: module.moduleID,
+        content: content.fileName
+      }
+      setContentID(JSON.stringify(information))
+      setEditCourseContext('Edit_Media');
     }
+    else if(content.contentType === 'Quiz'){
+      //setContentID(content.quizID)
+      setEditCourseContext('Edit_Quiz');
+    }
+    
+  }
 
   const displayContent = (module: any, content: any) => {
 
@@ -182,7 +201,7 @@ function Edit_Course() {
                 </div>
               </Typography.Title>
               <div style={{ display: 'flex' }}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => null}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)}>
                   <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                 </Button>
                 <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)}>
@@ -216,7 +235,7 @@ function Edit_Course() {
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
                 <div style={{ display: 'flex' }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} >
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)}>
                     <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
                   <Popover
@@ -243,6 +262,7 @@ function Edit_Course() {
                   <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)}>
                     <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                   </Button>
+                  {selectedModuleID === module.moduleID && <EditModuleModal isModalOpen={editModuleOpen} closeModal={closeEditModuleModal} ModuleName={module['moduleName']} moduleID={module['moduleID']} courseJSON = {selectedCourse}></EditModuleModal>}
                 </div>
               </div>
             }

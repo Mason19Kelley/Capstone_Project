@@ -2,12 +2,12 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Card, Upload, message, UploadProps, Button } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
-import { FileAPI } from '../../../api/FileAPI';
-import { CourseAPI } from '../../../api/CourseAPI';
-import { AuthContext } from '../../../context/AuthContext';
+import { FileAPI } from '../../../../api/FileAPI';
+import { CourseAPI } from '../../../../api/CourseAPI';
+import { AuthContext } from '../../../../context/AuthContext';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { contentContext } from '../../../context/contentContext';
+import { contentContext } from '../../../../context/contentContext';
 
 
 function Create_Media() {

@@ -10,7 +10,6 @@ function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean |
   
 
   useEffect(() => {
-    //setOldCourseName(CourseName)
     if (props.isModalOpen) {
         setCourseName(props.courseName || "");
         setinstructorName(props.instructorName || "");
@@ -23,9 +22,7 @@ function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean |
   }
 
   const saveCourseInformation = () => {
-    //console.log(props.courseName)
     courseJSON.courseName = CourseName
-
     CourseAPI.updateCourse(CourseName, props.courseName ?? "", instructorName, props.instructorName ?? "")
     props.closeModal()
   }

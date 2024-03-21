@@ -10,8 +10,10 @@ import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Edit_Course  from '../../components/Course_Management/Edit_Course/Edit_Course';
-import Create_Quiz from '../../components/Course_Management/Edit_Course/Create_Quiz';
-import Create_Media from '../../components/Course_Management/Edit_Course/Create_Media';
+import Create_Quiz from '../../components/Course_Management/Edit_Course/Create/Create_Quiz';
+import Create_Media from '../../components/Course_Management/Edit_Course/Create/Create_Media';
+import Edit_Media from '../../components/Course_Management/Edit_Course/Edit/Edit_Media';
+import Edit_Quiz from '../../components/Course_Management/Edit_Course/Edit/Edit_Quiz';
 
 const layoutStyle = {
   width: '100%',
@@ -83,6 +85,10 @@ function EditCourse() {
         return <Create_Quiz />;
       case 'Create_Media':
         return <Create_Media />;
+      case 'Edit_Media':
+        return <Edit_Media />;
+      case 'Edit_Quiz':
+        return <Edit_Quiz />;
       default:
         return null
 
