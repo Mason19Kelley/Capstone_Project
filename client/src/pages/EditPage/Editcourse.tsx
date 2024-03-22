@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
-import { Button, Card, ConfigProvider, Image, Typography } from 'antd';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { Image, Typography } from 'antd';
 import { Avatar, Layout, Menu, MenuProps } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 import headerImg from '../../assets/Dashboard/DashboardHeader.png'
-import { UserOutlined, TeamOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useContext, useState } from 'react'
+import { UserOutlined, TeamOutlined } from '@ant-design/icons';
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Edit_Course  from '../../components/Course_Management/Edit_Course/Edit_Course';
@@ -42,10 +41,10 @@ const siderStyle: React.CSSProperties = {
 
 
 function EditCourse() {
-  const {user, organization, EditCourseContext, setEditCourseContext } = useContext(AuthContext)
+  const {user,  EditCourseContext } = useContext(AuthContext)
   const { fullName } = user || {};
   
-  const { id } = useParams();
+
 
   const navigate = useNavigate();
 

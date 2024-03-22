@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Card, Upload, message, UploadProps, Button } from 'antd';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { Card, Upload, message, UploadProps } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { FileAPI } from '../../../../api/FileAPI';
@@ -31,6 +31,7 @@ function Create_Media() {
         if(id && user?.organization?.id){
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
             setJsonInformation(JSON.parse(data['jsonInformation']))
+            console.log(fileList)
         })
         }
       }, [jsonInformation])

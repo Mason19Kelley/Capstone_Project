@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Button, Modal, Input, Select } from 'antd';
+import { Button, Modal, Select } from 'antd';
 import { CourseAPI } from '../../../api/CourseAPI';
 import { AdminAPI } from '../../../api/AdminAPI';
 import { User } from '../../../models/user.model';

@@ -1,5 +1,5 @@
 import './Management.css'
-import { Button, Card, ConfigProvider, Image, Typography } from 'antd';
+import { Button, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';

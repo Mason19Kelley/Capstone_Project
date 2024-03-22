@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Radio, Button } from "antd";
 import { RadioChangeEvent } from "antd/lib/radio";
 
