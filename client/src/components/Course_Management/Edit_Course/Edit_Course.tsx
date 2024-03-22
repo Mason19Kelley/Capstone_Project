@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { Button, Card, ConfigProvider, Image, Typography, Popover } from 'antd';
+import  { useEffect } from 'react';
+import { Button, Card,  Typography, Popover } from 'antd';
 import { useParams } from 'react-router-dom';
-import { UserOutlined, TeamOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import { Box, ThemeProvider } from '@mui/system'
 import { CourseAPI } from '../../../api/CourseAPI';
@@ -12,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { contentContext } from '../../../context/contentContext';
 import { FileAPI } from '../../../api/FileAPI';
 import  EditModuleModal  from '../../modals/EditModuleModal/EditModuleModal';
+import AddUserModal from './AddUserModal';
 
 interface course {
   courseName : string,
@@ -96,6 +96,7 @@ function Edit_Course() {
     
     if(id && user?.organization?.id){
       CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
+        console.log(data)
         const jsonInformation = JSON.parse(data['jsonInformation']);
         setInstructor(data['instructor']);
         setselectedCourse(jsonInformation);
@@ -288,6 +289,14 @@ function Edit_Course() {
       </div>
     )
   }
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const openAddUserModal = () => {
+    setIsAddUserModalOpen(true);
+  }
+
+  const closeAddUserModal = () => {
+    setIsAddUserModalOpen(false);
+   };
 
 
   
@@ -319,6 +328,9 @@ function Edit_Course() {
                     <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => EditCourseInformation()}>
                       <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
+                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => openAddUserModal()}>
+                      <UserAddOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                    </Button>
                     <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule()} >
                       <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
                     </Button>
@@ -328,7 +340,9 @@ function Edit_Course() {
               <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
               <div>{listModules(selectedCourse)}</div>
               </div>
+              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
             </div>
+            
             
   )
 }

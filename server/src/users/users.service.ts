@@ -40,6 +40,23 @@ export class UsersService {
     return this.usersRepository.delete({ id })
   }
 
+  async addUsersToCourse(courseName: string, users: number[]){
+    const course = await this.courseService.findCourseByName(courseName)
+    const userEntities = await Promise.all(users.map( async (userId) => {
+      return await this.usersRepository.findOneBy({id: userId})
+    }));
+
+    userEntities.forEach(user => {
+      if (!course.users.some(existingUser => existingUser.id === user.id)) {
+          course.users.push(user);
+      }
+  });
+
+  return await this.courseService.save(course);
+
+    
+}
+
   // insert user into course
   async insertUserInCourse(cid: number, id: number) {
     const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: id}});
