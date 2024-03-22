@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Courses } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Equal, Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import {  Repository } from 'typeorm';
+
 
 // logic for courses
 @Injectable()
@@ -14,15 +14,15 @@ export class CoursesService {
 
     // get course by id
     findCourseById(cid: number): Promise<Courses | undefined> {
-        //console.log(cid)
         return this.courseRepository.findOneBy({cid})
     }
 
+    // get course by course name
     async findCourseByName(courseName: string): Promise<Courses | undefined> {
-        //console.log(cid)
         return await this.courseRepository.findOneBy({courseName})
     }
 
+    // inserts a course into the database
     insertCourse(course: string, jsonInformation: string, instructor: string, organization: number){
         const courseEntity = this.courseRepository.create({courseName: course, jsonInformation: jsonInformation, instructor: instructor, organization_ID: organization})
         return this.courseRepository.insert(courseEntity)
@@ -55,6 +55,7 @@ export class CoursesService {
         return courseEntity
     }
 
+    // gets users in course
     async getUsersInCourse(course: string) {
         const fullCourse = await this.courseRepository.findOneBy({courseName: course})
         const users = fullCourse.users
@@ -66,8 +67,10 @@ export class CoursesService {
         return this.courseRepository.delete({courseName: course})
     }
 
-    // update course
+    // update course name and instructor name
     async updateCourse(courseName: string, oldCourseName:string, instructor: string, oldInstructorName: string): Promise<void> {
+
+        //old json to update
         const updateJSON = await this.courseRepository
         .createQueryBuilder('course')
         .select(['course.jsonInformation'])
@@ -78,7 +81,7 @@ export class CoursesService {
 
         json.courseName = courseName
 
-
+        //new json to put into database
         const updateCourse = await this.courseRepository
             .createQueryBuilder()
             .update(Courses)
@@ -105,7 +108,7 @@ export class CoursesService {
     async seedCourses() {
         let courses = await this.courseRepository.count();
 
-        //temp json info
+        //example json information for courses
         const oshaInfo = {
             courseName : "OSHA",
             modules : [
