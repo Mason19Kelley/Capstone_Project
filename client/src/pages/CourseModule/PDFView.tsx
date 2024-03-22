@@ -27,17 +27,17 @@
 
 //export default PDFViewer
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import samplePDF from './test.pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 export default function PDFViewer() {
-  const [numPages, setNumPages] = useState(null);
+  const [pageCount, setPageCount] = useState<number | null>(null);
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  function onDocumentLoadSuccess({ numPages }: {numPages: number}) {
+    setPageCount(numPages);
   }
 
   return (
@@ -47,11 +47,12 @@ export default function PDFViewer() {
             onLoadSuccess={onDocumentLoadSuccess}
         >
         {Array.from(
-            new Array(numPages),
-            (el, index) => (
+            new Array(pageCount),
+            (_, index) => (
             <Page
                 key={`page_${index + 1}`}
                 pageNumber={index + 1}
+                renderTextLayer={false}
             />
             ),
         )}

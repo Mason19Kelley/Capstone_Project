@@ -4,10 +4,14 @@
     align-self: self-start;
 }
 
-.wrapper {
+.admin-wrapper {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+    margin-bottom: 1%;
 }
 
 .card-title {

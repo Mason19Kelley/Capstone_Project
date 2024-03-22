@@ -9,6 +9,7 @@ import { OrganizationsService } from '../organizations/organizations.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { Courses } from 'src/courses/courses.entity';
 import { UpdateUser } from './UpdateUser.model';
+import { CreateUserArgs } from './CreateUserArgs.model';
 
 
 // user business logic class
@@ -109,6 +110,19 @@ export class UsersService {
 
     this.usersRepository.save(user)
     return true
+  }
+
+  async createUser(newUser: CreateUserArgs){
+    try {
+      const userOrg = await this.orgsService.findOrg(newUser.orgId);
+      const userRole = await this.rolesService.findRoleByName(newUser.role);
+      const user = { fullName: newUser.fullName, email: newUser.email, password: null, organization: userOrg, role: userRole}
+      const userEntity = this.usersRepository.create(user)
+      await this.usersRepository.insert(userEntity)
+      return userEntity;
+    } catch(error){
+      console.log(error)
+    }
   }
   
   // inserts a default users into db

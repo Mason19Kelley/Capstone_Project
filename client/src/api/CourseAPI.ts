@@ -52,9 +52,12 @@ export const CourseAPI = {
         const { data } = await api.post(`/courses/updateCourse/${courseName}/${oldCourseName}/${instructor}/${oldInstructorName}`);
         return data
     },
+    
 
-    updateCourseJSON: async (courseName: string, courseJSON: any) => {
-        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}`, courseJSON);
+    updateCourseJSON: async (courseName: string, courseJSON: string) => {
+        const compressed = pako.deflate(JSON.stringify(courseJSON));
+        console.log(compressed)
+        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}/${compressed}`);
         return data;
     }
 }

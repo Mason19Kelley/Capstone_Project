@@ -1,5 +1,3 @@
-import { Organization } from "../models/organization.model";
-import { UserTable } from "../models/userTable.model";
 import { api } from "./axiosConfig";
 
 export const FileAPI = {

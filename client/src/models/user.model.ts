@@ -10,3 +10,10 @@ export interface User {
     role: Role | undefined;
     courses: Courses[] | undefined;
 }
+
+export interface CreateUserArgs {
+    fullName: string,
+    email: string,
+    role: string,
+    orgId?: number
+}
