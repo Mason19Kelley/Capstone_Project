@@ -109,7 +109,7 @@ function Management () {
 
 
   return (
-    <div className='wrapper'>
+    <div className='cm-wrapper'>
       <div className='headerImage'>
         <Image
           width= '100%'

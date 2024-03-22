@@ -71,7 +71,7 @@ const Courses: React.FC = () => {
   
   const cards = getCoursesCards()
   return (
-    <div className='wrapper'>
+    <div className='c-wrapper'>
       <div className='headerImage'>
         <Image
           width= '100%'
