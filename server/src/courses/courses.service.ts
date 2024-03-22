@@ -150,13 +150,73 @@ export class CoursesService {
             ]
           }
 
+          const forkliftInfo = {
+            courseName : "Forklift",
+            modules : [
+                {
+                    moduleName : "Forklift 1",
+                    moduleID : '7c4b8214-42bb-4cc3-8015-3ad6f0874702',
+                    content : [
+                        {
+                            contentType : "Quiz",
+                            fileType : null,
+                            fileName : null,
+                            quizID : 7,
+                            Description : null
+                        }]
+                },
+                {
+                  moduleName : "Forklift 2",
+                  moduleID : '55642e05-40c5-4af9-a50f-c3cf4a20a0c3',
+                  content : [
+                      {
+                          contentType : "Media",
+                          fileType : "mp4",
+                          fileName : "Sample Video",
+                          quizID : null,
+                          Description : "This is a sample video"
+                      }]
+                }
+            ]
+          }
+
+          const SafetyInfo = {
+            courseName : "Safety",
+            modules : [
+                {
+                    moduleName : "Safety 1",
+                    moduleID : '7c4b8214-42bb-4cc3-8015-3ad6f0874702',
+                    content : [
+                        {
+                            contentType : "Quiz",
+                            fileType : null,
+                            fileName : null,
+                            quizID : 7,
+                            Description : null
+                        }]
+                },
+                {
+                  moduleName : "Safety 2",
+                  moduleID : '55642e05-40c5-4af9-a50f-c3cf4a20a0c3',
+                  content : [
+                      {
+                          contentType : "Media",
+                          fileType : "mp4",
+                          fileName : "Sample Video",
+                          quizID : null,
+                          Description : "This is a sample video"
+                      }]
+                }
+            ]
+          }
+
         if(courses > 0) return
 
         const coursesToSeed = [
             { courseName: 'Cyber', instructor: 'Mason', jsonInformation: JSON.stringify(cyberInfo), organization_ID: 1 },
             { courseName: 'OSHA', instructor: 'Abigail', jsonInformation: JSON.stringify(oshaInfo), organization_ID: 1 },
-            { courseName: 'Forklift', instructor: 'Jacob', jsonInformation: JSON.stringify(cyberInfo),  organization_ID: 1 },
-            { courseName: 'Safety', instructor: 'Gabe', jsonInformation: JSON.stringify(oshaInfo),  organization_ID: 2 },
+            { courseName: 'Forklift', instructor: 'Jacob', jsonInformation: JSON.stringify(forkliftInfo),  organization_ID: 1 },
+            { courseName: 'Safety', instructor: 'Gabe', jsonInformation: JSON.stringify(SafetyInfo),  organization_ID: 2 },
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)
