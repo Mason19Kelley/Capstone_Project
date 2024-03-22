@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
-import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -34,9 +33,8 @@ const tempCourse = {
 function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
   
-  const { user, organization, setEditCourseContext } = useContext(AuthContext);
+  const { user, setEditCourseContext } = useContext(AuthContext);
 
-  const uniqueID = uuidv4();
 
   useEffect(() => {
     CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {
