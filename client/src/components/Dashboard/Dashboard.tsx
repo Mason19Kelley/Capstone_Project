@@ -74,8 +74,6 @@ function getCoursesCards(): JSX.Element[] {
 
 function Dashboard() {
   const [ videoURL, setVideoURL ] = useState("");
-
-
   const Coursecards = getCoursesCards();
 
   
