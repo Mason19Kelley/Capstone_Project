@@ -39,6 +39,7 @@ export class UsersController {
     
     @Post('insertUser/:cid/:uid')
     async insertUser(@Param( 'cid') cid: number, @Param('uid') uid: number) {
+        console.log("inserting user in course")
         return this.usersService.insertUserInCourse(cid, uid)
     }
 
@@ -49,6 +50,14 @@ export class UsersController {
 
     @Get('getCourses/:uid')
     async getCourse(@Param('uid') uid: number): Promise<Courses[]>{
-        return await this.usersService.getCoursesById(uid) as Courses[]
+        var temp = await this.usersService.getCoursesById(uid) as Courses[]
+        console.log(temp)
+        return temp
+    }
+
+    @Post('addUsersToCourse/:courseName')
+    async addUsersToCourse(@Param('courseName') courseName: string, @Body() body: {userIds: number[]}){
+
+        return await this.usersService.addUsersToCourse(courseName, body.userIds)
     }
 }

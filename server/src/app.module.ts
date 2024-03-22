@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { Organization } from './organizations/organization.entity';
 import { User } from './users/user.entity';
 import { Role } from './roles/role.entity';
+import { Quiz } from './quiz/quiz.entity';
 import { SeedService } from './seed/seed.service';
 import { CoursesModule } from './courses/courses.module';
 import { Courses } from './courses/courses.entity';
@@ -22,6 +23,7 @@ import { PostmarkService } from './postmark/postmark.service';
 import { PostmarkModule } from './postmark/postmark.module';
 import { StorageModule } from './storage/storage.module';
 import { FileModule } from './file/file.module';
+import { QuizModule } from './quiz/quiz.module';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -36,7 +38,7 @@ import { FileModule } from './file/file.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role, LoginLog, Courses],
+         entities: [User, Organization, Role, LoginLog, Courses, Quiz],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),
@@ -54,7 +56,8 @@ import { FileModule } from './file/file.module';
      PostmarkModule,
      LoginlogsModule,
      StorageModule,
-     FileModule
+     FileModule,
+     QuizModule
   ],
   controllers: [AppController],
   providers: [AppService, SeedService, PostmarkService],

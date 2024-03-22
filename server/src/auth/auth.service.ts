@@ -6,13 +6,17 @@ import * as crypto from 'crypto';
 import { PostmarkService } from 'src/postmark/postmark.service';
 import { Mail } from 'src/postmark/mail.model'
 import * as dayjs from 'dayjs'
+import { CreateUserArgs } from 'src/users/CreateUserArgs.model';
+import { OrganizationsService } from 'src/organizations/organizations.service';
+import { RolesService } from 'src/roles/roles.service';
 // auth business logic service
 @Injectable()
 export class AuthService {
   saltRounds = 10; // don't change
   constructor(private usersService: UsersService,
     private jwtService: JwtService,
-    private emailService: PostmarkService,
+    private emailService: PostmarkService
+
   ) {}
  
     // validates user login
@@ -72,6 +76,18 @@ export class AuthService {
       console.log(error)
     }
   }
+
+  async createUser(newUser: CreateUserArgs){
+    try {
+      const user = await this.usersService.createUser(newUser)
+      await this.requestResetPassword(user.email)
+      return true;
+    } catch(error){
+      console.log(error)
+    }
+    
+
+}
 
   async resetPassword(userId: number, token: string, password: string) {
     const bcryptSalt = 10;

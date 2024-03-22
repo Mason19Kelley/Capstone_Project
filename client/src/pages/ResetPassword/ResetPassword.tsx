@@ -59,7 +59,7 @@ const ResetPassword: React.FC = () => {
               <input type="password" required value={password2} onChange={(e) => setPassword2(e.target.value)} />
               <label>Re-type Password</label>
             </div>
-            <button type="submit" disabled={canSubmit()}>Save</button>
+            <button type="submit" className="reset-pass-button" disabled={canSubmit()}>Save</button>
           </form>
         </div>
       </div>

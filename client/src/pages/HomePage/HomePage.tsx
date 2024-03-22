@@ -3,7 +3,7 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
@@ -12,6 +12,8 @@ import Courses from '../../components/Courses/Courses';
 import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import { CourseAPI } from '../../api/CourseAPI';
+import Management from '../../components/Course_Management/Management';
+import EditCourse from '../EditPage/Editcourse';
 
 
 
@@ -37,6 +39,7 @@ const siderStyle: React.CSSProperties = {
   color: '#fff',
   backgroundColor: '#002F8B',
   width: '17%', 
+  minWidth: "215px",
   overflowY: 'auto', 
 };
 
@@ -52,12 +55,14 @@ function seedCourses(id: number | undefined) {
 
 function HomePage() {
   const [page, setPage] = useState('Dashboard');
-  const { setLoggedIn, user, setUser } = useContext(AuthContext)
-  const { fullName, id } = user || {};
+  const { setLoggedIn, user, setUser, setOrganization } = useContext(AuthContext)
+  const { fullName, id } = user || {}
 
-  seedCourses(id)
+  setOrganization(user?.organization?.orgName || null)
+
+  //seedCourses(id);
   const renderPage = () => {
-    console.log(user)
+
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;
@@ -67,6 +72,10 @@ function HomePage() {
         return <Account />;
       case 'Admin':
         return <Admin />
+      case 'Management':
+        return <Management />
+      case 'editCourse':
+        return <EditCourse />
       case 'Logout':
         logOut()
         return null;
@@ -84,7 +93,6 @@ function HomePage() {
 
   const handleMenuClick = ({ key }: { key: string }) => {
     setPage(key);
-    console.log(page)
   };
 
   type MenuItem = Required<MenuProps>['items'][number];
@@ -106,14 +114,14 @@ function HomePage() {
   }
 
   const items: MenuProps['items'] = [
-    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
   ];
 
   return (
     <div>
       <Layout style={layoutStyle}>
         <Layout>
-          <Sider width="17%" style={siderStyle}>
+          <Sider width="17%" style={siderStyle} className="sider">
             <div className="title">
               <Typography.Title level={2} className='text-left align-middle'>
                 <div className = "brand">

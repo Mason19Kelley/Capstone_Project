@@ -7,14 +7,14 @@ import * as path from 'path';
 @Injectable()
 export class StorageService {
   private storage: Storage;
-
+  
   constructor() {
     this.storage = new Storage({
       credentials: JSON.parse(process.env.GOOGLE_JSON_KEY)
     });
   }
 
-  async save(path: string, media: Buffer, bucket: string,metadata: { [key: string]: string }[]) {
+  async save(path: string, media: Buffer, bucket: string, metadata: { [key: string]: string }[]) {
     const object = metadata.reduce((obj, item) => Object.assign(obj, item), {});
     const file = this.storage.bucket(bucket).file(path);
     const stream = file.createWriteStream();

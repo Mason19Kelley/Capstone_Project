@@ -15,7 +15,7 @@ interface LoginResponse {
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoggedIn, setLoggedIn, setUser } = useContext(AuthContext)
+  const { isLoggedIn, setLoggedIn,user, setUser, organization, setOrganization } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 
@@ -30,6 +30,7 @@ const LoginPage: React.FC = () => {
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
     AuthAPI.checkUser().then(response => {
       setUser(response)
+      setOrganization(response.organization.orgName)
       setLoggedIn(true)  
       navigate("/home")
     }).catch(error => 
@@ -46,6 +47,7 @@ const LoginPage: React.FC = () => {
       .then((response: LoginResponse) => {
         setLoggedIn(true)
         setUser(response.user)
+        setOrganization(response.user.organization?.orgName || null)
         navigate("/home")
       })
       .catch(error => {
@@ -66,11 +68,11 @@ const LoginPage: React.FC = () => {
     
 
   return (
-    <section>
+    <section className="login-box">
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            <h2 className="login-header">Login</h2>
             <div className="inputbox">
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
               <label>Email</label>
@@ -83,15 +85,11 @@ const LoginPage: React.FC = () => {
               <p>Incorrect Username or Password</p>
             </div>
             <div className="forget">
-              {/* <label>
-                <input type="checkbox" /> Remember me
-              </label> */}
-              <div></div>
               <label>
                 <a href="/forget">Forgot password?</a>
               </label>
             </div>
-            <button type="submit" >Login</button>
+            <button className="login-button" type="submit" >Login</button>
             <div className="register">
               <p>
                 Don't have an account ? <Link to="/createorg">Register</Link>

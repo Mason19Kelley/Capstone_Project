@@ -9,6 +9,7 @@ import { OrganizationsService } from '../organizations/organizations.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { Courses } from 'src/courses/courses.entity';
 import { UpdateUser } from './UpdateUser.model';
+import { CreateUserArgs } from './CreateUserArgs.model';
 
 
 // user business logic class
@@ -38,6 +39,23 @@ export class UsersService {
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
   }
+
+  async addUsersToCourse(courseName: string, users: number[]){
+    const course = await this.courseService.findCourseByName(courseName)
+    const userEntities = await Promise.all(users.map( async (userId) => {
+      return await this.usersRepository.findOneBy({id: userId})
+    }));
+
+    userEntities.forEach(user => {
+      if (!course.users.some(existingUser => existingUser.id === user.id)) {
+          course.users.push(user);
+      }
+  });
+
+  return await this.courseService.save(course);
+
+    
+}
 
   // insert user into course
   async insertUserInCourse(cid: number, id: number) {
@@ -79,6 +97,8 @@ export class UsersService {
   async getCoursesById(uid: number): Promise<Courses[]> {
     const user = (await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}}));
 
+    console.log(user)
+    
     if(!user) {
       return
     }
@@ -107,6 +127,19 @@ export class UsersService {
 
     this.usersRepository.save(user)
     return true
+  }
+
+  async createUser(newUser: CreateUserArgs){
+    try {
+      const userOrg = await this.orgsService.findOrg(newUser.orgId);
+      const userRole = await this.rolesService.findRoleByName(newUser.role);
+      const user = { fullName: newUser.fullName, email: newUser.email, password: null, organization: userOrg, role: userRole}
+      const userEntity = this.usersRepository.create(user)
+      await this.usersRepository.insert(userEntity)
+      return userEntity;
+    } catch(error){
+      console.log(error)
+    }
   }
   
   // inserts a default users into db

@@ -1,4 +1,5 @@
 import { Organization } from "../models/organization.model";
+import { CreateUserArgs } from "../models/user.model";
 import { UserTable } from "../models/userTable.model";
 import { api } from "./axiosConfig";
 
@@ -7,7 +8,6 @@ export const AdminAPI = {
         if(orgId === undefined){
             return
         }
-        console.log(api.defaults)
       const { data } = await api.get(`/users/getUsersByOrg/${orgId}`);
       return data
     },
@@ -33,7 +33,12 @@ export const AdminAPI = {
     pullLogs: async () => {
         const { data } = await api.get(`/auth/getLogs`)
         return data
-      }
+      },
+
+    createUser: async (createUserArgs: CreateUserArgs) => {
+    const { data } = await api.post(`/auth/createUser`, createUserArgs)
+    return data
+    },
 
 
 }
