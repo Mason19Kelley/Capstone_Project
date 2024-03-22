@@ -37,6 +37,11 @@ export class CoursesController {
         return await this.coursesService.getOneCourse(course, org)
     }
 
+    @Get('getUsersInCourse/:course')
+    async getUsersInCourse(@Param('course') course: string) {
+        return await this.coursesService.getUsersInCourse(course)
+    }
+
     @Post('deleteCourse/:course')
     async deleteCourse(@Param('course') course: string) {
         return await this.coursesService.deleteCourse(course)
@@ -55,6 +60,8 @@ export class CoursesController {
 
         return await this.coursesService.updateCourseJSON(courseName, temp)
     }
+
+    
 }
 
 

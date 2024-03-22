@@ -13,6 +13,16 @@ export const CourseAPI = {
         return data
     },
 
+    getUsersInCourse: async (course: string) => {
+        const { data } = await api.get(`/courses/getUsersInCourse/${course}`);
+        return data
+    },
+
+    addUserstoCourse: async (course: string, userIds: number[]) => {
+        const { data } = await api.post(`/users/addUsersToCourse/${course}`, {userIds: userIds});
+        return data
+    },
+
     insertUser: async (cid: number, uid: number) => {
         const { data } = await api.post(`/users/insertUser/${cid}/${uid}`);
         return data
@@ -54,10 +64,9 @@ export const CourseAPI = {
     },
     
 
-    updateCourseJSON: async (courseName: string, courseJSON: string) => {
-        const compressed = pako.deflate(JSON.stringify(courseJSON));
-        console.log(compressed)
-        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}/${compressed}`);
+    updateCourseJSON: async (courseName: string, courseJSON: any) => {
+  
+        const { data } = await api.post(`/courses/updateCourseJSON/${courseName}`, courseJSON);
         return data;
     }
 }

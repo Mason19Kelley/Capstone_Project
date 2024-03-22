@@ -54,4 +54,10 @@ export class UsersController {
         console.log(temp)
         return temp
     }
+
+    @Post('addUsersToCourse/:courseName')
+    async addUsersToCourse(@Param('courseName') courseName: string, @Body() body: {userIds: number[]}){
+
+        return await this.usersService.addUsersToCourse(courseName, body.userIds)
+    }
 }

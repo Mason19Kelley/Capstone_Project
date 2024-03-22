@@ -12,7 +12,7 @@ export class Courses {
   @Column({ nullable: true })
   instructor: string;
 
-  @ManyToMany(() => User, (user) => user.courses)
+  @ManyToMany(() => User, (user) => user.courses, {eager: true})
   users: User[]
 
   @Column()

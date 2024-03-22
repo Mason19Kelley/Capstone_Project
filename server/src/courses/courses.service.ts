@@ -18,9 +18,18 @@ export class CoursesService {
         return this.courseRepository.findOneBy({cid})
     }
 
+    async findCourseByName(courseName: string): Promise<Courses | undefined> {
+        //console.log(cid)
+        return await this.courseRepository.findOneBy({courseName})
+    }
+
     insertCourse(course: string, jsonInformation: string, instructor: string, organization: number){
         const courseEntity = this.courseRepository.create({courseName: course, jsonInformation: jsonInformation, instructor: instructor, organization_ID: organization})
         return this.courseRepository.insert(courseEntity)
+    }
+
+    async save(course: Courses) {
+        return this.courseRepository.save(course)
     }
 
     // get all courses
@@ -44,6 +53,12 @@ export class CoursesService {
         .getOne()
 
         return courseEntity
+    }
+
+    async getUsersInCourse(course: string) {
+        const fullCourse = await this.courseRepository.findOneBy({courseName: course})
+        const users = fullCourse.users
+        return users
     }
 
     // delete course
@@ -83,6 +98,8 @@ export class CoursesService {
             .execute();
         console.log(updateCourse)
     }
+
+    
 
     // inserts default courses into seed
     async seedCourses() {
