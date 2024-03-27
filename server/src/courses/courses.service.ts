@@ -116,8 +116,8 @@ export class CoursesService {
                         {
                             contentType : "Quiz",
                             fileType : null,
-                            fileName : null,
-                            quizID : 7,
+                            fileName : 'Test Quiz',
+                            quizID : '95352491-342e-480b-b05e-c4a4e94d96b7',
                             Description : null
                         }]
                 },
