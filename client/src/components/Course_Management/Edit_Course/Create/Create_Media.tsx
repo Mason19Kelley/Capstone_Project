@@ -47,25 +47,6 @@ function Create_Media() {
         setDescription(event.target.value);
     }
 
-    // const handleFileChange = (info: UploadChangeParam<UploadFile<any>>) => {
-    //     const { status, originFileObj } = info.file;
-    //     if (status !== 'uploading') {
-    //         console.log(info.file, info.fileList);
-    //     }
-    //     if (status === 'done') {
-    //         console.log(info.file);
-    //         message.success(`${info.file.name} file uploaded successfully.`);
-    //         if (originFileObj) {
-    //             setFile(originFileObj); // Update file state with the uploaded file
-    //         } else {
-    //             console.error('Origin file object is undefined');
-    //         }
-    //     } else if (status === 'error') {
-    //         message.error(`${info.file.name} file upload failed.`);
-    //     }
-    //     setFileList(info.fileList);
-    // };
-
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
@@ -79,20 +60,21 @@ function Create_Media() {
           setUploading(true);
     
           const formData = new FormData();
-          console.log(fileList)
 
-          fileList.forEach((file) => {
-            // Assuming 'file' is of type UploadFile, check and convert if necessary
-            const convertedFile = file.originFileObj instanceof File ? file.originFileObj : file as File;
-            formData.append('files[]', convertedFile);
-          });
+            formData.append('file', fileList[0]);
 
-    
-          console.log(formData.getAll('files[]'))
+          console.log(formData)
           
           const response = await FileAPI.uploadFile(formData);
     
           // Update jsonInformation and course information as needed
+          const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
+          tempMediaJSON.fileType = fileList[0].type;
+          tempMediaJSON.fileName = fileList[0].name;
+          tempMediaJSON.Description = description;
+          moduleToEdit.content.push(tempMediaJSON);
+
+
           console.log('Upload response:', response);
     
           if (id) {
@@ -120,8 +102,10 @@ function Create_Media() {
           setFileList(newFileList);
         },
         beforeUpload: (file) => {
-          setFileList([file]);
-          return false;
+            console.log(file)
+            setFileList([file]);
+            setFile(file);
+            return false;
         },
         fileList,
       };
@@ -166,101 +150,6 @@ function Create_Media() {
           </Button>
         </Card>
       );
-
-    // const handleSubmit = async (event: FormEvent) => {
-    //     console.log(fileName)
-    //     console.log(fileList)
-    //     const formData = new FormData();
-    //     fileList.forEach((file) => {
-    //         formData.append('files[]', file as FileType);
-    //     });
-        
-    //     setUploading(true)
-
-
-    //     console.log(jsonInformation)
-    //     event.preventDefault();
-    //     if (!fileName) {
-    //             console.error('No file selected');
-    //             return;
-    //     }
-    //     try {
-    //         const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
-    //         tempMediaJSON.fileType = fileName.type;
-    //         tempMediaJSON.fileName = fileName.name;
-    //         tempMediaJSON.Description = description;
-    //         moduleToEdit.content.push(tempMediaJSON);
-    //         const response = await FileAPI.uploadFile(formData);
-    //         console.log('Upload response:', response);
-    //         if (id){
-    //             CourseAPI.updateCourseJSON(id, jsonInformation);
-    //         }
-    //         setUploading(false)
-    //         // Perform further actions if needed
-    //     } catch (error) {
-    //         console.error('Upload error:', error);
-    //     }
-    // };
-
-
-    // const props: UploadProps = {
-    //     name: 'file',
-    //     maxCount: 1,
-    //     onRemove: (file) => {
-    //         const index = fileList.indexOf(file);
-    //         const newFileList = fileList.slice();
-    //         newFileList.splice(index, 1);
-    //         setFileList(newFileList);
-            
-    //       },
-    //       beforeUpload: (file) => {
-    //         setFileList([...fileList, file]);
-    //         const newFileList = fileList.slice();
-    //         setFile(newFileList[0]);
-    //         console.log(fileName)
-    //         return false;
-    //       },
-    //       fileList,
-    // };
-
-    // return (
-    //     <Card>
-    //         <Upload {...props}>
-    //             <p className="ant-upload-drag-icon">
-    //                 <InboxOutlined />
-    //             </p>
-    //             <p className="ant-upload-text">Click or drag file to this area to upload</p>
-    //             <p className="ant-upload-hint">
-    //                 Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-    //                 banned files.
-    //             </p>
-    //         </Upload>
-    //         <br></br>
-    //         <br></br>
-    //         Description: <textarea 
-    //             value = {description}
-    //             onChange={handleChange}
-    //             style={{
-    //                 background: 'white', 
-    //                 outlineColor: 'black', 
-    //                 outlineWidth: 1,
-    //                 outlineStyle: 'solid',
-    //                 border: 'none', // To remove default input border
-    //                 padding: '5px', // Adjust padding as needed
-    //                 width: '50%',
-    //                 height: '100px',
-    //                 verticalAlign: 'top',
-    //                 textAlign: 'justify',
-    //                 resize: 'vertical',
-    //             }}  />
-    //         <div></div>
-    //         <Button 
-    //             onClick={handleSubmit}
-    //             disabled = {fileList.length === 0}
-    //             loading = {uploading}
-    //         >Submit</Button>
-    //     </Card>
-    // );
 }
 
 export default Create_Media;

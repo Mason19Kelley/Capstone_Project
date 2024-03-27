@@ -14,7 +14,7 @@ export class FileController {
     @Post('uploadFile')
     @UseInterceptors(FileInterceptor('file'))
     async uploadMedia(@UploadedFile() file: Express.Multer.File) {
-        console.log(file)
+        
         await this.storageService.save(file.originalname, file.buffer, "surge-videos", [{ mediaId: file.originalname }]);
     }
 
