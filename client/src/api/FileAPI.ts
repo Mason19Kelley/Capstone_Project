@@ -9,7 +9,11 @@ export const FileAPI = {
     },
 
     uploadFile: async(file: any) => {
-      const { data } = await api.post('file/uploadFile', file);
+      const { data } = await api.post('file/uploadFile', file, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(data)
     },
 
