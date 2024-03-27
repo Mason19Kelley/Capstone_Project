@@ -9,7 +9,7 @@ import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
 
 
-
+// Temporary course object to be used when creating a new course
 const tempCourse = {
   courseName: 'temp',
   modules: [
@@ -34,7 +34,6 @@ function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
   
   const { user, setEditCourseContext } = useContext(AuthContext);
-
 
   useEffect(() => {
     CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {

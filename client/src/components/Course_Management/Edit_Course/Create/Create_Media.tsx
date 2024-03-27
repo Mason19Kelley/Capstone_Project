@@ -1,23 +1,27 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Card, Upload, message, UploadProps } from 'antd';
+import { Card, Upload, message, Button } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { FileAPI } from '../../../../api/FileAPI';
 import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { contentContext } from '../../../../context/contentContext';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
 
 
 function Create_Media() {
-    const [file, setFile] = useState<File | null>(null);
+    const [fileName, setFile] = useState<File | null>(null);
     const [fileList, setFileList] = useState<any[]>([]);
     const [description, setDescription] = useState<string>('');
     const [jsonInformation, setJsonInformation] = useState<any>(null);
     const { user } = useContext(AuthContext);
     const { id } = useParams();
     const { contentID } = useContext(contentContext);
+    const [uploading, setUploading] = useState(false);
+
+    type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
 
     const tempMediaJSON = {
         contentType : "Media",
@@ -32,6 +36,7 @@ function Create_Media() {
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
             setJsonInformation(JSON.parse(data['jsonInformation']))
             console.log(fileList)
+            console.log(fileName)
         })
         }
       }, [])
@@ -42,95 +47,109 @@ function Create_Media() {
         setDescription(event.target.value);
     }
 
-    const handleFileChange = (info: UploadChangeParam<UploadFile<any>>) => {
-        const { status, originFileObj } = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            console.log(info.file);
-            message.success(`${info.file.name} file uploaded successfully.`);
-            if (originFileObj) {
-                setFile(originFileObj); // Update file state with the uploaded file
-            } else {
-                console.error('Origin file object is undefined');
-            }
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-        setFileList(info.fileList);
-    };
 
     const handleSubmit = async (event: FormEvent) => {
-        console.log(jsonInformation)
         event.preventDefault();
-        if (!file) {
-            console.error('No file selected');
-            return;
+    
+        if (!fileList.length) {
+          message.error('Please select a file.');
+          return;
         }
-
-        const formData = new FormData();
-        formData.append('file', file);
-
+    
         try {
-            const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
-            tempMediaJSON.fileType = file.type;
-            tempMediaJSON.fileName = file.name;
-            tempMediaJSON.Description = description;
-            moduleToEdit.content.push(tempMediaJSON);
-            const response = await FileAPI.uploadFile(formData);
-            console.log('Upload response:', response);
-            if (id){
-                CourseAPI.updateCourseJSON(id, jsonInformation);
-            }
-            // Perform further actions if needed
+          setUploading(true);
+    
+          const formData = new FormData();
+
+            formData.append('file', fileList[0]);
+
+          console.log(formData)
+          
+          const response = await FileAPI.uploadFile(formData);
+    
+          // Update jsonInformation and course information as needed
+          const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
+          tempMediaJSON.fileType = fileList[0].type;
+          tempMediaJSON.fileName = fileList[0].name;
+          tempMediaJSON.Description = description;
+          moduleToEdit.content.push(tempMediaJSON);
+
+
+          console.log('Upload response:', response);
+    
+          if (id) {
+            await CourseAPI.updateCourseJSON(id, jsonInformation);
+          }
+    
+          message.success('Upload successful.');
+          setFileList([]);
+          setDescription('');
         } catch (error) {
-            console.error('Upload error:', error);
+          console.error('Upload error:', error);
+          message.error('Upload failed.');
+        } finally {
+          setUploading(false);
         }
-    };
-
-
-    const props: UploadProps = {
+      };
+    
+      const props: UploadProps = {
         name: 'file',
-        action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-        onChange: handleFileChange,
         maxCount: 1,
-    };
-
-    return (
+        onRemove: (file) => {
+          const index = fileList.indexOf(file);
+          const newFileList = [...fileList];
+          newFileList.splice(index, 1);
+          setFileList(newFileList);
+        },
+        beforeUpload: (file) => {
+            console.log(file)
+            setFileList([file]);
+            setFile(file);
+            return false;
+        },
+        fileList,
+      };
+    
+      return (
         <Card>
-            <Upload {...props}>
-                <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                    banned files.
-                </p>
-            </Upload>
-            <br></br>
-            <br></br>
-            Description: <textarea 
-                value = {description}
-                onChange={handleChange}
-                style={{
-                    background: 'white', 
-                    outlineColor: 'black', 
-                    outlineWidth: 1,
-                    outlineStyle: 'solid',
-                    border: 'none', // To remove default input border
-                    padding: '5px', // Adjust padding as needed
-                    width: '50%',
-                    height: '100px',
-                    verticalAlign: 'top',
-                    textAlign: 'justify',
-                    resize: 'vertical'
-                }}  />
-            <div></div>
-            <button onClick={handleSubmit}>Submit</button>
+          <Upload {...props}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">
+              Support for a single upload. Strictly prohibited from uploading company data or other banned files.
+            </p>
+          </Upload>
+          <br /><br />
+          <p>Description:</p>
+          <textarea
+            value={description}
+            onChange={handleChange}
+            style={{
+              background: 'white',
+              outlineColor: 'black',
+              outlineWidth: 1,
+              outlineStyle: 'solid',
+              border: 'none',
+              padding: '5px',
+              width: '50%',
+              height: '100px',
+              verticalAlign: 'top',
+              textAlign: 'justify',
+              resize: 'vertical',
+            }}
+          />
+          <br /><br />
+          <Button
+            onClick={handleSubmit}
+            disabled={fileList.length === 0 || uploading}
+            loading={uploading}
+          >
+            {uploading ? 'Uploading' : 'Submit'}
+          </Button>
         </Card>
-    );
+      );
 }
 
 export default Create_Media;
