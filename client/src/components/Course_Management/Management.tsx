@@ -1,5 +1,5 @@
 import './Management.css'
-import { Button, Card, ConfigProvider, Image, Typography } from 'antd';
+import { Button, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 
 
-
+// Temporary course object to be used when creating a new course
 const tempCourse = {
   courseName: 'temp',
   modules: [
@@ -34,9 +34,7 @@ const tempCourse = {
 function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
   
-  const { user, organization, setEditCourseContext } = useContext(AuthContext);
-
-  const uniqueID = uuidv4();
+  const { user, setEditCourseContext } = useContext(AuthContext);
 
   useEffect(() => {
     CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {
