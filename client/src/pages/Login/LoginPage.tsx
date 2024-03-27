@@ -6,6 +6,8 @@ import { AuthContext } from '../../context/AuthContext';
 import { User } from '../../models/user.model'
 import { api } from '../../api/axiosConfig';
 import Cookies from 'js-cookie';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 interface LoginResponse {
   token: string,
@@ -17,6 +19,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser, setOrganization } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
+  const [loading, setLoading ] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,9 +36,10 @@ const LoginPage: React.FC = () => {
       setOrganization(response.organization.orgName)
       setLoggedIn(true)  
       navigate("/home")
-    }).catch(error => 
+    }).catch(error => {
+      setLoading(false)
       console.log(error)
-    )
+  })
   }, [])
 
 
@@ -65,10 +69,12 @@ const LoginPage: React.FC = () => {
   const handleIncorrectResponse = () => {
     setIncorrect(false)
   }
-    
 
-  return (
-    <section className="login-box">
+  const isLoading = () => {
+    if(loading){
+      return (<Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />)
+    }else {
+      return (<section className="login-box">
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
@@ -98,7 +104,13 @@ const LoginPage: React.FC = () => {
           </form>
         </div>
       </div>
-    </section>
+    </section>)
+    }
+  }
+    
+
+  return (
+    isLoading()
   );
 };
 
