@@ -1,5 +1,4 @@
 import { api } from "./axiosConfig"
-import pako from 'pako'
 
 export const CourseAPI = {
 

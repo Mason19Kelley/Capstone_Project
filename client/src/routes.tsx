@@ -25,7 +25,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/forget" element={<ForgetPass/>} />
       <Route path="/createorg" element={<CreateOrg />} />
       <Route path="/passwordReset" element={<ResetPassword />} />
-      <Route path="/coursemodule" element={<CourseModule />} />
       <Route path="/pdf" element={<PDFViewer />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/home" element={
@@ -43,6 +42,13 @@ const AppRoutes: React.FC = () => {
           <EditCourse />
         </ProtectedRoute>
       } />
+      <Route path="/coursemodule/:courseId" element={
+        <ProtectedRoute>
+          <CourseModule />
+        </ProtectedRoute>
+      
+      } />
+
     </Routes>
   );
 };

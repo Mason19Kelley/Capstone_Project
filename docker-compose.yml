@@ -7,7 +7,7 @@ services:
     depends_on: 
       - backend
     ports:
-      - 5173:80
+      - 80:80
     networks:
       - app_network
 
@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile.backend
     environment:
       ENVIRONMENT: prod
-      CLIENT_URL: http://34.125.74.75:5173
+      CLIENT_URL: https://electron-surge.com
     depends_on: 
       - postgres
     ports:

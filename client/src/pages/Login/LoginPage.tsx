@@ -15,7 +15,7 @@ interface LoginResponse {
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoggedIn, setLoggedIn,user, setUser, organization, setOrganization } = useContext(AuthContext)
+  const { isLoggedIn, setLoggedIn, setUser, setOrganization } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
   const navigate = useNavigate();
 

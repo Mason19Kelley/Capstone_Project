@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal, Input, Select } from 'antd';
+import { Button, Modal, Input } from 'antd';
 import { CourseAPI } from '../../../api/CourseAPI';
 
 function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean | undefined; courseName: string | undefined; instructorName: string | undefined; courseJSON: any; }) {
-  const [ loading, setLoading ] = useState(false);
   const [CourseName, setCourseName] = useState("")
   const [instructorName, setinstructorName] = useState("")
   const [courseJSON, setCourseJSON] = useState<any>({})
@@ -35,7 +34,7 @@ function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean |
         <Button key="back" onClick={closeModal}>
           Cancel
         </Button>
-        <Button key="submit" className="save-button" loading={loading} onClick={saveCourseInformation} >
+        <Button key="submit" className="save-button" onClick={saveCourseInformation} >
           Save
         </Button>
       </div>

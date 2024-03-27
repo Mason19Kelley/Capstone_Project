@@ -52,7 +52,7 @@ function Edit_Course() {
     
   const { contentID, setContentID } = useContext(contentContext);
 
-  const {user, organization, EditCourseContext, setEditCourseContext} = useContext(AuthContext)
+  const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
 
   const { id } = useParams();
@@ -63,7 +63,6 @@ function Edit_Course() {
   const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
 
   const [ editModuleOpen, setEditModuleOpen ] = useState<boolean>(false);
-  const [ editModulePopOverOpen, setEditModulePopOverOpen ] =  useState<any | null>(null);
   const [selectedModuleID, setSelectedModuleID] = useState(null);
 
 
@@ -81,14 +80,7 @@ function Edit_Course() {
           }]
       }
     
-      const tempContent = {
-        contentType : "temp",
-        fileType : null,
-        fileLocation :null,
-        fileName : null,
-        quizID : null,
-        Description : null
-      }
+
     
 
 

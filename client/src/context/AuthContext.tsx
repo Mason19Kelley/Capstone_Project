@@ -1,6 +1,5 @@
 import { createContext, useState, ReactNode, FunctionComponent } from 'react';
 import { User } from '../models/user.model';
-import { Organization } from '../models/organization.model';
 
 interface AuthContextProps {
   isLoggedIn: boolean;

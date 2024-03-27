@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { contentContext } from '../../../../context/contentContext'; 
 import { Card } from 'antd';
 
 function Edit_Media () {
-    const { contentID, setContentID } = useContext(contentContext);
+    const { contentID } = useContext(contentContext);
 
     const information = JSON.parse(contentID);
     return (

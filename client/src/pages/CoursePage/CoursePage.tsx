@@ -1,10 +1,11 @@
-import { Image, Layout, theme, Card, ConfigProvider } from "antd";
+import { Image, Layout, theme, Card, ConfigProvider, Button } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
 import { useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
+import { PlaySquareOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 
@@ -137,9 +138,15 @@ const CoursePage: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-        <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
-          {courseName}
-        </h1>
+          <div className="flex flex-row justify-between">
+          <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+            {courseName}
+          </h1>
+          <Link to={`/courseModule/${id}`}>
+            <Button type="primary" icon={<PlaySquareOutlined />}>
+            </Button>
+          </Link>
+        </div>
         <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
           Taught by: {instructor}
         </h2>

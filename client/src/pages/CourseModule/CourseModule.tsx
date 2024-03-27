@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './CourseModule.css';
 import PDFViewer from './PDFView';
 import QuizComponent from './Quiz'; // Import the QuizComponent
 import { Button, message, Steps, theme } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { CourseAPI } from '../../api/CourseAPI';
 
 const steps = [
   {
@@ -21,10 +22,17 @@ const steps = [
 ];
 
 const CourseModule: React.FC = () => {
+  const { courseId } = useParams();
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   //const [quizCompleted, setQuizCompleted] = useState(false); // State to track quiz completion
 
+
+  useEffect(() => {
+    CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
+      console.log(response)
+    })
+  }, [])
   const next = () => {
     setCurrent(current + 1);
   };
