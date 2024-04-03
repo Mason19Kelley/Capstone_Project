@@ -47,6 +47,7 @@ function getCoursesCards(): JSX.Element[] {
     try {
       const coursesData = await CourseAPI.getCoursesFromUser(id ?? 0);
       setCourses(coursesData);
+      CourseAPI.getCourseCompletion(1,1).then(response => console.log(response))
     } catch (error) {
       console.error('Error fetching courses:', error);
     }};

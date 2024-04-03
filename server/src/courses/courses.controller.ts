@@ -57,12 +57,17 @@ export class CoursesController {
 
     //updates a courses JSON based on course name
     @Post('updateCourseJSON/:courseName')
-    async updateCourseJSON(@Param('courseName') courseName: string,@Body() courseJSON: JSON){
+    async updateCourseJSON(@Param('courseName') courseName: string, @Body() courseJSON: JSON){
         console.log(courseJSON)
         const temp = JSON.stringify(courseJSON)
         console.log("success")
 
         return await this.coursesService.updateCourseJSON(courseName, temp)
+    }
+
+    @Get('getCourseCompletion/:userId/:courseId')
+    async getCourseCompletion(@Param('userId') userId: number, @Param('courseId') courseId: number) {
+        return await this.coursesService.getCourseCompletion(userId, courseId)
     }
 
     

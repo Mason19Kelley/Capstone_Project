@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Courses } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {  Repository } from 'typeorm';
+import { CourseCompletion } from './course-completion.entity';
 
 
 // logic for courses
@@ -10,6 +11,8 @@ export class CoursesService {
     constructor(
         @InjectRepository(Courses)
         private courseRepository: Repository<Courses>,
+        @InjectRepository(CourseCompletion)
+        private courseCompletionRepository: Repository<CourseCompletion>,
     ) {}
 
     // get course by id
@@ -100,6 +103,11 @@ export class CoursesService {
             .where("courseName = :courseName", { courseName: courseName })
             .execute();
         console.log(updateCourse)
+    }
+
+    async getCourseCompletion(userId: number, courseId: number) {
+        const courseCompletion = await this.courseCompletionRepository.findOneBy({userId, courseId})
+        return courseCompletion
     }
 
     
