@@ -1,4 +1,4 @@
-import { Image, Layout, theme, Card, ConfigProvider, Button } from "antd";
+import { Image, Layout, theme, Card, ConfigProvider, Button, Menu } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Link, useParams } from "react-router-dom";
@@ -84,6 +84,11 @@ function createModule(jsonInfo: course | undefined): JSX.Element[] {
   return cards
 }
 
+const items = new Array(3).fill(null).map((_, index) => ({
+  key: String(index + 1),
+  label: `nav ${index + 1}`,
+}));
+
 const CoursePage: React.FC = () => {
   let { id } = useParams();
 
@@ -120,7 +125,15 @@ const CoursePage: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
         }}
-      />
+      >
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={['2']}
+          items={items}
+          style={{flex:1 , minWidth: 0}}
+          />
+        </Header>
       <div className='headerImage'>
           <Image
             width= '100%'
