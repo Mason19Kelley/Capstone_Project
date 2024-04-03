@@ -2,6 +2,7 @@ import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CoursesService } from './courses.service';
+import { CourseCompletionBody } from './course-completion.interface';
 
 
 @ApiTags('courses')
@@ -68,6 +69,11 @@ export class CoursesController {
     @Get('getCourseCompletion/:userId/:courseId')
     async getCourseCompletion(@Param('userId') userId: number, @Param('courseId') courseId: number) {
         return await this.coursesService.getCourseCompletion(userId, courseId)
+    }
+
+    @Post('updateCourseCompletion/:userId/:courseId')
+    async updateCourseCompletion(@Param('userId') userId: number, @Param('courseId') courseId: number, @Body() completion: CourseCompletionBody) {
+        return await this.coursesService.updateCourseCompletion(userId, courseId, completion.moduleCompleted, completion.contentCompleted)
     }
 
     

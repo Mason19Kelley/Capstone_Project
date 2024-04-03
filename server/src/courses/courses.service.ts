@@ -110,6 +110,14 @@ export class CoursesService {
         return courseCompletion
     }
 
+    async updateCourseCompletion(userId: number, courseId: number, moduleCompleted: number, contentCompleted: number) {
+        const update = await this.courseCompletionRepository.update({userId, courseId}, {
+            moduleCompleted,
+            contentCompleted
+        });
+        return update
+    }
+
     
 
     // inserts default courses into seed
