@@ -6,6 +6,10 @@ import { CourseAPI } from "../../api/CourseAPI";
 import { useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
 import { PlaySquareOutlined } from "@ant-design/icons";
+import Dashboard from '../../components/Dashboard/Dashboard';
+import HomePage from "../HomePage/HomePage";
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
+
 
 const { Header, Content } = Layout;
 
@@ -129,10 +133,18 @@ const CoursePage: React.FC = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={items}
+          defaultSelectedKeys={['1']}
           style={{flex:1 , minWidth: 0}}
-          />
+          >
+            <Menu.Item key="1" icon=<HomeOutlined />>
+              <Link to="/Home">
+                <span>Dashboard</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              
+            </Menu.Item>
+          </Menu>
         </Header>
       <div className='headerImage'>
           <Image
