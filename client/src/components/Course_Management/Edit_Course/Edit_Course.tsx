@@ -50,7 +50,7 @@ function Edit_Course() {
         }]
     }
     
-  const { contentID, setContentID } = useContext(contentContext);
+  const { contentID, setContentID, setCourseName } = useContext(contentContext);
 
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
@@ -118,7 +118,6 @@ function Edit_Course() {
   }
 
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
-    console.log(content.fileName)
     FileAPI.deleteFile(content.fileName);
     const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
@@ -133,7 +132,6 @@ function Edit_Course() {
    };
 
    const editModuleInformation = (module: any) => {
-    console.log(module.moduleID)
     setSelectedModuleID(module.moduleID)
     setEditModuleOpen(true);
    }
@@ -144,11 +142,13 @@ function Edit_Course() {
 
   const createMedia= (module: any) => {
     setContentID(module.moduleID)
-    console.log(contentID)
     setEditCourseContext('Create_Media');
     }
 
-  const createQuiz = () => {
+  const createQuiz = (module: any) => {
+    console.log(id)
+    setCourseName(selectedCourse.courseName);
+    setContentID(module.moduleID)
     setEditCourseContext('Create_Quiz');
   }
 
@@ -235,7 +235,7 @@ function Edit_Course() {
                     key={module}
                     content={
                       <div style={{display: 'flex'}} >
-                        <Button style={{flex: 1}} onClick={() => createQuiz()} >
+                        <Button style={{flex: 1}} onClick={() => createQuiz(module)} >
                             Quiz
                         </Button>
                         <Button style={{flex: 1}} onClick={() => createMedia(module)}>

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable()
@@ -11,8 +12,14 @@ export class QuizService {
         private quizRepository: Repository<Quiz>,
       ) {}
 
-      
+      findQuizById(qid: string){
+        return this.quizRepository.findOne({ where: { id: qid } });
+      }
 
+      async saveQuiz(quiz: any){
+        const quizEntity = this.quizRepository.create(quiz)
+        return this.quizRepository.insert(quizEntity)
+      }
 
 
 async seedOrganizations() {
