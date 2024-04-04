@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Input } from 'antd';
+import { Card, Button, Input, message } from 'antd';
 import { QuizAPI } from '../../../../api/QuizAPI';
 import { useContext } from 'react';
 import { contentContext } from '../../../../context/contentContext';
@@ -83,6 +83,7 @@ const CreateQuiz: React.FC = () => {
         if (!quiz) return;
         // Call your API function here with the quiz state
         QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0);
+        message.success('Quiz saved successfully');
     }
 
     return (
