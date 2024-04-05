@@ -3,12 +3,15 @@ import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Link, useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
 import { PlaySquareOutlined } from "@ant-design/icons";
 import Dashboard from '../../components/Dashboard/Dashboard';
 import HomePage from "../HomePage/HomePage";
+import { AuthAPI } from "../../api/AuthAPI";
+import { Role } from "../../models/role.model"
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
+import { AuthContext } from "../../context/AuthContext";
 
 
 const { Header, Content } = Layout;
@@ -88,10 +91,29 @@ function createModule(jsonInfo: course | undefined): JSX.Element[] {
   return cards
 }
 
-const items = new Array(3).fill(null).map((_, index) => ({
-  key: String(index + 1),
-  label: `nav ${index + 1}`,
-}));
+function createAdminButton(uid: number | undefined, courseName: string): JSX.Element {
+ const [role, setRole] = useState<Role>();
+
+  useEffect(() => {
+    if(uid){
+      AuthAPI.getUser(uid).then((data: any) => {
+        setRole(data['role'])
+      })
+    }
+  }, [uid])
+  
+  if(role?.id == (1 || 2)){
+    return (
+      <Menu.Item key="EditCourse">
+        <Link to={`/editCourse/${courseName}`}>
+          <span>Edit Course</span>
+        </Link>
+      </Menu.Item>
+    )
+  } else {
+    return <Menu.Item/>
+  }
+}
 
 const CoursePage: React.FC = () => {
   let { id } = useParams();
@@ -99,6 +121,7 @@ const CoursePage: React.FC = () => {
   const [selectedCourse, setselectedCourse] = useState<course>();
   const [instructor, setInstructor] = useState<string>('');
   const [courseName, setcourseName] = useState<string>('');
+  const { user } = useContext(AuthContext)
 
 
   useEffect(() => {
@@ -111,6 +134,8 @@ const CoursePage: React.FC = () => {
       })
     }
   }, [id])
+
+    const optionalMenuItem  = createAdminButton(user?.id, courseName)
     
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -136,14 +161,12 @@ const CoursePage: React.FC = () => {
           defaultSelectedKeys={['1']}
           style={{flex:1 , minWidth: 0}}
           >
-            <Menu.Item key="1" icon=<HomeOutlined />>
-              <Link to="/Home">
+            <Menu.Item key="Dashboard" icon=<HomeOutlined />>
+              <Link to={`/home`}>
                 <span>Dashboard</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="2">
-              
-            </Menu.Item>
+            {optionalMenuItem}
           </Menu>
         </Header>
       <div className='headerImage'>
