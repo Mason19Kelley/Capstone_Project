@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { User } from '../../models/user.model'
 import { api } from '../../api/axiosConfig';
 import Cookies from 'js-cookie';
+import { PageContext } from '../../context/PageContext';
 
 interface LoginResponse {
   token: string,
@@ -17,6 +18,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const { isLoggedIn, setLoggedIn, setUser, setOrganization } = useContext(AuthContext)
   const [incorrect, setIncorrect] = useState(true);
+  const { setPage } = useContext(PageContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +33,8 @@ const LoginPage: React.FC = () => {
     AuthAPI.checkUser().then(response => {
       setUser(response)
       setOrganization(response.organization.orgName)
-      setLoggedIn(true)  
+      setLoggedIn(true)
+      setPage('Dashboard')  
       navigate("/home")
     }).catch(error => 
       console.log(error)

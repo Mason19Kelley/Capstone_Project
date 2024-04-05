@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import Management from '../../components/Course_Management/Management';
 import EditCourse from '../EditPage/Editcourse';
+import { PageContext } from '../../context/PageContext';
 
 
 
@@ -53,7 +54,8 @@ const siderStyle: React.CSSProperties = {
 // }
 
 function HomePage() {
-  const [page, setPage] = useState('Dashboard');
+  const { page, setPage} = useContext(PageContext);
+  //const [page, setPage] = useState('Dashboard');
   const { setLoggedIn, user, setUser, setOrganization } = useContext(AuthContext)
   const { fullName } = user || {}
 

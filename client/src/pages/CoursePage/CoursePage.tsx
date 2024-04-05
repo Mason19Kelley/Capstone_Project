@@ -12,6 +12,7 @@ import { AuthAPI } from "../../api/AuthAPI";
 import { Role } from "../../models/role.model"
 import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
 import { AuthContext } from "../../context/AuthContext";
+import { PageContext } from "../../context/PageContext";
 
 
 const { Header, Content } = Layout;
@@ -122,6 +123,7 @@ const CoursePage: React.FC = () => {
   const [instructor, setInstructor] = useState<string>('');
   const [courseName, setcourseName] = useState<string>('');
   const { user } = useContext(AuthContext)
+  const { page, setPage } = useContext(PageContext)
 
 
   useEffect(() => {
@@ -135,79 +137,86 @@ const CoursePage: React.FC = () => {
     }
   }, [id])
 
-    const optionalMenuItem  = createAdminButton(user?.id, courseName)
+  const optionalMenuItem  = createAdminButton(user?.id, courseName)
     
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+  const handleClick = () => {
+    setPage('Courses');
+  }
+  
+  const {
+      token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
     
-    const module = createModule(selectedCourse);
+  const module = createModule(selectedCourse);
 
-    return (
-    <Layout style={{minHeight: '100vh'}}>
-        <Header
+  return (
+  <Layout style={{minHeight: '100vh'}}>
+      <Header
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        defaultSelectedKeys={['1']}
+        style={{flex:1 , minWidth: 0}}
+        >
+          <Menu.Item key="Dashboard" icon=<HomeOutlined />>
+            <Link to={`/home`}>
+              <span>Dashboard</span>
+            </Link>
+          </Menu.Item>
+          {optionalMenuItem}
+          <Menu.Item onClick={handleClick}>
+            hi
+          </Menu.Item>
+        </Menu>
+      </Header>
+    <div className='headerImage'>
+        <Image
+          width= '100%'
+          height = '98%'
+          src = {headerImg}
+          preview = {false}
+        />
+      </div>
+    <Content style={{ padding: '0 48px' }}>
+      <div
         style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
+          padding: 24,
+          minHeight: 380,
+          background: colorBgContainer,
+          borderRadius: borderRadiusLG,
         }}
       >
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['1']}
-          style={{flex:1 , minWidth: 0}}
-          >
-            <Menu.Item key="Dashboard" icon=<HomeOutlined />>
-              <Link to={`/home`}>
-                <span>Dashboard</span>
-              </Link>
-            </Menu.Item>
-            {optionalMenuItem}
-          </Menu>
-        </Header>
-      <div className='headerImage'>
-          <Image
-            width= '100%'
-            height = '98%'
-            src = {headerImg}
-            preview = {false}
-          />
-        </div>
-      <Content style={{ padding: '0 48px' }}>
-        <div
-          style={{
-            padding: 24,
-            minHeight: 380,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <div className="flex flex-row justify-between">
-          <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
-            {courseName}
-          </h1>
-          <Link to={`/courseModule/${id}`}>
-            <Button type="primary" icon={<PlaySquareOutlined />}>
-            </Button>
-          </Link>
-        </div>
-        <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
-          Taught by: {instructor}
-        </h2>
-        <div className="modules" >
-        <ConfigProvider>
-            {module.map(card => <div>{card}</div>)}
-        </ConfigProvider>
-        </div>
+        <div className="flex flex-row justify-between">
+        <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+          {courseName}
+        </h1>
+        <Link to={`/courseModule/${id}`}>
+          <Button type="primary" icon={<PlaySquareOutlined />}>
+          </Button>
+        </Link>
       </div>
-      </Content>
-    </Layout>
-    );
-  };
+      <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+        Taught by: {instructor}
+      </h2>
+      <div className="modules" >
+      <ConfigProvider>
+          {module.map(card => <div>{card}</div>)}
+      </ConfigProvider>
+      </div>
+    </div>
+    </Content>
+  </Layout>
+  );
+};
 
   
 export default CoursePage;
