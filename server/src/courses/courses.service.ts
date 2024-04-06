@@ -3,6 +3,7 @@ import { Courses } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {  Repository } from 'typeorm';
 import { CourseCompletion } from './course-completion.entity';
+import { User } from 'src/users/user.entity';
 
 
 // logic for courses
@@ -116,6 +117,16 @@ export class CoursesService {
             contentCompleted
         });
         return update
+    }
+
+    async getUsersCompletions(users: User[]) {
+        const completions = users.map(async (user: User) => {
+            return {
+                user: user,
+                completion: await this.courseCompletionRepository.findBy({userId: user.id})
+            }
+        })
+        return completions
     }
 
     

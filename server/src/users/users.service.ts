@@ -141,6 +141,17 @@ export class UsersService {
       console.log(error)
     }
   }
+
+  async getUsersWithCourseCompletion(orgId: number){
+    try {
+      const org = await this.orgsService.findOrg(orgId);
+      const users = org.users;
+      const completions = this.courseService.getUsersCompletions(users)
+      return completions;
+    } catch(error){
+      console.log(error)
+    }
+  }
   
   // inserts a default users into db
   async seedUsers() {
