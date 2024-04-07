@@ -80,7 +80,7 @@ export const CourseAPI = {
     },
 
     getUsersCompletion: async (orgId: number) => {
-        const { data } = await api.get(`courses/getUsersCompletion/${orgId}`)
+        const { data } = await api.get(`users/getUsersCompletion/${orgId}`)
         return data
     }
 }

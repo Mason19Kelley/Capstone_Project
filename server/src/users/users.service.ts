@@ -145,7 +145,8 @@ export class UsersService {
   async getUsersWithCourseCompletion(orgId: number){
     try {
       const org = await this.orgsService.findOrg(orgId);
-      const users = org.users;
+      const users = await this.usersRepository.findBy({organization: org})
+      console.log(users)
       const completions = this.courseService.getUsersCompletions(users)
       return completions;
     } catch(error){

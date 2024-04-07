@@ -120,12 +120,14 @@ export class CoursesService {
     }
 
     async getUsersCompletions(users: User[]) {
-        const completions = users.map(async (user: User) => {
+        console.log(users)
+        const completions = Promise.all(users.map(async (user: User) => {
             return {
                 user: user,
                 completion: await this.courseCompletionRepository.findBy({userId: user.id})
             }
-        })
+        }))
+        console.log(completions)
         return completions
     }
 
