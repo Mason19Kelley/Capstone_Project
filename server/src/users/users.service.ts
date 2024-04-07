@@ -46,9 +46,10 @@ export class UsersService {
       return await this.usersRepository.findOneBy({id: userId})
     }));
 
-    userEntities.forEach(user => {
+    userEntities.forEach(async user => {
       if (!course.users.some(existingUser => existingUser.id === user.id)) {
           course.users.push(user);
+          await this.courseService.addCourseCompletion(user.id, course.cid, 0, 0)
       }
   });
 
@@ -146,7 +147,6 @@ export class UsersService {
     try {
       const org = await this.orgsService.findOrg(orgId);
       const users = await this.usersRepository.findBy({organization: org})
-      console.log(users)
       const completions = this.courseService.getUsersCompletions(users)
       return completions;
     } catch(error){

@@ -119,16 +119,38 @@ export class CoursesService {
         return update
     }
 
+    async addCourseCompletion(userId: number, courseId: number, moduleCompleted: number, contentCompleted: number) {
+        const add = await this.courseCompletionRepository.create({userId, courseId, moduleCompleted, contentCompleted});
+        return await this.courseCompletionRepository.insert(add)
+    }
+
     async getUsersCompletions(users: User[]) {
-        console.log(users)
         const completions = Promise.all(users.map(async (user: User) => {
             return {
                 user: user,
-                completion: await this.courseCompletionRepository.findBy({userId: user.id})
+                completion: (await this.courseCompletionRepository.findBy({userId: user.id}))
             }
         }))
-        console.log(completions)
-        return completions
+
+        return await completions.then(async completionsArray => {
+            return await Promise.all(completionsArray.map(async user => {
+                const updatedCompletions = await Promise.all(user.completion.map(async (course) => {
+                    const courseDetails = await this.courseRepository.findOneBy({cid: course.courseId});
+                    const courseJSON = JSON.parse(courseDetails.jsonInformation)
+                    return {
+                        ...course,
+                        courseName: courseDetails.courseName,
+                        totalModules: courseJSON?.modules?.length ?? 8,
+                        totalContent: courseJSON?.modules[course.moduleCompleted]?.content?.length ?? 8
+                    };
+                }));
+    
+                return {
+                    user: user.user,
+                    completion: updatedCompletions
+                };
+            }));
+        });
     }
 
     

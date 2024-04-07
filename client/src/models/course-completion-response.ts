@@ -2,7 +2,7 @@ import { User } from "./user.model";
 
 export interface CourseCompletionResponse {
     user: User;
-    completions: Completion[];
+    completion: Completion[];
 }
 
 export interface Completion {
@@ -10,4 +10,7 @@ export interface Completion {
     courseId: number;
     moduleCompleted: number;
     userId: number;
+    courseName: string;
+    totalModules: number;
+    totalContent: number;
 }
