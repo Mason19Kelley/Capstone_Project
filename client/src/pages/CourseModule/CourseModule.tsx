@@ -8,53 +8,9 @@ import { Link, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
 //import { QuizAPI } from '../../../../api/QuizAPI';
 
-/*const steps = [
-  {
-    title: 'First',
-    content: <PDFViewer />,
-  },
-  {
-    title: 'Second',
-    content: <QuizComponent />, // Use the QuizComponent here
-  },
-  {
-    title: 'Third',
-    content: <QuizComponent />, // Use the QuizComponent here
-  },
-  {
-    title: 'Last',
-    content: 'Check out this text. It rocks!',
-  },
-];
-*/
 interface Step {
   title: string;
   content: JSX.Element | string;
-}
-
-function generateSteps(totalContent: number, contentType: string, fileType?: string): Step[] {
-  const steps: Step[] = [];
-  
-  for (let i = 0; i < totalContent; i++) {
-    if (i === 0) {
-      steps.push({
-        title: `Step ${i + 1}`,
-        content: contentType === 'Media' && fileType === 'mp4' ? <VideoPlayer /> : <PDFViewer />,
-      });
-    } else if (i === totalContent - 1) {
-      steps.push({
-        title: `Last`,
-        content: 'Check out this text. It rocks!',
-      });
-    } else {
-      steps.push({
-        title: `Step ${i + 1}`,
-        content: contentType === 'Media' && fileType === 'mp4' ? <VideoPlayer /> : <QuizComponent />,
-      });
-    }
-  }
-  
-  return steps;
 }
 
 const CourseModule: React.FC = () => {
@@ -66,39 +22,33 @@ const CourseModule: React.FC = () => {
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
       const data = JSON.parse(response.jsonInformation);
-      console.log("Received data:", data); // Log the received data for debugging
-  
+      console.log("Received data:", data);
+
       const moduleSteps: Step[] = [];
-      // Iterate through each module and its content
+
       data.modules.forEach(module => {
         module.content.forEach((content, index) => {
-          let contentType = content.contentType;
-          let fileType = content.fileType;
-          // Adjust the contentType and fileType based on the index
-          if (index === 0) {
-            // For the first content item in the module
-            if (!contentType || (contentType === 'Media' && !fileType)) {
-              // If contentType is not specified or if it's 'Media' without fileType, default to 'pdf'
-              contentType = 'Media';
-              fileType = 'pdf';
+          let stepContent;
+
+          if (content.contentType === 'Media') {
+            if (content.fileType === 'mp4') {
+              stepContent = <VideoPlayer />;
+            } else if (content.fileType === 'pdf') {
+              stepContent = <PDFViewer fileName={content.fileName} />;
             }
-          } else {
-            // For subsequent content items in the module
-            if (!contentType || (contentType === 'Media' && !fileType)) {
-              // If contentType is not specified or if it's 'Media' without fileType, default to 'quiz'
-              contentType = 'Quiz';
-              fileType = null;
-            }
+          } else if (content.contentType === 'Quiz') {
+            stepContent = <QuizComponent />;
           }
-          // Generate step based on contentType and fileType
-          const stepContent = contentType === 'Media' ? <VideoPlayer /> : <QuizComponent />;
-          moduleSteps.push({
-            title: `Module ${module.moduleName} - ${content.fileName}`, // Adjust title as needed
-            content: stepContent
-          });
+
+          if (stepContent) {
+            moduleSteps.push({
+              title: `Module ${module.moduleName} - ${content.fileName}`,
+              content: stepContent
+            });
+          }
         });
       });
-  
+
       if (moduleSteps.length > 0) {
         setTrueSteps(moduleSteps);
       } else {
@@ -129,7 +79,6 @@ const CourseModule: React.FC = () => {
     marginTop: 1,
   };
 
-  // Ensure truesteps[current] is defined before accessing its content property
   const content = truesteps[current] ? truesteps[current].content : null;
 
   return (
@@ -170,4 +119,5 @@ const CourseModule: React.FC = () => {
     </div>
   );
 };
+
 export default CourseModule;

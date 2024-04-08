@@ -69,7 +69,8 @@ function Create_Media() {
     
           // Update jsonInformation and course information as needed
           const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
-          tempMediaJSON.fileType = fileList[0].type;
+          const type = fileList[0].type.split('/')[1];
+          tempMediaJSON.fileType = type;
           tempMediaJSON.fileName = fileList[0].name;
           tempMediaJSON.Description = description;
           moduleToEdit.content.push(tempMediaJSON);
