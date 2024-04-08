@@ -24,6 +24,7 @@ import { PostmarkModule } from './postmark/postmark.module';
 import { StorageModule } from './storage/storage.module';
 import { FileModule } from './file/file.module';
 import { QuizModule } from './quiz/quiz.module';
+import { CourseCompletion } from './courses/course-completion.entity';
 
 // sets up db/typeorm connection and loads all modules into app
 @Module({
@@ -38,7 +39,7 @@ import { QuizModule } from './quiz/quiz.module';
          username: "surge-user",
          password: 'password',
          database: 'surge',
-         entities: [User, Organization, Role, LoginLog, Courses, Quiz],
+         entities: [User, Organization, Role, LoginLog, Courses, Quiz, CourseCompletion],
          synchronize: true,
          migrations: ["src/migration/**/*.ts"],
        }),

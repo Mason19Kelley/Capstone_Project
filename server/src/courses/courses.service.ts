@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Courses } from './courses.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {  Repository } from 'typeorm';
+import { CourseCompletion } from './course-completion.entity';
+import { User } from 'src/users/user.entity';
 
 
 // logic for courses
@@ -10,6 +12,8 @@ export class CoursesService {
     constructor(
         @InjectRepository(Courses)
         private courseRepository: Repository<Courses>,
+        @InjectRepository(CourseCompletion)
+        private courseCompletionRepository: Repository<CourseCompletion>,
     ) {}
 
     // get course by id
@@ -100,6 +104,54 @@ export class CoursesService {
             .where("courseName = :courseName", { courseName: courseName })
             .execute();
         console.log(updateCourse)
+    }
+
+    async getCourseCompletion(userId: number, courseId: number) {
+        const courseCompletion = await this.courseCompletionRepository.findOneBy({userId, courseId})
+        return courseCompletion
+    }
+
+    async updateCourseCompletion(userId: number, courseId: number, moduleCompleted: number, contentCompleted: number) {
+        const update = await this.courseCompletionRepository.update({userId, courseId}, {
+            moduleCompleted,
+            contentCompleted
+        });
+        return update
+    }
+
+    async addCourseCompletion(userId: number, courseId: number, moduleCompleted: number, contentCompleted: number) {
+        const add = await this.courseCompletionRepository.create({userId, courseId, moduleCompleted, contentCompleted});
+        return await this.courseCompletionRepository.insert(add)
+    }
+
+    async getUsersCompletions(users: User[]) {
+        const completions = Promise.all(users.map(async (user: User) => {
+            return {
+                user: user,
+                completion: (await this.courseCompletionRepository.findBy({userId: user.id}))
+            }
+        }))
+
+        return await completions.then(async completionsArray => {
+            return await Promise.all(completionsArray.map(async user => {
+                const updatedCompletions = await Promise.all(user.completion.map(async (course) => {
+                    const courseDetails = await this.courseRepository.findOneBy({cid: course.courseId});
+                    const courseJSON = JSON.parse(courseDetails.jsonInformation)
+                    return {
+                        ...course,
+                        courseName: courseDetails.courseName,
+                        totalModules: courseJSON?.modules?.length ?? 8,
+                        totalContent: courseJSON?.modules[Math.max(course.moduleCompleted -1, 0)]?.content?.length ?? 8,
+                        completed: courseJSON?.modules?.length === course.moduleCompleted
+                    };
+                }));
+    
+                return {
+                    user: user.user,
+                    completion: updatedCompletions
+                };
+            }));
+        });
     }
 
     

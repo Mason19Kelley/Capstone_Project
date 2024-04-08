@@ -48,6 +48,14 @@ const AppRoutes: React.FC = () => {
         </ProtectedRoute>
       
       } />
+      {/* <Route path="/courseCompletion" element={
+        <ProtectedRoute>
+          <AdminRoute>
+            <h1>Hello</h1>
+          </AdminRoute>
+        </ProtectedRoute>
+      
+      } /> */}
 
     </Routes>
   );
