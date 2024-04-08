@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, ReactNode, FunctionComponent } from "react";
-import Dashboard from "../components/Dashboard/Dashboard";
+import { createContext, useState, ReactNode, FunctionComponent } from "react";
 
 interface PageContextProps {
     page: string
@@ -21,9 +20,6 @@ interface PageProviderProps {
 const PageProvider: FunctionComponent<PageProviderProps> = ({ children }) => {
     const [page, setPage] = useState('Dashboard');
 
-    const setPageState = (newPage: string) => {
-        setPage(newPage);
-    }
     return (
         <PageContext.Provider value={{ page, setPage }}>
             {children}

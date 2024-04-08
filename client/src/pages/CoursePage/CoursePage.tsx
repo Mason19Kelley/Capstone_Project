@@ -6,11 +6,9 @@ import { CourseAPI } from "../../api/CourseAPI";
 import { useContext, useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
 import { PlaySquareOutlined } from "@ant-design/icons";
-import Dashboard from '../../components/Dashboard/Dashboard';
-import HomePage from "../HomePage/HomePage";
 import { AuthAPI } from "../../api/AuthAPI";
 import { Role } from "../../models/role.model"
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
 import { AuthContext } from "../../context/AuthContext";
 import { PageContext } from "../../context/PageContext";
 
@@ -123,7 +121,7 @@ const CoursePage: React.FC = () => {
   const [instructor, setInstructor] = useState<string>('');
   const [courseName, setcourseName] = useState<string>('');
   const { user } = useContext(AuthContext)
-  const { page, setPage } = useContext(PageContext)
+  const { setPage } = useContext(PageContext)
 
 
   useEffect(() => {
@@ -139,9 +137,9 @@ const CoursePage: React.FC = () => {
 
   const optionalMenuItem  = createAdminButton(user?.id, courseName)
     
-  const handleClick = () => {
-    setPage('Courses');
-  }
+  const handleMenuClick = ({ key }: { key: string }) => {
+    setPage(key);
+  };
   
   const {
       token: { colorBgContainer, borderRadiusLG },
@@ -166,16 +164,19 @@ const CoursePage: React.FC = () => {
         mode="horizontal"
         defaultSelectedKeys={['1']}
         style={{flex:1 , minWidth: 0}}
+        onClick={handleMenuClick}
         >
           <Menu.Item key="Dashboard" icon=<HomeOutlined />>
             <Link to={`/home`}>
               <span>Dashboard</span>
             </Link>
           </Menu.Item>
-          {optionalMenuItem}
-          <Menu.Item onClick={handleClick}>
-            hi
+          <Menu.Item key="Courses" icon=<ProfileOutlined />>
+            <Link to={'/home'}>
+              Courses
+            </Link>
           </Menu.Item>
+          {optionalMenuItem}
         </Menu>
       </Header>
     <div className='headerImage'>

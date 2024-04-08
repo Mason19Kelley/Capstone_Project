@@ -13,6 +13,7 @@ import Create_Quiz from '../../components/Course_Management/Edit_Course/Create/C
 import Create_Media from '../../components/Course_Management/Edit_Course/Create/Create_Media';
 import Edit_Media from '../../components/Course_Management/Edit_Course/Edit/Edit_Media';
 import Edit_Quiz from '../../components/Course_Management/Edit_Course/Edit/Edit_Quiz';
+import { PageContext } from '../../context/PageContext';
 
 const layoutStyle = {
   width: '100%',
@@ -43,8 +44,7 @@ const siderStyle: React.CSSProperties = {
 function EditCourse() {
   const {user,  EditCourseContext } = useContext(AuthContext)
   const { fullName } = user || {};
-  
-
+  const { setPage } = useContext(PageContext)
 
   const navigate = useNavigate();
 
@@ -67,11 +67,12 @@ function EditCourse() {
   }
 
   const items: MenuProps['items'] = [
-    getItem('Home', 'home', <TeamOutlined />)
+    getItem('Home', 'Dashboard', <TeamOutlined />)
   ];
 
-  const handleMenuClick = () => {
-    navigate(`/home`)
+  const handleMenuClick = ({ key }: { key: string }) => {
+    setPage(key);
+    navigate('/home')
   };
 
   const renderPage = () => {
