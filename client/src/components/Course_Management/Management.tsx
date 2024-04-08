@@ -88,12 +88,10 @@ function Management () {
               <Typography.Title level={3} style={{ textAlign: 'left' }}>
                 <div className='dashboardText'>{course}</div>
               </Typography.Title>
-              <div style = {{display:'flex'}}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)}>
-                  <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+              <div style = {{display:'flex', gap: "2px"}}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'black' }} />}>
                 </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)}>
-                  <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
                 </Button>
               </div>
             </Box>
@@ -133,8 +131,7 @@ function Management () {
             <Typography.Title level={3} style={{ textAlign: 'left' }}>
               <div className='dashboardText'>Courses</div>
             </Typography.Title>
-            <Button className='noHover' type="primary" style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick = {addCourse}>
-              <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+            <Button className='noHover' type="primary" style={{ width: '50px' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'black' }} />}>
             </Button>
           </Box>
           </ThemeProvider>
