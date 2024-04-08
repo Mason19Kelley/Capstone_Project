@@ -1,7 +1,7 @@
 import  { useEffect } from 'react';
 import { Button, Card,  Typography, Popover } from 'antd';
-import { useParams } from 'react-router-dom';
-import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Link, useParams } from 'react-router-dom';
+import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext';
 import { Box, ThemeProvider } from '@mui/system'
@@ -58,6 +58,7 @@ function Edit_Course() {
   const { id } = useParams();
   
   const [instructor, setInstructor] = useState<string>('')
+  const [cid, setCid] = useState<number>(0);
 
   const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
   const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
@@ -80,10 +81,6 @@ function Edit_Course() {
           }]
       }
     
-
-    
-
-
   useEffect(() => {
     
     if(id && user?.organization?.id){
@@ -92,6 +89,7 @@ function Edit_Course() {
         const jsonInformation = JSON.parse(data['jsonInformation']);
         setInstructor(data['instructor']);
         setselectedCourse(jsonInformation);
+        setCid(data.cid);
       })
     }
   }, [])
@@ -295,7 +293,15 @@ function Edit_Course() {
   return (
             <div>
               <Typography.Title level={2} style={{ textAlign: 'left' }}>
+              <div className="flex flex-row justify-between">
                 <div className='dashboardText'>Edit Course</div>
+                <Link to={`/courses/${cid}`}>
+                  <Button type="primary" icon={<PlaySquareOutlined />}>
+                    Go to Course
+                  </Button>
+                </Link>
+                
+              </div>
               </Typography.Title>
               <div>
               <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
