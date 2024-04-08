@@ -1,0 +1,19 @@
+.course-progress-container {
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.completed-row {
+    background-color: #89ff89a8;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+    background: none !important;
+}
+
+.ant-collapse-header {
+    text-align: left !important;
+}

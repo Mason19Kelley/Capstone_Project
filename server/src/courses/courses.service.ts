@@ -141,7 +141,8 @@ export class CoursesService {
                         ...course,
                         courseName: courseDetails.courseName,
                         totalModules: courseJSON?.modules?.length ?? 8,
-                        totalContent: courseJSON?.modules[course.moduleCompleted]?.content?.length ?? 8
+                        totalContent: courseJSON?.modules[Math.max(course.moduleCompleted -1, 0)]?.content?.length ?? 8,
+                        completed: courseJSON?.modules?.length === course.moduleCompleted
                     };
                 }));
     

@@ -32,13 +32,14 @@ function CourseProgressTable(props: {courses: Completion[]}) {
         course: course.courseName,
         modules: `${course.moduleCompleted} / ${course.totalModules}`,
         content: `${course.contentCompleted} / ${course.totalContent}`,
+        completed: course.completed,
     })))
   }, [props.courses])
 
 
   return (
-    <Table dataSource={dataSource} columns={columns} />
+    <Table dataSource={dataSource} columns={columns} pagination={{ position: ['none', 'none'] }} rowClassName={(record: any) => record.completed as boolean ? 'completed-row' :  ''}/>
   )
-}
+} 
 
 export default CourseProgressTable;

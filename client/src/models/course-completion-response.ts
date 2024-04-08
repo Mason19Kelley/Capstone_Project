@@ -13,4 +13,5 @@ export interface Completion {
     courseName: string;
     totalModules: number;
     totalContent: number;
+    completed: boolean;
 }
