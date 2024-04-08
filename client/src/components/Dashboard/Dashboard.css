@@ -28,7 +28,7 @@
 
 .dashboardText {
     padding-top: 5px;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Playfair Display';
 }
 
 .learningDashboard {
@@ -54,4 +54,22 @@
 
 .dashboardText {
     padding-top: 0.1%;
+}
+
+.cardText {
+    font-family: 'Oswald';
+    font-weight: bold;
+    font-size: normal;
+}
+
+.top-card {
+    min-width: 202px;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.course-card {
+    border-radius: 5px; 
+    width: 300px; 
+    background: '#f0f0f0' 
 }

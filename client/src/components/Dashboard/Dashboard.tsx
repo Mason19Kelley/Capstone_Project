@@ -29,15 +29,15 @@ const cards: string[] = [
     const boxTemplate = {
       width: 1,
       height:147,
-      borderRadius: 1,
-      bgcolor: 'gray'
+      borderRadius: "5px",
+      bgcolor: '#949292'
     };
   
     // Building the Actual card, obtaining the name and instructor
     return (
       <Link to={`/courses/${cid}`}>
-      <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
-        <Meta title = { courseName } description= { instructor } />
+      <Card hoverable={true} className="course-card" cover={ <Box sx={ boxTemplate } /> }>
+        <Meta title = {<div className='cardText'>{ courseName }</div>} description= {<div className='cardText'>{instructor}</div> } />
       </Card>
       </Link>
     );
@@ -91,8 +91,8 @@ function Dashboard() {
       </div>
       <h1 style= {{color:'#0c2245', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
       <div className='cards'>
-        <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
-            {cards.map(card => <Card style={{width: '100%', minWidth: "202px"}} className="course-card"><Typography.Text>{card}</Typography.Text></Card>)}
+        <ConfigProvider theme={{ token: { fontFamily: "Playfair Display", fontSize: 30, paddingLG: 18 } }}>
+            {cards.map(card => <Card className="top-card"><Typography.Text>{card}</Typography.Text></Card>)}
         </ConfigProvider>
       </div>
 
