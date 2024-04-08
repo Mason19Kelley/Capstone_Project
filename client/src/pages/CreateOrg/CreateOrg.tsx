@@ -30,10 +30,10 @@ const CreateOrg: React.FC = () => {
   return (
     <section>
       <div className="org-box">
+      <Link to={'/login'} className="create-org-back"><ArrowLeftOutlined /></Link>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
             <div className='back-link'>
-              <Link to={'/login'}><ArrowLeftOutlined /></Link>
               <h2>Create an Organization</h2>
             </div>
             

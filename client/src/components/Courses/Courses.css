@@ -14,8 +14,9 @@
     box-sizing: border-box;
     height: 146px;
     display: flex;
-    gap: 2%;
+    gap: 1%;
     flex-direction: row;
+    margin-left: 1%;
 }
 
 .headerImage {
