@@ -50,7 +50,7 @@ function Edit_Course() {
         }]
     }
     
-  const { contentID, setContentID } = useContext(contentContext);
+  const { contentID, setContentID, setCourseName } = useContext(contentContext);
 
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
@@ -116,7 +116,6 @@ function Edit_Course() {
   }
 
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
-    console.log(content.fileName)
     FileAPI.deleteFile(content.fileName);
     const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
@@ -131,7 +130,6 @@ function Edit_Course() {
    };
 
    const editModuleInformation = (module: any) => {
-    console.log(module.moduleID)
     setSelectedModuleID(module.moduleID)
     setEditModuleOpen(true);
    }
@@ -142,11 +140,13 @@ function Edit_Course() {
 
   const createMedia= (module: any) => {
     setContentID(module.moduleID)
-    console.log(contentID)
     setEditCourseContext('Create_Media');
     }
 
-  const createQuiz = () => {
+  const createQuiz = (module: any) => {
+    console.log(id)
+    setCourseName(selectedCourse.courseName);
+    setContentID(module.moduleID)
     setEditCourseContext('Create_Quiz');
   }
 
@@ -191,12 +191,10 @@ function Edit_Course() {
                   {content['fileName']}
                 </div>
               </Typography.Title>
-              <div style={{ display: 'flex' }}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)}>
-                  <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+              <div style={{ display: 'flex', gap: '2px' }}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)} icon={<EditOutlined style={{ color: 'black' }} />}>
                 </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)}>
-                  <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
                 </Button>
               </div>
           </div>
@@ -225,15 +223,14 @@ function Edit_Course() {
                 <Typography.Title level={3} style={{ textAlign: 'left', margin: 0 }}>
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
-                <div style={{ display: 'flex' }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)}>
-                    <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                <div style={{ display: 'flex', gap: "2px" }}>
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)} icon={<EditOutlined style={{ color: 'black' }} />}>
                   </Button>
                   <Popover
                     key={module}
                     content={
                       <div style={{display: 'flex'}} >
-                        <Button style={{flex: 1}} onClick={() => createQuiz()} >
+                        <Button style={{flex: 1}} onClick={() => createQuiz(module)} >
                             Quiz
                         </Button>
                         <Button style={{flex: 1}} onClick={() => createMedia(module)}>
@@ -246,12 +243,10 @@ function Edit_Course() {
                     open={popOverOpen === module}
                     onOpenChange={(visible) => createCourseContent(visible ? module : null)}
                     >
-                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)}>
-                        <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)} icon={<PlusOutlined style={{ color: 'black' }} />}>
                     </Button>
                 </Popover>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)}>
-                    <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
                   </Button>
                   {selectedModuleID === module.moduleID && <EditModuleModal isModalOpen={editModuleOpen} closeModal={closeEditModuleModal} ModuleName={module['moduleName']} moduleID={module['moduleID']} courseJSON = {selectedCourse}></EditModuleModal>}
                 </div>
@@ -322,15 +317,12 @@ function Edit_Course() {
                     <div className='dashboardText'>{selectedCourse['courseName']}</div>
                     <div style={{fontSize:'15px'}}>{instructor}</div>
                   </Typography.Title>
-                  <div style = {{display:'flex'}}>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => EditCourseInformation()}>
-                      <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                  <div style = {{display:'flex', gap: "2px"}}>
+                    <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
                     </Button>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle'  }} onClick={() => openAddUserModal()}>
-                      <UserAddOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                    <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
                     </Button>
-                    <Button className='noHover' style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick={() => addModule()} >
-                      <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                    <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
                     </Button>
                   </div>
                 </Box>

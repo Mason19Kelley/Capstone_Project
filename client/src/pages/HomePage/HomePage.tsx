@@ -3,17 +3,19 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined, CheckOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
 import Account from '../../components/Account/Account';
-import Courses from '../../components/Courses/Courses';
 import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import Management from '../../components/Course_Management/Management';
 import EditCourse from '../EditPage/Editcourse';
 import { PageContext } from '../../context/PageContext';
+import CourseProgress from '../../components/CourseProgress/CourseProgress';
+import CoursesList from '../../components/Courses/Courses';
+
 
 
 
@@ -68,7 +70,7 @@ function HomePage() {
       case 'Dashboard':
         return <Dashboard />;
       case 'Courses':
-        return <Courses />;
+        return <CoursesList />;
       case 'Account':
         return <Account />;
       case 'Admin':
@@ -77,6 +79,8 @@ function HomePage() {
         return <Management />
       case 'editCourse':
         return <EditCourse />
+      case 'User Course Progress':
+        return <CourseProgress />
       case 'Logout':
         logOut()
         return null;
@@ -115,7 +119,7 @@ function HomePage() {
   }
 
   const items: MenuProps['items'] = [
-    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('User Course Progress', 'User Course Progress', <CheckOutlined />) : null, getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
   ];
 
   return (

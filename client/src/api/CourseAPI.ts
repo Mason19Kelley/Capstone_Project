@@ -67,5 +67,20 @@ export const CourseAPI = {
   
         const { data } = await api.post(`/courses/updateCourseJSON/${courseName}`, courseJSON);
         return data;
+    },
+
+    getCourseCompletion: async (userId: number, courseId: number) => {
+        const { data } = await api.get(`courses/getCourseCompletion/${userId}/${courseId}`)
+        return data
+    },
+
+    updateCourseCompletion: async (userId: number, courseId: number, moduleCompleted: number, contentCompleted: number) => {
+        const { data } = await api.post(`courses/updateCourseCompletion/${userId}/${courseId}`, {moduleCompleted, contentCompleted})
+        return data
+    },
+
+    getUsersCompletion: async (orgId: number) => {
+        const { data } = await api.get(`users/getUsersCompletion/${orgId}`)
+        return data
     }
 }

@@ -20,6 +20,9 @@
     text-align: center;
     flex-wrap: wrap;
     padding-bottom: 2%;
+    flex-direction: row;
+    margin-left: 1%;
+
 }
 
 .headerImage {
