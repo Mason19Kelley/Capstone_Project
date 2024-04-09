@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+//imports
+import React, { useState } from 'react';
 import { Card, Button, Input, message } from 'antd';
 import { QuizAPI } from '../../../../api/QuizAPI';
 import { useContext } from 'react';
 import { contentContext } from '../../../../context/contentContext';
 import { AuthContext } from '../../../../context/AuthContext';
 
+// interface for quiz json
 interface QuizInterface {
     QuizName: string;
     Questions: {
@@ -25,7 +27,8 @@ const CreateQuiz: React.FC = () => {
 
 
     const addQuestion = () => {
-        // Extract question and answers from the inputs
+        
+        // Create a new question object
         const newQuestion = {
             QuestionType: "Multiple Choice",
             Question: questionInputs[(quiz?.Questions.length || 0) * 5],

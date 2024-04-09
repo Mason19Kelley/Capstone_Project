@@ -13,6 +13,8 @@ import { FileAPI } from '../../../api/FileAPI';
 import  EditModuleModal  from '../../modals/EditModuleModal/EditModuleModal';
 import AddUserModal from './AddUserModal';
 
+
+// interface for course json
 interface course {
   courseName : string,
   modules :
@@ -31,8 +33,9 @@ interface course {
 }
 
 function Edit_Course() {
- const uniqueID = uuidv4();
+ let uniqueID = uuidv4();
   
+ // creates new course with temporary information
   const initialCourse: course = {
     courseName : 'temp',
     modules : [
@@ -50,23 +53,20 @@ function Edit_Course() {
         }]
     }
     
-  const { contentID, setContentID, setCourseName } = useContext(contentContext);
-
+  const { setContentID, setCourseName } = useContext(contentContext);
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
-
   const { id } = useParams();
-  
   const [instructor, setInstructor] = useState<string>('')
   const [cid, setCid] = useState<number>(0);
-
   const [editCourseOpen, setisEditCourseOpen] = useState<boolean>(false);
   const [popOverOpen, setPopOverOpen] =  useState<any | null>(null);;
-
   const [ editModuleOpen, setEditModuleOpen ] = useState<boolean>(false);
   const [selectedModuleID, setSelectedModuleID] = useState(null);
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
 
+    uniqueID = uuidv4();
       const tempModule = {
         moduleName : "temp",
         moduleID : uniqueID,
@@ -102,6 +102,7 @@ function Edit_Course() {
     CourseAPI.updateCourseJSON(selectedCourse.courseName, selectedCourse);
   }
 
+  // adds module to course
   const addModule = () => {
     setselectedCourse(prevCourse => {
       const newModules = [...prevCourse.modules, tempModule];
@@ -109,22 +110,22 @@ function Edit_Course() {
     });
   }
 
+  // deletes module from course json
   const deleteModule = (selectedCourse: any, module: any) => {
-    console.log(module.moduleID)
     const newModules = selectedCourse.modules.filter((mod: any) => mod.moduleID !== module.moduleID);
     setselectedCourse({ ...selectedCourse, modules: newModules });
   }
 
+  // deletes content from module in course json
+  // deletes file from GCP
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
     FileAPI.deleteFile(content.fileName);
-    console.log(selectedCourse)
-    console.log(module)
-    console.log(content)
     const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
     setselectedCourse({ ...selectedCourse, modules: newModules });
   }
 
+  // opens edit course modal
   const EditCourseInformation = () => {
     setisEditCourseOpen(true);
   }
@@ -132,31 +133,36 @@ function Edit_Course() {
     setisEditCourseOpen(false);
    };
 
+   // opens edit module modal
    const editModuleInformation = (module: any) => {
     setSelectedModuleID(module.moduleID)
     setEditModuleOpen(true);
    }
-
    const closeEditModuleModal = () => {
     setEditModuleOpen(false);
    };
 
+   // function that changes the context to create media component
   const createMedia= (module: any) => {
     setContentID(module.moduleID)
     setEditCourseContext('Create_Media');
     }
 
+    // function that changes the context to create quiz component
   const createQuiz = (module: any) => {
-    console.log(id)
     setCourseName(selectedCourse.courseName);
     setContentID(module.moduleID)
     setEditCourseContext('Create_Quiz');
   }
 
+  // popover to display content options
   const createCourseContent = (module: any) => {
     setPopOverOpen(popOverOpen === module ? null : module);
   };
 
+  // function that changes the context to edit media component
+  // determines if the content is media or quiz and changes context 
+  // to the appropriate component
   const EditContent = (module: any, content: any) => {
     if(content.contentType === 'Media'){
       const information = {
@@ -174,6 +180,7 @@ function Edit_Course() {
     
   }
 
+  // function used to display content within the course json
   const displayContent = (module: any, content: any) => {
 
     return (
@@ -205,6 +212,7 @@ function Edit_Course() {
     )
   }
 
+  // function used to display modules within the course json
   const displayModules = (module: any) => {
     return (
 
@@ -277,7 +285,8 @@ function Edit_Course() {
       </div>
     )
   }
-  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+
+  // opens add user modal
   const openAddUserModal = () => {
     setIsAddUserModalOpen(true);
   }
