@@ -18,16 +18,16 @@ const CourseModule: React.FC = () => {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   const [truesteps, setTrueSteps] = useState<Step[]>([]);
+  const [contentDone, setContentDone] = useState(false)
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
       const data = JSON.parse(response.jsonInformation);
       console.log("Received data:", data);
-
       const moduleSteps: Step[] = [];
 
-      data.modules.forEach(module => {
-        module.content.forEach((content, index) => {
+      data.modules.forEach((module: { content: any[]; moduleName: any; }) => {
+        module.content.forEach((content) => {
           let stepContent;
 
           if (content.contentType === 'Media') {
@@ -37,7 +37,7 @@ const CourseModule: React.FC = () => {
               stepContent = <PDFViewer fileName={content.fileName} />;
             }
           } else if (content.contentType === 'Quiz') {
-            stepContent = <QuizComponent />;
+            stepContent = <QuizComponent quizId={content.quizId} done={checkQuizDone}/>;
           }
 
           if (stepContent) {
@@ -61,6 +61,7 @@ const CourseModule: React.FC = () => {
 
   const next = () => {
     setCurrent(current + 1);
+    setContentDone(false)
   };
 
   const prev = () => {
@@ -70,7 +71,7 @@ const CourseModule: React.FC = () => {
   const items = truesteps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
-    lineHeight: '260px',
+    // lineHeight: '260px',
     textAlign: 'center',
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
@@ -78,6 +79,10 @@ const CourseModule: React.FC = () => {
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 1,
   };
+
+  const checkQuizDone = (done: boolean) => {
+    setContentDone(done)
+  }
 
   const content = truesteps[current] ? truesteps[current].content : null;
 
@@ -98,7 +103,7 @@ const CourseModule: React.FC = () => {
             </div>
             <div style={{ marginTop: 24 }}>
               {current < truesteps.length - 1 && (
-                <Button type="default" onClick={() => next()}>
+                <Button type="default" disabled={!contentDone} onClick={() => next()}>
                   Next
                 </Button>
               )}
