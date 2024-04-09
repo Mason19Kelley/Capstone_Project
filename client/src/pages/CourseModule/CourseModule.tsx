@@ -32,9 +32,9 @@ const CourseModule: React.FC = () => {
 
           if (content.contentType === 'Media') {
             if (content.fileType === 'mp4') {
-              stepContent = <VideoPlayer />;
+              stepContent = <VideoPlayer done={checkVideoDone}/>;
             } else if (content.fileType === 'pdf') {
-              stepContent = <PDFViewer fileName={content.fileName} />;
+              stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
             }
           } else if (content.contentType === 'Quiz') {
             stepContent = <QuizComponent quizId={content.quizId} done={checkQuizDone}/>;
@@ -82,6 +82,14 @@ const CourseModule: React.FC = () => {
 
   const checkQuizDone = (done: boolean) => {
     setContentDone(done)
+  }
+
+  const checkPdfDone = () => {
+    setContentDone(true)
+  }
+
+  const checkVideoDone = () => {
+    setContentDone(true)
   }
 
   const content = truesteps[current] ? truesteps[current].content : null;

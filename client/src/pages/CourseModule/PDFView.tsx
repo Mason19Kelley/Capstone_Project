@@ -7,9 +7,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/l
 
 interface PDFViewerProps {
   fileName: string;
+  done: () => void
 }
 
-export default function PDFViewer({ fileName }: PDFViewerProps) {
+export default function PDFViewer({ fileName, done }: PDFViewerProps) {
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,6 +18,7 @@ export default function PDFViewer({ fileName }: PDFViewerProps) {
   useEffect(() => {
     const fetchPDF = async () => {
       try {
+        done()
         const pdfBlob = await FileAPI.getFile(fileName);
         setPdfFile(pdfBlob);
         setLoading(false);
