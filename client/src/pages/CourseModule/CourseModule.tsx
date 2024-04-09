@@ -60,7 +60,7 @@ const CourseModule: React.FC = () => {
   return (
     <div className="cmod-container">
       <div className="back-button">
-        <Link to="/home">
+        <Link to={`/courses/${courseId}`}>
           <button type="button">Back</button>
         </Link>
       </div>
