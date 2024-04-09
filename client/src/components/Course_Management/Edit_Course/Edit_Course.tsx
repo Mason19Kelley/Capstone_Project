@@ -119,6 +119,9 @@ function Edit_Course() {
 
   const deleteContent = (selectedCourse: any, module: any, content: any) => {
     FileAPI.deleteFile(content.fileName);
+    console.log(selectedCourse)
+    console.log(module)
+    console.log(content)
     const newContent = module.content.filter((con: any) => con.fileName !== content.fileName);
     const newModules = selectedCourse.modules.map((mod: any) => mod.moduleName === module.moduleName ? { ...mod, content: newContent } : mod);
     setselectedCourse({ ...selectedCourse, modules: newModules });
@@ -157,9 +160,9 @@ function Edit_Course() {
   };
 
   const EditContent = (module: any, content: any) => {
-    console.log(content.contentType)
     if(content.contentType === 'Media'){
       const information = {
+        course: selectedCourse.courseName,
         module: module.moduleID,
         content: content.fileName
       }
@@ -167,7 +170,7 @@ function Edit_Course() {
       setEditCourseContext('Edit_Media');
     }
     else if(content.contentType === 'Quiz'){
-      //setContentID(content.quizID)
+      setContentID(content.quizID)
       setEditCourseContext('Edit_Quiz');
     }
     

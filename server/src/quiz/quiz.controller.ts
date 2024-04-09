@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Res, ServiceUnavailableException, UploadedFile, UseGuards, UseInterceptors, } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put, Res, ServiceUnavailableException, UploadedFile, UseGuards, UseInterceptors, } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +22,7 @@ export class QuizController {
     // get quiz by id
     @UseGuards(JwtAuthGuard)
     @Get("getQuizById/:qid")
-    async getQuizById(qid: string) {
+    async getQuizById(@Param("qid") qid: string) {
         return await this.quizService.findQuizById(qid)
     }
 
@@ -63,4 +63,12 @@ export class QuizController {
         return { message: 'Quiz saved successfully' };
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Put("updateQuiz/:quizID")
+    async updateQuiz(
+        @Body() quiz: any,
+        @Param('quizID') quizID: string,
+    ) {
+        await this.quizService.updateQuiz(quiz, quizID);
+    }
 }

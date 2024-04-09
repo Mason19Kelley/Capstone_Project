@@ -5,7 +5,7 @@ import { FileAPI } from '../../../../api/FileAPI';
 import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { contentContext } from '../../../../context/contentContext';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 
@@ -15,10 +15,11 @@ function Create_Media() {
     const [fileList, setFileList] = useState<any[]>([]);
     const [description, setDescription] = useState<string>('');
     const [jsonInformation, setJsonInformation] = useState<any>(null);
-    const { user } = useContext(AuthContext);
+    const {user,  setEditCourseContext } = useContext(AuthContext)
     const { id } = useParams();
     const { contentID } = useContext(contentContext);
     const [uploading, setUploading] = useState(false);
+    
 
     type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -35,8 +36,6 @@ function Create_Media() {
         if(id && user?.organization?.id){
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
             setJsonInformation(JSON.parse(data['jsonInformation']))
-            console.log(fileList)
-            console.log(fileName)
         })
         }
       }, [])
@@ -69,7 +68,8 @@ function Create_Media() {
     
           // Update jsonInformation and course information as needed
           const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
-          tempMediaJSON.fileType = fileList[0].type;
+          const type = fileList[0].type.split('/')[1];
+          tempMediaJSON.fileType = type;
           tempMediaJSON.fileName = fileList[0].name;
           tempMediaJSON.Description = description;
           moduleToEdit.content.push(tempMediaJSON);
@@ -84,6 +84,9 @@ function Create_Media() {
           message.success('Upload successful.');
           setFileList([]);
           setDescription('');
+          setTimeout(() => {
+            setEditCourseContext('Edit_Course');
+            }, 500);
         } catch (error) {
           console.error('Upload error:', error);
           message.error('Upload failed.');
@@ -128,6 +131,7 @@ function Create_Media() {
             onChange={handleChange}
             style={{
               background: 'white',
+              color: 'black',
               outlineColor: 'black',
               outlineWidth: 1,
               outlineStyle: 'solid',

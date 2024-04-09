@@ -21,7 +21,7 @@ const CreateQuiz: React.FC = () => {
     const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", Questions: [] });
     const [questionInputs, setQuestionInputs] = useState<string[]>(['']);
     const { contentID, courseName } = useContext(contentContext);
-    const {user} = useContext(AuthContext)
+    const {user,  setEditCourseContext } = useContext(AuthContext)
 
 
     const addQuestion = () => {
@@ -82,8 +82,16 @@ const CreateQuiz: React.FC = () => {
         console.log("Save Quiz clicked");
         if (!quiz) return;
         // Call your API function here with the quiz state
-        QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0);
+        try{
+            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0);
         message.success('Quiz saved successfully');
+        setTimeout(() => {
+            setEditCourseContext('Edit_Course');
+            }, 500);
+        }
+        catch (error) {
+            message.error('Failed to save quiz');
+        }
     }
 
     return (
