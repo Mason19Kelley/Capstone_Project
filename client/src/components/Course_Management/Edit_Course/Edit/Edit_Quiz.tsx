@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Radio, Button, Card, Input, message } from "antd";
-import { RadioChangeEvent } from "antd/lib/radio";
+//imports
+import { useContext, useEffect, useState } from "react";
+import { Button, Card, Input, message } from "antd";
 import { QuizAPI } from "../../../../api/QuizAPI";
 import { contentContext } from "../../../../context/contentContext";
 import { AuthContext } from "../../../../context/AuthContext";
 
+// interface for quiz json
 interface QuizInterface {
     QuizName: string;
     Questions: {
@@ -19,26 +20,31 @@ interface QuizInterface {
 
 function Edit_Quiz() {
 
+    // variables
     const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "", Questions: [] });
     const [questionInputs, setQuestionInputs] = useState<string[]>([]);
-    const { contentID, courseName } = useContext(contentContext);
-    const { user, setEditCourseContext } = useContext(AuthContext);
+    const { contentID } = useContext(contentContext);
+    const { setEditCourseContext } = useContext(AuthContext);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // fetch quiz from api
     useEffect(() => {
-      console.log(contentID)
         const fetchQuiz = async () => {
             try {
                 const data = await QuizAPI.getQuiz(contentID);
+
+                // parse the json to be usable 
                 const parsedData = JSON.parse(data.Quiz_JSON);
-                console.log(parsedData)
                 setQuiz(parsedData);
+
+                // get the questions and answers
                 const inputs: string[] = [];
                 parsedData.Questions.forEach((question: { Question: string; Answers: { Correct: any; Incorrect: any; }; }) => {
                     inputs.push(question.Question, ...question.Answers.Correct, ...question.Answers.Incorrect);
                 });
                 setQuestionInputs(inputs);
                 setLoading(false);
+            // catch errors
             } catch (error) {
                 console.error("Failed to fetch quiz:", error);
                 setLoading(false);
@@ -47,6 +53,8 @@ function Edit_Quiz() {
         fetchQuiz();
     }, [contentID]);
 
+    // handle question input change
+    // This function is used to handle if the question input is changed
     const handleQuestionInputChange = (index: number, value: string) => {
         const updatedInputs = [...questionInputs];
         updatedInputs[index] = value;
@@ -70,6 +78,47 @@ function Edit_Quiz() {
         });
     }
 
+    // Adds the ability to add a new question
+    const addQuestion = () => {
+        setQuiz(prevState => {
+            if (!prevState) return prevState;
+            return {
+                ...prevState,
+                Questions: [
+                    ...prevState.Questions,
+                    {
+                        QuestionType: "", // Set appropriate type
+                        Question: "",
+                        Answers: {
+                            Correct: [],
+                            Incorrect: []
+                        }
+                    }
+                ]
+            };
+        });
+        const emptyInputs = ["", "", "", "", ""]; // 5 empty inputs for each new question
+        setQuestionInputs(prevInputs => [...prevInputs, ...emptyInputs]);
+    }
+
+    // Deletes a question from the quiz json
+    const deleteQuestion = (index: number) => {
+        setQuiz(prevState => {
+            if (!prevState) return prevState;
+            const updatedQuestions = prevState.Questions.filter((_, i) => i !== index);
+            return {
+                ...prevState,
+                Questions: updatedQuestions
+            };
+        });
+        setQuestionInputs(prevInputs => {
+            const updatedInputs = [...prevInputs];
+            updatedInputs.splice(index * 5, 5);
+            return updatedInputs;
+        });
+    }
+
+    // Saves quiz and sends updated information to the api
     const saveQuiz = async () => {
         console.log("Save Quiz clicked");
         if (!quiz) return;
@@ -102,9 +151,11 @@ function Edit_Quiz() {
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 2]} onChange={(e) => handleQuestionInputChange(index * 5 + 2, e.target.value)} />
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 3]} onChange={(e) => handleQuestionInputChange(index * 5 + 3, e.target.value)} />
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 4]} onChange={(e) => handleQuestionInputChange(index * 5 + 4, e.target.value)} />
+                        <Button onClick={() => deleteQuestion(index)}>Delete Question</Button>
                     </Card>
                 </div>
             ))}
+            <Button onClick={addQuestion}>Add Question</Button>
             <div>
                 <Button onClick={saveQuiz}>Save</Button>
             </div>

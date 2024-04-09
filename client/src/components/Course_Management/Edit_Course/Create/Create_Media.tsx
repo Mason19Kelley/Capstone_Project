@@ -5,13 +5,12 @@ import { FileAPI } from '../../../../api/FileAPI';
 import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { contentContext } from '../../../../context/contentContext';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import type { UploadProps } from 'antd';
 
 
 function Create_Media() {
-    const [fileName, setFile] = useState<File | null>(null);
     const [fileList, setFileList] = useState<any[]>([]);
     const [description, setDescription] = useState<string>('');
     const [jsonInformation, setJsonInformation] = useState<any>(null);
@@ -20,10 +19,7 @@ function Create_Media() {
     const { contentID } = useContext(contentContext);
     const [uploading, setUploading] = useState(false);
     
-
-    type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-
+    // temporary json used in creation of media
     const tempMediaJSON = {
         contentType : "Media",
         fileType : "temp",
@@ -32,6 +28,7 @@ function Create_Media() {
         Description : "This is a sample video"
     }
 
+    // fetches course json
     useEffect(() => {
         if(id && user?.organization?.id){
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
@@ -40,13 +37,12 @@ function Create_Media() {
         }
       }, [])
 
-
-
+    // handles change in description
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(event.target.value);
     }
 
-
+    // handles submit of media
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
     
@@ -61,8 +57,6 @@ function Create_Media() {
           const formData = new FormData();
 
             formData.append('file', fileList[0]);
-
-          console.log(formData)
           
           const response = await FileAPI.uploadFile(formData);
     
@@ -73,7 +67,6 @@ function Create_Media() {
           tempMediaJSON.fileName = fileList[0].name;
           tempMediaJSON.Description = description;
           moduleToEdit.content.push(tempMediaJSON);
-
 
           console.log('Upload response:', response);
     
@@ -105,9 +98,7 @@ function Create_Media() {
           setFileList(newFileList);
         },
         beforeUpload: (file) => {
-            console.log(file)
             setFileList([file]);
-            setFile(file);
             return false;
         },
         fileList,

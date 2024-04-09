@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+//imports
+import { useContext, useEffect, useState } from 'react';
 import { contentContext } from '../../../../context/contentContext'; 
 import { Button, Card, Typography, message } from 'antd';
 import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { DeleteOutlined } from '@ant-design/icons';
 import { FileAPI } from '../../../../api/FileAPI';
-import { json } from 'react-router-dom';
 
 function Edit_Media () {
+    //variables
     const { contentID } = useContext(contentContext);
     const { user, setEditCourseContext } = useContext(AuthContext);
-
     const [jsonInformation, setJsonInformation] = useState<any>({});
     const information = JSON.parse(contentID);
 
+    // fetches course json
     useEffect(() => {
         if (information && user?.organization?.id) {
             CourseAPI.getOneCourse(information.course, user.organization.id)
@@ -25,16 +26,18 @@ function Edit_Media () {
                     console.error('Error fetching course:', error);
                 });
         }
-    }, [information, jsonInformation]);
+    }, [information]);
 
     useEffect(() => {
-        updateJSON();
-    })
+        updateJSON()
+    }, [jsonInformation])
 
+    // updates json with the new json
     const updateJSON = () => {
         CourseAPI.updateCourseJSON(jsonInformation.courseName, jsonInformation);
       }
 
+    // pulls information from the json, finds the correct content in array
     const getInformation = (modules: any[], contentName: any, moduleID: any) => {
         if (Array.isArray(modules) && modules.length > 0) {
             const module = modules.find((module: any) => module.moduleID === moduleID);
@@ -45,6 +48,7 @@ function Edit_Media () {
         return null;
     };
 
+    //pulls description from the json 
     const pullInformation = () => {
         const description = getInformation(jsonInformation.modules, information.content, information.module);
         return (
@@ -54,19 +58,19 @@ function Edit_Media () {
         );
     };
 
-    
-    
-
+    // deletes content
     const deleteContent = () => {
         if (!jsonInformation) return;
-
+        
+        //deletes file from GCP
         FileAPI.deleteFile(information.content)
-
+        
         const updatedModules = jsonInformation.modules.map((module: { content: any[]; }) => {
-            // Filter out the content with fileName "classes.txt"
-            const updatedContent = module.content.filter(content => content.fileName !== "classes.txt");
+            const updatedContent = module.content.filter(content => content.fileName !== information.content);
             return { ...module, content: updatedContent };
         });
+
+        console.log(updatedModules)
 
         // Update the jsonInformation state with the modified modules
         setJsonInformation({ ...jsonInformation, modules: updatedModules });
@@ -74,9 +78,11 @@ function Edit_Media () {
         // Show success message
         message.success('Content deleted successfully.');
 
+        // used to change components
+        // time delay needed to make things more smooth
         setTimeout(() => {
-            setEditCourseContext('Edit_Course');
-            }, 500);
+        setEditCourseContext('Edit_Course');
+        }, 500);
     }
 
     return (

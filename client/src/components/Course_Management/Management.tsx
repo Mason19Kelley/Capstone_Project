@@ -13,6 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
 // Temporary course object to be used when creating a new course
 const newID = uuidv4();
 
+// temporary course information to be used when creating a 
+// new course
 const tempCourse = {
   courseName: 'temp',
   modules: [
@@ -35,7 +37,6 @@ const tempCourse = {
 
 function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
-  
   const { user, setEditCourseContext } = useContext(AuthContext);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ function Management () {
 
   const navigate = useNavigate();
 
+  // adds a course to the list of courses and adds to the database
   const addCourse = () => {
     const length = courseList.length + 1;
     var newCourse = 'Course ' + length;
@@ -57,6 +59,7 @@ function Management () {
     CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', user?.organization?.id)
   }
 
+  // removes course from the list of courses and deletes from the database
   const removeCourse = (classtoRemove: string) => {
     CourseAPI.deleteCourse(classtoRemove);
     const updatedcoursesList = courseList.filter(item => item !== classtoRemove);
@@ -64,12 +67,13 @@ function Management () {
 
   }
 
+  // navigates to the edit course page
   const editCourse = (course: string) => {
     setEditCourseContext('Edit_Course');
     navigate(`/editCourse/${course}`);
   };
   
-
+  // creates cards for each course and displays
   const cards = () => {
     return (
       <div style={{gap:'10px', justifyContent: 'space-between' }}>

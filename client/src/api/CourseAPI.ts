@@ -64,7 +64,6 @@ export const CourseAPI = {
     
 
     updateCourseJSON: async (courseName: string, courseJSON: any) => {
-  
         const { data } = await api.post(`/courses/updateCourseJSON/${courseName}`, courseJSON);
         return data;
     },
