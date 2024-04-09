@@ -1,40 +1,20 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Radio, Button, message } from 'antd';
+import { QuizAPI } from '../../api/QuizAPI';
 
-const QuizComponent: React.FC = () => {
+const QuizComponent = (props: {quizId: string, done: (arg0: boolean) => void}) => {
   const [form] = Form.useForm();
   const [isAllAnswered, setIsAllAnswered] = useState(false);
+  const [quizName, setQuizName ] = useState<string>()
+  const [questions, setQuestions ] = useState<{key: string, options: {isCorrect: boolean, label: string, value: string}[], question: string}[]>([])
 
-  const questions = [
-    {
-      question: "What is the airspeed velocity of an Unladen Swallow?",
-      options: [
-        { label: "What do you mean?", value: "a", isCorrect: false },
-        { label: "An African or European swallow?", value: "b", isCorrect: true },
-        { label: "Huh? I-- I don't know that!", value: "c", isCorrect: false }
-      ],
-      key: "q1"
-    },
-    {
-      question: "What time is it?",
-      options: [
-        { label: "Adventure Time!", value: "a", isCorrect: false },
-        { label: "Half past ten.", value: "b", isCorrect: false },
-        { label: "Time for you to get a watch!", value: "c", isCorrect: true }
-      ],
-      key: "q2"
-    },
-    {
-      question: "My life be like...",
-      options: [
-        { label: "oooooooo", value: "a", isCorrect: false },
-        { label: "aaaaaaaa", value: "b", isCorrect: false },
-        { label: "ooooooooooooooooooo", value: "c", isCorrect: true }
-      ],
-      key: "q3"
-    },
-    // Add more questions here
-  ];
+
+  useEffect(() => {
+    QuizAPI.getQuiz(props.quizId).then(response => {
+      setQuizName(response.Quiz_Name)
+      setQuestions(JSON.parse(response.Quiz_JSON).Questions)
+    }).catch(error => console.log(error))
+  }, [props.quizId])
 
   const handleFormChange = () => {
     const areAllAnswered = questions.every((q) => form.getFieldValue(q.key) !== undefined);
@@ -53,11 +33,13 @@ const QuizComponent: React.FC = () => {
     }*/else {
         message.error('One or more answers are incorrect. Please review your answers.');
       }
+      props.done(isAllAnswered && isAllCorrect)
     });
   };
 
   return (
-    <div>
+    <div className='flex flex-col justify-start'>
+      <h3 className=''>{quizName}</h3>
       <Form
         form={form}
         name="quiz"
