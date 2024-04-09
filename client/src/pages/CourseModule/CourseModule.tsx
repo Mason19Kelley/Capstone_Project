@@ -37,7 +37,7 @@ const CourseModule: React.FC = () => {
               stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
             }
           } else if (content.contentType === 'Quiz') {
-            stepContent = <QuizComponent quizId={content.quizId} done={checkQuizDone}/>;
+            stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
           }
 
           if (stepContent) {
