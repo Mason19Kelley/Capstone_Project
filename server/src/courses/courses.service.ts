@@ -52,7 +52,7 @@ export class CoursesService {
     async getOneCourse(course: string, org: number) {
         const courseEntity =  await this.courseRepository
         .createQueryBuilder('course')
-        .select(['course.jsonInformation', 'course.instructor'])
+        .select(['course.jsonInformation', 'course.instructor', 'course.cid'])
         .where('course.courseName = :course AND course.organization_ID = :org', {course: course, org: org})
         .getOne()
 
