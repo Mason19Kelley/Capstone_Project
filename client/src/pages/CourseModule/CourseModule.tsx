@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './CourseModule.css';
 import PDFViewer from './PDFView';
 import QuizComponent from './Quiz'; // Import the QuizComponent
@@ -7,6 +7,7 @@ import { Button, message, Steps, theme } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
 //import { QuizAPI } from '../../../../api/QuizAPI';
+import { StepContext } from '../../context/StepContext';
 
 interface Step {
   title: string;
@@ -16,9 +17,11 @@ interface Step {
 const CourseModule: React.FC = () => {
   const { courseId } = useParams();
   const { token } = theme.useToken();
-  const [current, setCurrent] = useState(0);
   const [truesteps, setTrueSteps] = useState<Step[]>([]);
   const [contentDone, setContentDone] = useState(false)
+  const { currentStep, setCurrentStep } = useContext(StepContext);
+  //const [quizCompleted, setQuizCompleted] = useState(false); // State to track quiz completion
+
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
@@ -60,12 +63,13 @@ const CourseModule: React.FC = () => {
   }, [courseId]);
 
   const next = () => {
-    setCurrent(current + 1);
     setContentDone(false)
+    setCurrentStep(currentStep + 1);
+    console.log(currentStep)
   };
 
   const prev = () => {
-    setCurrent(current - 1);
+    setCurrentStep(currentStep - 1);
   };
 
   const items = truesteps.map((item) => ({ key: item.title, title: item.title }));
@@ -92,7 +96,7 @@ const CourseModule: React.FC = () => {
     setContentDone(true)
   }
 
-  const content = truesteps[current] ? truesteps[current].content : null;
+  const content = truesteps[currentStep] ? truesteps[currentStep].content : null;
 
   return (
     <div className="cmod-container">
@@ -105,22 +109,22 @@ const CourseModule: React.FC = () => {
         <h3>Example Course Module</h3>
         <div className="content-box">
           <>
-            <Steps current={current} items={items} />
+            <Steps current={currentStep} items={items} />
             <div style={contentStyle}>
               {content}
             </div>
             <div style={{ marginTop: 24 }}>
-              {current < truesteps.length - 1 && (
+              {currentStep < truesteps.length - 1 && (
                 <Button type="default" disabled={!contentDone} onClick={() => next()}>
                   Next
                 </Button>
               )}
-              {current === truesteps.length - 1 && (
+              {currentStep === truesteps.length - 1 && (
                 <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
                   Done
                 </Button>
               )}
-              {current > 0 && (
+              {currentStep > 0 && (
                 <Button style={{ margin: '0 8px' }} onClick={prev}>
                   Previous
                 </Button>
