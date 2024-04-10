@@ -4,44 +4,49 @@ import { QuizAPI } from '../../api/QuizAPI';
 
 const QuizComponent = (props: {quizId: string, done: (arg0: boolean) => void}) => {
   const [form] = Form.useForm();
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [areAllCorrect, setAreAllCorrect] = useState(false);
   const [quizName, setQuizName ] = useState<string>()
-  const [ answers, setAnswers ] = useState<{key: string, isCorrect: boolean, label: string, value: string}[]>([])
+  const [ questions, setQuestions ] = useState<{ questionTitle: string, answers: {key: string, isCorrect: boolean, label: string, value: string}[]}[]>([])
 
 
   useEffect(() => {
     QuizAPI.getQuiz(props.quizId).then(response => {
+      console.log(JSON.parse(response.Quiz_JSON).Questions)
        setQuizName(response.Quiz_Name);
-       const answerChoices = JSON.parse(response.Quiz_JSON).Questions[0];
-       const allAnswers = [...answerChoices.Answers.Correct, ...answerChoices.Answers.Incorrect];
-   
-       const shuffledAnswers = allAnswers.sort(() => 0.5 - Math.random());
-   
-       setAnswers(shuffledAnswers.map(answer => ({
-         key: answer,
-         value: answer,
-         label: answer,
-         isCorrect: answerChoices.Answers.Correct.includes(answer)
-       })));
+       const allQuestions = JSON.parse(response.Quiz_JSON).Questions.map((q: { Answers: { Correct: string | any[]; Incorrect: any; }; Question: any; }) => {
+          const allAnswers = [...q.Answers.Correct, ...q.Answers.Incorrect];
+          const shuffledAnswers = allAnswers.sort(() => 0.5 - Math.random());
+          return {
+            questionTitle: q.Question,
+            answers: shuffledAnswers.map(answer => ({
+              key: answer,
+              value: answer,
+              label: answer,
+              isCorrect: q.Answers.Correct.includes(answer)
+            }))
+          }
+       });
+       setQuestions(allQuestions);
     }).catch(error => console.log(error));
    }, [props.quizId]);
 
   const handleFormChange = () => {
-    const selectedAnswer = form.getFieldValue("question");
-    const isCorrect = answers.some(answer => answer.value === selectedAnswer && answer.isCorrect);
-    setIsCorrect(isCorrect);
+    const correct = questions.every((q) => form.getFieldValue(q.questionTitle) === q.answers.filter(a => a.isCorrect)[0].value);
+    setAreAllCorrect(correct);
    };
+
+   
 
   const onFinish = () => {
     form.validateFields().then(() => {
 
-      if (isCorrect) {
+      if (areAllCorrect) {
         message.success('Quiz complete! Please proceed to the next section.');
       }
         else {
         message.error('Your answer is incorrect. Please review your answer.');
       }
-      props.done(isCorrect)
+      props.done(areAllCorrect)
     });
   };
 
@@ -54,17 +59,20 @@ const QuizComponent = (props: {quizId: string, done: (arg0: boolean) => void}) =
         onValuesChange={handleFormChange}
         onFinish={onFinish}
       >
-        <Form.Item
-          name="question"
-          label="Question"
-          rules={[{ required: true, message: 'Please select an answer.' }]}
-        >
-          <Radio.Group>
-            {answers.map((option) => (
-              <Radio key={option.key} value={option.value}>{option.label}</Radio>
-            ))}
-          </Radio.Group>
-        </Form.Item>
+        {questions.map((q) => (
+          <Form.Item
+            key={q.questionTitle}
+            name={q.questionTitle}
+            label={q.questionTitle}
+            rules={[{ required: true, message: 'Please select an answer.' }]}
+          >
+            <Radio.Group>
+              {q.answers.map((opt) => (
+                <Radio key={opt.value} value={opt.value}>{opt.label}</Radio>
+              ))}
+            </Radio.Group>
+          </Form.Item>
+        ))}
         <Form.Item>
           <Button type="default" htmlType="submit">
             Submit
