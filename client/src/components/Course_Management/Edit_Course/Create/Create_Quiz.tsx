@@ -9,6 +9,7 @@ import { AuthContext } from '../../../../context/AuthContext';
 // interface for quiz json
 interface QuizInterface {
     QuizName: string;
+    QuizID: string;
     Questions: {
         QuestionType: string;
         Question: string;
@@ -20,7 +21,7 @@ interface QuizInterface {
 }
 
 const CreateQuiz: React.FC = () => {
-    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", Questions: [] });
+    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", QuizID: '', Questions: [] });
     const [questionInputs, setQuestionInputs] = useState<string[]>(['']);
     const { contentID, courseName } = useContext(contentContext);
     const {user,  setEditCourseContext } = useContext(AuthContext)
@@ -100,7 +101,7 @@ const CreateQuiz: React.FC = () => {
     return (
         <div>
             <Card>
-                <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: [] }))} />
+                <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, QuizID: '', Questions: [] }))} />
                 <Button onClick={addQuestion}>Add Question</Button>
             </Card>
             {quiz && quiz.Questions.map((question, index) => (
