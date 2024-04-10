@@ -11,11 +11,12 @@ import { Card } from 'antd';
 
 
 
-export default function VideoPlayer() {
+export default function VideoPlayer(props: { done: () => void}) {
   const [ videoURL, setVideoURL ] = useState("");
   useEffect(() => {
     const fetchVideo = async () => {
       try {
+        props.done()
         const response = await FileAPI.getFile('sample-5s.mp4');
         setVideoURL(URL.createObjectURL(response));
       } catch (error) {
