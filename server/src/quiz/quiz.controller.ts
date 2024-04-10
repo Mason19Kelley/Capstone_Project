@@ -35,6 +35,9 @@ export class QuizController {
         @Param('orgID') orgID: number
     ) {
         const newID = uuidv4();
+
+        quiz.QuizID = newID;
+
         const NewQuiz = {
             Quiz_Name: quiz.QuizName,
             id: newID,
