@@ -104,7 +104,7 @@ const CreateQuiz: React.FC = () => {
                 <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, QuizID: '', Questions: [] }))} />
                 <Button onClick={addQuestion}>Add Question</Button>
             </Card>
-            {quiz && quiz.Questions.map((question, index) => (
+            {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
                     <Card title={`Question ${index + 1}`}>
                         <Input placeholder="Question" value={questionInputs[index * 5]} onChange={(e) => handleQuestionInputChange(index * 5, e.target.value)} />

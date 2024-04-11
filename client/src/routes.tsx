@@ -10,7 +10,6 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import EditCourse from './pages/EditPage/Editcourse';
 import CoursePage from './pages/CoursePage/CoursePage';
 import CourseModule from './pages/CourseModule/CourseModule';
-import PDFViewer from './pages/CourseModule/PDFView';
 //import PrivateRoute from './PrivateRoute'
 
 
@@ -25,7 +24,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/forget" element={<ForgetPass/>} />
       <Route path="/createorg" element={<CreateOrg />} />
       <Route path="/passwordReset" element={<ResetPassword />} />
-      <Route path="/pdf" element={<PDFViewer />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/home" element={
         <ProtectedRoute>

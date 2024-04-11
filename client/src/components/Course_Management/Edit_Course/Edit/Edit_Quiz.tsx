@@ -143,7 +143,7 @@ function Edit_Quiz() {
             <Card>
               <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [] }))} />
             </Card>
-            {quiz && quiz.Questions.map((question, index) => (
+            {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
                     <Card title={`Question ${index + 1}`}>
                         <Input placeholder="Question" value={questionInputs[index * 5]} onChange={(e) => handleQuestionInputChange(index * 5, e.target.value)} />
