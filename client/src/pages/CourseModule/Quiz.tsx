@@ -1,63 +1,58 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Radio, Button, message } from 'antd';
+import { QuizAPI } from '../../api/QuizAPI';
 
-const QuizComponent: React.FC = () => {
+const QuizComponent = (props: {quizId: string, done: (arg0: boolean) => void}) => {
   const [form] = Form.useForm();
-  const [isAllAnswered, setIsAllAnswered] = useState(false);
+  const [areAllCorrect, setAreAllCorrect] = useState(false);
+  const [quizName, setQuizName ] = useState<string>()
+  const [ questions, setQuestions ] = useState<{ questionTitle: string, answers: {key: string, isCorrect: boolean, label: string, value: string}[]}[]>([])
 
-  const questions = [
-    {
-      question: "What is the airspeed velocity of an Unladen Swallow?",
-      options: [
-        { label: "What do you mean?", value: "a", isCorrect: false },
-        { label: "An African or European swallow?", value: "b", isCorrect: true },
-        { label: "Huh? I-- I don't know that!", value: "c", isCorrect: false }
-      ],
-      key: "q1"
-    },
-    {
-      question: "What time is it?",
-      options: [
-        { label: "Adventure Time!", value: "a", isCorrect: false },
-        { label: "Half past ten.", value: "b", isCorrect: false },
-        { label: "Time for you to get a watch!", value: "c", isCorrect: true }
-      ],
-      key: "q2"
-    },
-    {
-      question: "My life be like...",
-      options: [
-        { label: "oooooooo", value: "a", isCorrect: false },
-        { label: "aaaaaaaa", value: "b", isCorrect: false },
-        { label: "ooooooooooooooooooo", value: "c", isCorrect: true }
-      ],
-      key: "q3"
-    },
-    // Add more questions here
-  ];
+
+  useEffect(() => {
+    QuizAPI.getQuiz(props.quizId).then(response => {
+      console.log(JSON.parse(response.Quiz_JSON).Questions)
+       setQuizName(response.Quiz_Name);
+       const allQuestions = JSON.parse(response.Quiz_JSON).Questions.map((q: { Answers: { Correct: string | any[]; Incorrect: any; }; Question: any; }) => {
+          const allAnswers = [...q.Answers.Correct, ...q.Answers.Incorrect];
+          const shuffledAnswers = allAnswers.sort(() => 0.5 - Math.random());
+          return {
+            questionTitle: q.Question,
+            answers: shuffledAnswers.map(answer => ({
+              key: answer,
+              value: answer,
+              label: answer,
+              isCorrect: q.Answers.Correct.includes(answer)
+            }))
+          }
+       });
+       setQuestions(allQuestions);
+    }).catch(error => console.log(error));
+   }, [props.quizId]);
 
   const handleFormChange = () => {
-    const areAllAnswered = questions.every((q) => form.getFieldValue(q.key) !== undefined);
-    setIsAllAnswered(areAllAnswered);
-  };
+    const correct = questions.every((q) => form.getFieldValue(q.questionTitle) === q.answers.filter(a => a.isCorrect)[0].value);
+    setAreAllCorrect(correct);
+   };
+
+   
 
   const onFinish = () => {
     form.validateFields().then(() => {
-      const selectedAnswers = form.getFieldsValue();
-      const isAllCorrect = questions.every((q) => selectedAnswers[q.key] === q.options.find((opt) => opt.isCorrect)?.value);
 
-      if (isAllAnswered && isAllCorrect) {
+      if (areAllCorrect) {
         message.success('Quiz complete! Please proceed to the next section.');
-      } /*else if (!isAllAnswered) {
-        message.error('Please answer all questions before submitting.');
-    }*/else {
-        message.error('One or more answers are incorrect. Please review your answers.');
       }
+        else {
+        message.error('Your answer is incorrect. Please review your answer.');
+      }
+      props.done(areAllCorrect)
     });
   };
 
   return (
-    <div>
+    <div className='flex flex-col justify-start'>
+      <h3 className=''>{quizName}</h3>
       <Form
         form={form}
         name="quiz"
@@ -66,20 +61,20 @@ const QuizComponent: React.FC = () => {
       >
         {questions.map((q) => (
           <Form.Item
-            key={q.key}
-            name={q.key}
-            label={q.question}
+            key={q.questionTitle}
+            name={q.questionTitle}
+            label={q.questionTitle}
             rules={[{ required: true, message: 'Please select an answer.' }]}
           >
             <Radio.Group>
-              {q.options.map((opt) => (
+              {q.answers.map((opt) => (
                 <Radio key={opt.value} value={opt.value}>{opt.label}</Radio>
               ))}
             </Radio.Group>
           </Form.Item>
         ))}
         <Form.Item>
-          <Button type="default" htmlType="submit" disabled={!isAllAnswered}>
+          <Button type="default" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

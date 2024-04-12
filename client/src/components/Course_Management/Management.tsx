@@ -7,15 +7,20 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
+import { v4 as uuidv4 } from 'uuid';
 
 
 // Temporary course object to be used when creating a new course
+const newID = uuidv4();
+
+// temporary course information to be used when creating a 
+// new course
 const tempCourse = {
   courseName: 'temp',
   modules: [
     {
       moduleName : "temp",
-      moduleID : 1,
+      moduleID : newID,
       content : [
         {
             contentType : null,
@@ -32,7 +37,6 @@ const tempCourse = {
 
 function Management () {
   const [courseList, setCourseList] = useState<string[]>([]);
-  
   const { user, setEditCourseContext } = useContext(AuthContext);
 
   useEffect(() => {
@@ -45,6 +49,7 @@ function Management () {
 
   const navigate = useNavigate();
 
+  // adds a course to the list of courses and adds to the database
   const addCourse = () => {
     const length = courseList.length + 1;
     var newCourse = 'Course ' + length;
@@ -54,6 +59,7 @@ function Management () {
     CourseAPI.insertCourse(newCourse, JSON.stringify(tempCourse), 'Instructor', user?.organization?.id)
   }
 
+  // removes course from the list of courses and deletes from the database
   const removeCourse = (classtoRemove: string) => {
     CourseAPI.deleteCourse(classtoRemove);
     const updatedcoursesList = courseList.filter(item => item !== classtoRemove);
@@ -61,12 +67,13 @@ function Management () {
 
   }
 
+  // navigates to the edit course page
   const editCourse = (course: string) => {
     setEditCourseContext('Edit_Course');
     navigate(`/editCourse/${course}`);
   };
   
-
+  // creates cards for each course and displays
   const cards = () => {
     return (
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
@@ -88,12 +95,10 @@ function Management () {
               <Typography.Title level={3} style={{ textAlign: 'left' }}>
                 <div className='dashboardText'>{course}</div>
               </Typography.Title>
-              <div style = {{display:'flex'}}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)}>
-                  <EditOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+              <div style = {{display:'flex', gap: "2px"}}>
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'black' }} />}>
                 </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)}>
-                  <DeleteOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
                 </Button>
               </div>
             </Box>
@@ -133,8 +138,7 @@ function Management () {
             <Typography.Title level={3} style={{ textAlign: 'left' }}>
               <div className='dashboardText'>Courses</div>
             </Typography.Title>
-            <Button className='noHover' type="primary" style={{ width: '50px', display:'flex', verticalAlign: 'middle' }} onClick = {addCourse}>
-              <PlusOutlined style={{ color: 'black', verticalAlign: 'middle' }} />
+            <Button className='noHover' type="primary" style={{ width: '50px' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'black' }} />}>
             </Button>
           </Box>
           </ThemeProvider>

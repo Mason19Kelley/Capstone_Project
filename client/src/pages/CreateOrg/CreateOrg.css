@@ -147,5 +147,11 @@
   }
   
   .back-link a {
-    margin-right: 0; /* This pushes the Link to the left */
+    margin-left: 0; /* This pushes the Link to the left */
+  }
+
+  .create-org-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
   }

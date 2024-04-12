@@ -1,50 +1,81 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './CourseModule.css';
 import PDFViewer from './PDFView';
 import QuizComponent from './Quiz'; // Import the QuizComponent
+import VideoPlayer from '../../components/VideoPlayer/VideoPlayer';
 import { Button, message, Steps, theme } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
+//import { QuizAPI } from '../../../../api/QuizAPI';
+import { StepContext } from '../../context/StepContext';
 
-const steps = [
-  {
-    title: 'First',
-    content: <PDFViewer />,
-  },
-  {
-    title: 'Second',
-    content: <QuizComponent />, // Use the QuizComponent here
-  },
-  {
-    title: 'Last',
-    content: 'Check out this text. It rocks!',
-  },
-];
+interface Step {
+  title: string;
+  content: JSX.Element | string;
+}
 
 const CourseModule: React.FC = () => {
   const { courseId } = useParams();
   const { token } = theme.useToken();
-  const [current, setCurrent] = useState(0);
+  const [truesteps, setTrueSteps] = useState<Step[]>([]);
+  const [contentDone, setContentDone] = useState(false)
+  const { currentStep, setCurrentStep } = useContext(StepContext);
   //const [quizCompleted, setQuizCompleted] = useState(false); // State to track quiz completion
 
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
-      console.log(response)
-    })
-  }, [])
+      const data = JSON.parse(response.jsonInformation);
+      console.log("Received data:", data);
+      const moduleSteps: Step[] = [];
+
+      data.modules.forEach((module: { content: any[]; moduleName: any; }) => {
+        module.content.forEach((content) => {
+          let stepContent;
+
+          if (content.contentType === 'Media') {
+            if (content.fileType === 'mp4') {
+              stepContent = <VideoPlayer done={checkVideoDone}/>;
+            } else if (content.fileType === 'pdf') {
+              stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
+            }
+          } else if (content.contentType === 'Quiz') {
+            stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
+          }
+
+          if (stepContent) {
+            moduleSteps.push({
+              title: `Module ${module.moduleName} - ${content.fileName}`,
+              content: stepContent
+            });
+          }
+        });
+      });
+
+      if (moduleSteps.length > 0) {
+        setTrueSteps(moduleSteps);
+      } else {
+        console.error("No content found in the modules:", data.modules);
+      }
+    }).catch(error => {
+      console.error("Error fetching course data:", error);
+    });
+  }, [courseId]);
+
   const next = () => {
-    setCurrent(current + 1);
+    setContentDone(false)
+    setCurrentStep(currentStep + 1);
+    console.log(currentStep)
   };
 
   const prev = () => {
-    setCurrent(current - 1);
+    setCurrentStep(currentStep - 1);
   };
 
-  const items = steps.map((item) => ({ key: item.title, title: item.title }));
+  const items = truesteps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
-    lineHeight: '260px',
+    // lineHeight: '260px',
     textAlign: 'center',
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
@@ -53,14 +84,24 @@ const CourseModule: React.FC = () => {
     marginTop: 1,
   };
 
-  //const handleQuizFinish = (isCompleted: boolean) => {
-  //  setQuizCompleted(isCompleted); // Update quiz completion state
-  //};
+  const checkQuizDone = (done: boolean) => {
+    setContentDone(done)
+  }
+
+  const checkPdfDone = () => {
+    setContentDone(true)
+  }
+
+  const checkVideoDone = () => {
+    setContentDone(true)
+  }
+
+  const content = truesteps[currentStep] ? truesteps[currentStep].content : null;
 
   return (
     <div className="cmod-container">
       <div className="back-button">
-        <Link to="/home">
+        <Link to={`/courses/${courseId}`}>
           <button type="button">Back</button>
         </Link>
       </div>
@@ -68,22 +109,22 @@ const CourseModule: React.FC = () => {
         <h3>Example Course Module</h3>
         <div className="content-box">
           <>
-            <Steps current={current} items={items} />
+            <Steps current={currentStep} items={items} />
             <div style={contentStyle}>
-              {steps[current].content}
+              {content}
             </div>
             <div style={{ marginTop: 24 }}>
-              {current < steps.length - 1 && (
-                <Button type="default" onClick={() => next()}>
-                Next
-              </Button>
+              {currentStep < truesteps.length - 1 && (
+                <Button type="default" disabled={!contentDone} onClick={() => next()}>
+                  Next
+                </Button>
               )}
-              {current === steps.length - 1 && (
+              {currentStep === truesteps.length - 1 && (
                 <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
                   Done
                 </Button>
               )}
-              {current > 0 && (
+              {currentStep > 0 && (
                 <Button style={{ margin: '0 8px' }} onClick={prev}>
                   Previous
                 </Button>

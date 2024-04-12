@@ -12,10 +12,17 @@
 
 .testcard {
     box-sizing: border-box;
-    height: 146px;
     display: flex;
+    height: 100%;
     gap: 2%;
     flex-direction: row;
+    padding-left: 2%;
+    text-align: center;
+    flex-wrap: wrap;
+    padding-bottom: 2%;
+    flex-direction: row;
+    margin-left: 1%;
+
 }
 
 .headerImage {

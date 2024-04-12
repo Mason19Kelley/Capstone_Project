@@ -7,22 +7,19 @@ import { AuthContext } from '../../../../context/AuthContext';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { contentContext } from '../../../../context/contentContext';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import type { UploadProps } from 'antd';
 
 
 function Create_Media() {
-    const [fileName, setFile] = useState<File | null>(null);
     const [fileList, setFileList] = useState<any[]>([]);
     const [description, setDescription] = useState<string>('');
     const [jsonInformation, setJsonInformation] = useState<any>(null);
-    const { user } = useContext(AuthContext);
+    const {user,  setEditCourseContext } = useContext(AuthContext)
     const { id } = useParams();
     const { contentID } = useContext(contentContext);
     const [uploading, setUploading] = useState(false);
-
-    type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-
+    
+    // temporary json used in creation of media
     const tempMediaJSON = {
         contentType : "Media",
         fileType : "temp",
@@ -31,23 +28,21 @@ function Create_Media() {
         Description : "This is a sample video"
     }
 
+    // fetches course json
     useEffect(() => {
         if(id && user?.organization?.id){
           CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
             setJsonInformation(JSON.parse(data['jsonInformation']))
-            console.log(fileList)
-            console.log(fileName)
         })
         }
       }, [])
 
-
-
+    // handles change in description
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setDescription(event.target.value);
     }
 
-
+    // handles submit of media
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
     
@@ -62,18 +57,16 @@ function Create_Media() {
           const formData = new FormData();
 
             formData.append('file', fileList[0]);
-
-          console.log(formData)
           
           const response = await FileAPI.uploadFile(formData);
     
           // Update jsonInformation and course information as needed
           const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
-          tempMediaJSON.fileType = fileList[0].type;
+          const type = fileList[0].type.split('/')[1];
+          tempMediaJSON.fileType = type;
           tempMediaJSON.fileName = fileList[0].name;
           tempMediaJSON.Description = description;
           moduleToEdit.content.push(tempMediaJSON);
-
 
           console.log('Upload response:', response);
     
@@ -84,6 +77,9 @@ function Create_Media() {
           message.success('Upload successful.');
           setFileList([]);
           setDescription('');
+          setTimeout(() => {
+            setEditCourseContext('Edit_Course');
+            }, 500);
         } catch (error) {
           console.error('Upload error:', error);
           message.error('Upload failed.');
@@ -102,9 +98,7 @@ function Create_Media() {
           setFileList(newFileList);
         },
         beforeUpload: (file) => {
-            console.log(file)
             setFileList([file]);
-            setFile(file);
             return false;
         },
         fileList,
@@ -128,6 +122,7 @@ function Create_Media() {
             onChange={handleChange}
             style={{
               background: 'white',
+              color: 'black',
               outlineColor: 'black',
               outlineWidth: 1,
               outlineStyle: 'solid',

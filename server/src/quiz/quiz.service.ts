@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Quiz } from './quiz.entity';
 
 
+
 @Injectable()
 export class QuizService {
     constructor(
@@ -11,8 +12,26 @@ export class QuizService {
         private quizRepository: Repository<Quiz>,
       ) {}
 
-      
+      async findQuizById(qid: string){
+        console.log(qid)
+        const quiz = await this.quizRepository.findOne({ where: { id: qid } });
+        console.log(quiz)
+        return quiz
+      }
 
+      async saveQuiz(quiz: any){
+        const quizEntity = this.quizRepository.create(quiz)
+        return this.quizRepository.insert(quizEntity)
+      }
+
+      async updateQuiz(quiz: any, quizId: string){
+        const quizjson = JSON.stringify(quiz)
+
+        const updateFields = {
+          Quiz_JSON: quizjson
+        }
+        return this.quizRepository.update(quizId, updateFields)
+      }
 
 
 async seedOrganizations() {

@@ -47,6 +47,7 @@ function getCoursesCards(): JSX.Element[] {
     try {
       const coursesData = await CourseAPI.getCoursesFromUser(id ?? 0);
       setCourses(coursesData);
+      CourseAPI.getCourseCompletion(1,1).then(response => console.log(response))
     } catch (error) {
       console.error('Error fetching courses:', error);
     }};
@@ -67,7 +68,7 @@ function getCoursesCards(): JSX.Element[] {
   return cards
 }
 
-const Courses: React.FC = () => {
+const CoursesList: React.FC = () => {
   
   const cards = getCoursesCards()
   return (
@@ -83,7 +84,7 @@ const Courses: React.FC = () => {
       <h1 className='header' style= {{
         color:'#0c2245', 
         fontFamily: 'Playfair-Display', 
-        paddingLeft: 50, paddingTop: 10}}>
+        marginLeft: '1%', paddingTop: 10, paddingBottom: 10}}>
           Courses Dashboard</h1>
       <div className='testcard'>
       {cards.map(card => <Box>{card}</Box>)}
@@ -93,4 +94,4 @@ const Courses: React.FC = () => {
 };
   
 
-export default Courses;
+export default CoursesList;
