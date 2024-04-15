@@ -39,7 +39,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       if(jsonInfo?.modules[mIndex].content[index].Description == null){
         return(
           <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left" }}>
-            <Meta title="Quiz"/>
+            <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
           </Card>
         )
       } else {
