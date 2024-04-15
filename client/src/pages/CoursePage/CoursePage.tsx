@@ -15,6 +15,8 @@ import { PageContext } from "../../context/PageContext";
 
 const { Header, Content } = Layout;
 
+let innerModules: {[counter: number]: string} = {};
+
 interface course {
   courseName : string,
   modules :
@@ -34,32 +36,38 @@ interface course {
 
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
   if (inner && mIndex != undefined){
-    if(jsonInfo?.modules[mIndex].content[index].contentType == 'Quiz'){
-      console.log('here')
-      if(jsonInfo?.modules[mIndex].content[index].Description == null){
+    const moduleContent = jsonInfo?.modules[mIndex].content[index];
+    const moduleName = moduleContent?.fileName || "Default";
+    if(!innerModules[mIndex]) {
+      innerModules[mIndex] = moduleName;
+      console.log(innerModules)
+    }
+    if(moduleContent?.contentType == 'Quiz'){
+      
+      if(moduleContent?.Description == null){
         return(
           <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left" }}>
-            <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
+            <Meta title={moduleName}/>
           </Card>
         )
       } else {
         return (
-          <Card type="inner" title="Quiz" style={{background: '#fafafa', marginBottom: '1vh'}}>
-            {jsonInfo.modules[mIndex].content[index].Description}
+          <Card type="inner" title={moduleName} style={{background: '#fafafa', marginBottom: '1vh'}}>
+            {moduleContent?.Description}
           </Card>
         )
       }
     } else {
-      if(jsonInfo?.modules[mIndex].content[index].Description == null){
+      if(moduleContent?.Description == null){
         return(
           <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left"}}>
-            <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
+            <Meta title={moduleName}/>
           </Card>
         )
       } else {
         return (
-          <Card type="inner" title={jsonInfo?.modules[mIndex].content[index].fileName} style={{marginBottom: '1vh'}}>
-            {jsonInfo.modules[mIndex].content[index].Description}
+          <Card type="inner" title={moduleName} style={{marginBottom: '1vh'}}>
+            {moduleContent?.Description}
           </Card>
         )
       }
