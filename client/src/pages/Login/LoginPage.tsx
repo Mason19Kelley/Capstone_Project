@@ -100,7 +100,7 @@ const LoginPage: React.FC = () => {
             </div>
             <button className="login-button" type="submit" >Login</button>
             <div className="register">
-              <p>
+              <p style={{fontFamily: 'Oswald', fontSize: '1.1em'}}>
                 Don't have an account ? <Link to="/createorg">Register</Link>
               </p>
             </div>
