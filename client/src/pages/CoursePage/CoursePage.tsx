@@ -11,9 +11,12 @@ import { Role } from "../../models/role.model"
 import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
 import { AuthContext } from "../../context/AuthContext";
 import { PageContext } from "../../context/PageContext";
+import { StepContext } from "../../context/StepContext";
 
 
 const { Header, Content } = Layout;
+
+let innerModules: {[counter: number]: string} = {};
 
 interface course {
   courseName : string,
@@ -33,38 +36,51 @@ interface course {
 }
 
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
-  if (inner && mIndex != undefined){
-    if(jsonInfo?.modules[mIndex].content[index].contentType == 'Quiz'){
-      console.log('here')
-      if(jsonInfo?.modules[mIndex].content[index].Description == null){
-        return(
-          <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left" }}>
-            <Meta title="Quiz"/>
-          </Card>
-        )
-      } else {
-        return (
-          <Card type="inner" title="Quiz" style={{background: '#fafafa', marginBottom: '1vh'}}>
-            {jsonInfo.modules[mIndex].content[index].Description}
-          </Card>
-        )
-      }
-    } else {
-      if(jsonInfo?.modules[mIndex].content[index].Description == null){
-        return(
-          <Card type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left"}}>
-            <Meta title={jsonInfo?.modules[mIndex].content[index].fileName}/>
-          </Card>
-        )
-      } else {
-        return (
-          <Card type="inner" title={jsonInfo?.modules[mIndex].content[index].fileName} style={{marginBottom: '1vh'}}>
-            {jsonInfo.modules[mIndex].content[index].Description}
-          </Card>
-        )
+  const { setCurrentStep } = useContext(StepContext);
+  let { id } = useParams();
+  
+  // This is the actual click Handle, it finds the index that correlates to the content in CourseModule
+  // And sets the page to that in CourseModule, before moving to that page
+  const handleMenuClick = (fileName: string) => {
+    let step = '';
+    for (const pIndex in innerModules){
+      if(innerModules[pIndex] == fileName){
+        step = pIndex
       }
     }
+    setCurrentStep(parseInt(step));
+  };
 
+  if (inner && mIndex != undefined){
+    const moduleContent = jsonInfo?.modules[mIndex].content[index];
+    const moduleName = moduleContent?.fileName || "Default";
+
+    const handleClickWrapper = () => {
+      handleMenuClick(moduleName)
+    }
+
+    if(!innerModules[mIndex]) {
+      innerModules[mIndex] = moduleName;
+    }
+    if(moduleContent?.Description == null){
+      return(
+        <Card onClick={handleClickWrapper} 
+          type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left"}}>
+            <Link to={`/courseModule/${id}`}>
+              <Meta title={moduleName}/>
+            </Link>
+        </Card>
+      )
+    } else {
+      return (
+        <Link to={`/courseModule/${id}`}>
+          <Card onClick={handleClickWrapper}
+            type="inner" title={moduleName} style={{marginBottom: '1vh'}}>
+              {moduleContent?.Description}
+          </Card>
+        </Link>
+        )
+      }
   } else {
     const cards: JSX.Element[] = [];
     if(jsonInfo?.modules[index].content.length || 1 > 0){
@@ -81,6 +97,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
 }
 
 function createModule(jsonInfo: course | undefined): JSX.Element[] {
+  innerModules = [];
   const cards: JSX.Element[] = [];
 
   for (let index = 0; index < (jsonInfo?.modules.length || 1); index++){
@@ -122,6 +139,7 @@ const CoursePage: React.FC = () => {
   const [courseName, setcourseName] = useState<string>('');
   const { user } = useContext(AuthContext)
   const { setPage } = useContext(PageContext)
+  const { setCurrentStep } = useContext(StepContext)
 
 
   useEffect(() => {
@@ -140,6 +158,10 @@ const CoursePage: React.FC = () => {
   const handleMenuClick = ({ key }: { key: string }) => {
     setPage(key);
   };
+  
+  const handleContenClick = () => {
+    setCurrentStep(0)
+  }
   
   const {
       token: { colorBgContainer, borderRadiusLG },
@@ -202,8 +224,9 @@ const CoursePage: React.FC = () => {
         </h1>
         <Link to={`/courseModule/${id}`}>
           <Tooltip placement="bottom" title='Start Course'>
-            <Button type="primary" icon={<PlaySquareOutlined />}>
-            </Button>
+            <Button onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
+              Go to start
+          </Button>
           </Tooltip>
         </Link>
       </div>
