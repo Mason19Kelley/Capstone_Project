@@ -1,5 +1,5 @@
 
-import { Button, Card, Dropdown, Input, Space, Table, TableProps } from 'antd';
+import { Button, Card, Dropdown, Input, Space, Table, TableProps, Tooltip } from 'antd';
 import './Admin.css'
 import { AdminAPI } from '../../api/AdminAPI';
 import { SetStateAction, useContext, useEffect, useState } from 'react';
@@ -134,7 +134,6 @@ function Admin() {
         );
 
         setTextBoxValue(logsInfo.join('\n'));
-        console.log(response);
       }
     }).catch(error => 
       console.log(error)
@@ -181,7 +180,7 @@ function Admin() {
       </Card>
       : null
       }
-      <Card title="User Management" className='org-management' extra={<Button icon={<PlusOutlined />} onClick={openCreateModal}></Button>}>
+      <Card title="User Management" className='org-management' extra={<Tooltip placement='bottom' title="Create User"><Button icon={<PlusOutlined />} onClick={openCreateModal}></Button></Tooltip>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
