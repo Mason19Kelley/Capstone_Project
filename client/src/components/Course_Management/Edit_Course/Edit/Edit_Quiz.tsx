@@ -16,16 +16,18 @@ interface QuizInterface {
             Incorrect: string[];
         }
     }[];
+    Description: string;
 }
 
 function Edit_Quiz() {
 
     // variables
-    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "", Questions: [] });
+    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "", Questions: [], Description: ""});
     const [questionInputs, setQuestionInputs] = useState<string[]>([]);
     const { contentID } = useContext(contentContext);
     const { setEditCourseContext } = useContext(AuthContext);
     const [loading, setLoading] = useState<boolean>(true);
+    const [description, setDescription] = useState<string>('');
 
     // fetch quiz from api
     useEffect(() => {
@@ -36,6 +38,7 @@ function Edit_Quiz() {
                 // parse the json to be usable 
                 const parsedData = JSON.parse(data.Quiz_JSON);
                 setQuiz(parsedData);
+                setDescription(parsedData.Description);
 
                 // get the questions and answers
                 const inputs: string[] = [];
@@ -141,7 +144,8 @@ function Edit_Quiz() {
     return (
         <div>
             <Card>
-              <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [] }))} />
+              <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [], Description: description }))} />
+              <Button onClick={addQuestion}>Add Question</Button>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
@@ -155,8 +159,24 @@ function Edit_Quiz() {
                     </Card>
                 </div>
             ))}
-            <Button onClick={addQuestion}>Add Question</Button>
             <div>
+
+            <Card>
+                    Description: 
+                    <Input 
+                        placeholder="Description" 
+                        allowClear 
+                        value={description}
+                        onChange={(e) => {
+                            setDescription(e.target.value);
+                            setQuiz((prevState: QuizInterface | null) => ({
+                                ...prevState!,
+                                Description: e.target.value,
+                                QuizName: prevState?.QuizName || '', // Ensure QuizName is included
+                            }));
+                        }}
+                    />
+                </Card>
                 <Button onClick={saveQuiz}>Save</Button>
             </div>
         </div>

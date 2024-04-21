@@ -18,14 +18,15 @@ interface QuizInterface {
             Incorrect: string[];
         }
     }[];
+    Description: string;
 }
 
 const CreateQuiz: React.FC = () => {
-    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", QuizID: '', Questions: [] });
+    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", QuizID: '', Questions: [], Description: ''});
     const [questionInputs, setQuestionInputs] = useState<string[]>(['']);
     const { contentID, courseName } = useContext(contentContext);
     const {user,  setEditCourseContext } = useContext(AuthContext)
-
+    const [description, setDescription] = useState<string>('');
 
     const addQuestion = () => {
         
@@ -87,7 +88,7 @@ const CreateQuiz: React.FC = () => {
         if (!quiz) return;
         // Call your API function here with the quiz state
         try{
-            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0);
+            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0, description);
         message.success('Quiz saved successfully');
         setTimeout(() => {
             setEditCourseContext('Edit_Course');
@@ -98,10 +99,32 @@ const CreateQuiz: React.FC = () => {
         }
     }
 
+    const deleteQuestion = (index: number) => {
+        setQuiz(prevState => {
+            if (!prevState) return prevState;
+            const updatedQuestions = prevState.Questions.filter((_, i) => i !== index);
+            return {
+                ...prevState,
+                Questions: updatedQuestions
+            };
+        });
+        setQuestionInputs(prevInputs => {
+            const updatedInputs = [...prevInputs];
+            updatedInputs.splice(index * 5, 5);
+            return updatedInputs;
+        });
+    }
+    
+
     return (
         <div>
             <Card>
-                <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, QuizID: '', Questions: [] }))} />
+            <Input 
+                placeholder="Quiz Name" 
+                value={quiz?.QuizName} 
+                onChange={(e) => setQuiz((prevState: QuizInterface | null) => ({ ...prevState!, QuizName: e.target.value, QuizID: '', Questions: prevState?.Questions || [], Description: description }))} 
+            />
+
                 <Button onClick={addQuestion}>Add Question</Button>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (
@@ -112,9 +135,24 @@ const CreateQuiz: React.FC = () => {
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 2]} onChange={(e) => handleQuestionInputChange(index * 5 + 2, e.target.value)} />
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 3]} onChange={(e) => handleQuestionInputChange(index * 5 + 3, e.target.value)} />
                         <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 4]} onChange={(e) => handleQuestionInputChange(index * 5 + 4, e.target.value)} />
+                        <Button onClick={() => deleteQuestion(index)}>Delete</Button>
                     </Card>
                 </div>
             ))}
+            
+            <div>
+                <Card>
+                    Description: 
+                    <Input 
+                        placeholder="Description" 
+                        allowClear 
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    >
+                    </Input>
+                </Card>
+            </div>
+
             <div>
                 <Button onClick={saveQuiz}>Save</Button>
             </div>

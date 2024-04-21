@@ -16,6 +16,7 @@ import AddUserModal from './AddUserModal';
 
 // interface for course json
 interface course {
+  instructor: string,
   courseName : string,
   modules :
       {
@@ -37,6 +38,7 @@ function Edit_Course() {
   
  // creates new course with temporary information
   const initialCourse: course = {
+    instructor: '',
     courseName : 'temp',
     modules : [
         {
@@ -65,6 +67,7 @@ function Edit_Course() {
   const [selectedModuleID, setSelectedModuleID] = useState(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
+   console.log(selectedCourse)
 
     uniqueID = uuidv4();
       const tempModule = {
@@ -81,18 +84,23 @@ function Edit_Course() {
           }]
       }
     
-  useEffect(() => {
-    
-    if(id && user?.organization?.id){
-      CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
-        console.log(data)
-        const jsonInformation = JSON.parse(data['jsonInformation']);
-        setInstructor(data['instructor']);
-        setselectedCourse(jsonInformation);
-        setCid(data.cid);
-      })
-    }
-  }, [])
+      useEffect(() => {
+        if (id && user?.organization?.id) {
+          CourseAPI.getOneCourse(id, user.organization.id)
+            .then((data: any) => {
+              const jsonInformation = JSON.parse(data['jsonInformation']);
+              setInstructor(data['instructor']);
+              setselectedCourse(jsonInformation);
+              setCid(data.cid);
+            })
+            .catch((error) => {
+              console.error("Error fetching course data:", error);
+              // Handle error, if needed
+            });
+        }
+      }, [instructor]);
+
+      
   
   useEffect(() => {
     updateJSON();
@@ -127,9 +135,12 @@ function Edit_Course() {
 
   // opens edit course modal
   const EditCourseInformation = () => {
+    console.log(selectedCourse)
     setisEditCourseOpen(true);
   }
   const closeEditModal = () => {
+    console.log(selectedCourse)
+    setInstructor(selectedCourse.instructor)
     setisEditCourseOpen(false);
    };
 

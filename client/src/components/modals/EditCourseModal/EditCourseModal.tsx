@@ -22,6 +22,7 @@ function EditCourseModal(props: { closeModal: () => void; isModalOpen: boolean |
 
   const saveCourseInformation = () => {
     courseJSON.courseName = CourseName
+    console.log(courseJSON)
     CourseAPI.updateCourse(CourseName, props.courseName ?? "", instructorName, props.instructorName ?? "")
     props.closeModal()
   }
