@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { FileAPI } from '../../api/FileAPI'; 
+import { FileAPI } from '../../api/FileAPI';
 import { Spin, Button } from 'antd';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
@@ -15,16 +15,13 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [scaleFactor, setScaleFactor] = useState<number>(1.0);
-  const maxScaleFactor = 2.0; 
-  const minScaleFactor = 0.5; 
-  const contentBoxWidth = 1050; 
-  const pageHeight = 445; 
+  const [containerWidth, setContainerWidth] = useState<number>(0);
 
   useEffect(() => {
-    const fetchPDF = async () => {
+    const fetchPDF = async (): Promise<void> => {
       try {
         done();
-        const pdfBlob = await FileAPI.getFile(fileName);
+        const pdfBlob: Blob = await FileAPI.getFile(fileName);
         setPdfFile(pdfBlob);
         setLoading(false);
       } catch (error) {
@@ -34,62 +31,52 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
 
     fetchPDF();
 
-    return () => {
-      // Cleanup function
-      setPdfFile(null);
-      setLoading(true);
+    // Update container width on window resize
+    const handleResize = (): void => {
+      setContainerWidth(window.innerWidth * 0.69); // 90% of viewport width
     };
-  }, [fileName]);
+    handleResize(); // Initial call to set container width
+    window.addEventListener('resize', handleResize);
+    return (): void => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [fileName, done]);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setPageCount(numPages);
-  }
-
-  const renderPages = () => {
-    if (pageCount) {
-      return Array.from(new Array(pageCount), (_, index) => (
-        <Page
-          key={`page_${index + 1}`}
-          pageNumber={index + 1}
-          renderTextLayer={false}
-          width={contentBoxWidth} 
-          height={pageHeight} 
-          scale={scaleFactor}
-          renderAnnotationLayer={false}
-        />
-      ));
-    } else {
-      return null;
-    }
   };
 
-  const handleIncreaseScale = () => {
-    const newScaleFactor = scaleFactor + 0.25;
-    if (newScaleFactor <= maxScaleFactor) {
-      setScaleFactor(newScaleFactor);
-    }
+  const handleIncreaseScale = (): void => {
+    const newScaleFactor: number = scaleFactor + 0.25;
+    setScaleFactor(Math.min(newScaleFactor, 2.0)); // Limit scale factor to 2.0
   };
 
-  const handleDecreaseScale = () => {
-    const newScaleFactor = scaleFactor - 0.25;
-    if (newScaleFactor >= minScaleFactor) {
-      setScaleFactor(newScaleFactor);
-    }
+  const handleDecreaseScale = (): void => {
+    const newScaleFactor: number = scaleFactor - 0.25;
+    setScaleFactor(Math.max(newScaleFactor, 0.5)); // Limit scale factor to 0.5
   };
 
   return (
-    <div>
+    <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-        <Button onClick={handleDecreaseScale} disabled={scaleFactor <= minScaleFactor}>-</Button>
+        <Button onClick={handleDecreaseScale}>-</Button>
         <span style={{ margin: '0 16px' }}>Size: {scaleFactor}</span>
-        <Button onClick={handleIncreaseScale} disabled={scaleFactor >= maxScaleFactor}>+</Button>
+        <Button onClick={handleIncreaseScale}>+</Button>
       </div>
-      <div style={{ width: `${contentBoxWidth}px`, height: `${pageCount ? pageCount * pageHeight : 490}px`, overflow: 'auto' }}>
+      <div style={{ maxWidth: '90%', maxHeight: '60vh', margin: '0 auto' }}>
         {loading ? (
           <Spin size="large" />
         ) : (
           <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
-            {renderPages()}
+            {pageCount && Array.from(new Array(pageCount), (_, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                renderTextLayer={false}
+                width={containerWidth * scaleFactor}
+                renderAnnotationLayer={false}
+              />
+            ))}
           </Document>
         )}
       </div>
