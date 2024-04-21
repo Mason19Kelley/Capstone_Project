@@ -30,26 +30,26 @@ const CreateOrg: React.FC = () => {
   return (
     <section>
       <div className="org-box">
-      <Link to={'/login'} className="create-org-back"><ArrowLeftOutlined /></Link>
+      <Link to={'/login'} className="create-org-back"><ArrowLeftOutlined style={{color:'white'}} /></Link>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
             <div className='back-link'>
               <h2>Create an Organization</h2>
             </div>
             
-            <div className="inputbox">
+            <div className="inputbox-org">
               <input type="organization" required value={organization} onChange={(e) => setOrgname(e.target.value)} />
               <label>Organization Name</label>
             </div>
-            <div className="inputbox">
+            <div className="inputbox-org">
               <input type="username" required value={username} onChange={(e) => setUsername(e.target.value)} />
               <label>Administrator Full Name</label>
             </div>
-            <div className="inputbox">
+            <div className="inputbox-org">
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
               <label>Administrator Email</label>
             </div>
-            <div className="inputbox">
+            <div className="inputbox-org">
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Administrator Password</label>
             </div>

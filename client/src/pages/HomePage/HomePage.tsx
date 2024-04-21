@@ -7,14 +7,12 @@ import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlin
 import { useContext } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
-import Account from '../../components/Account/Account';
 import Cookies from 'js-cookie';
 import Admin from '../../components/Admin/Admin';
 import Management from '../../components/Course_Management/Management';
 import EditCourse from '../EditPage/Editcourse';
 import { PageContext } from '../../context/PageContext';
 import CourseProgress from '../../components/CourseProgress/CourseProgress';
-import CoursesList from '../../components/Courses/Courses';
 
 
 
@@ -69,10 +67,6 @@ function HomePage() {
     switch (page) {
       case 'Dashboard':
         return <Dashboard />;
-      case 'Courses':
-        return <CoursesList />;
-      case 'Account':
-        return <Account />;
       case 'Admin':
         return <Admin />
       case 'Management':
@@ -119,7 +113,7 @@ function HomePage() {
   }
 
   const items: MenuProps['items'] = [
-    getItem('Dashboard', 'Dashboard', <HomeOutlined />), getItem('Courses', 'Courses', <ProfileOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('User Course Progress', 'User Course Progress', <CheckOutlined />) : null, getItem('Account', 'Account', <UserOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('User Course Progress', 'User Course Progress', <CheckOutlined />) : null, (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
   ];
 
   return (

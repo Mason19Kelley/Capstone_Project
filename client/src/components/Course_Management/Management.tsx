@@ -1,7 +1,7 @@
-import './Management.css'
-import { Button, Image, Typography } from 'antd';
+import './Management.css';
+import { Button, Card, Image, Tooltip, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { Box, ThemeProvider } from '@mui/system';
+import { ThemeProvider } from '@mui/system';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
@@ -42,7 +42,8 @@ function Management () {
   useEffect(() => {
     CourseAPI.getAllCourses(user?.organization?.id || 0).then((data: any[]) => {
       const names = data.map((course: {courseName: string}) => course.courseName);
-      setCourseList(names);
+      const sortedNames = names.sort((a, b) => a.localeCompare(b));
+      setCourseList(sortedNames);
 
     });
   }, [])
@@ -76,32 +77,29 @@ function Management () {
   // creates cards for each course and displays
   const cards = () => {
     return (
-      <div style={{gap:'10px', justifyContent: 'space-between' }}>
+      <div className="flex flex-col gap-[1px]">
         {courseList.map((course) => (
-        <div className='courses'>
+        <div className='courses flex flex-row justify-between  w-[100%]'>
           <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-            <Box
-              sx={{
-                width: 1,
-                height: 75,
-                borderRadius: 1,
-                bgcolor: 'primary.main',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '2%',
-              }}
+            <Card
+            style={{ width: '100%', backgroundColor: 'lightgrey'}}
             >
-              <Typography.Title level={3} style={{ textAlign: 'left' }}>
-                <div className='dashboardText'>{course}</div>
-              </Typography.Title>
-              <div style = {{display:'flex', gap: "2px"}}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'black' }} />}>
-                </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
-                </Button>
+              <div className="flex flex-row justify-between">
+                <Typography.Title level={3} style={{ textAlign: 'left' }}>
+                  <div className='dashboardText'>{course}</div>
+                </Typography.Title>
+                <div style = {{display:'flex', gap: "2px"}}>
+                  <Tooltip placement='bottom' title="Edit Course">
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'black' }} />}>
+                  </Button>
+                  </Tooltip>
+                  <Tooltip placement='bottom' title="Delete Course">
+                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
+                    </Button>
+                  </Tooltip>                  
+                </div>
               </div>
-            </Box>
+            </Card>
           </ThemeProvider>
         </div>
         ))}
@@ -120,29 +118,35 @@ function Management () {
           preview = {false}
         />
       </div>
-      <h1 className='self-start' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingLeft: 50, paddingTop: 10}}>Course Management</h1>
-      <div className='courses'>
+      <h1 className='self-start course-m pb-3' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10}}>Course Management</h1>
+      <div className='courses ml-[1%] mr-[1%]'>
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-          <Box
-            sx={{
-              width: 1,
-              height: 75,
-              borderRadius: 1,
-              bgcolor: 'primary.main',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '2%',
-            }}
+          <Card
+            // sx={{
+            //   width: 1,
+            //   height: 75,
+            //   borderRadius: 1,
+            //   bgcolor: 'primary.main',
+            //   display: 'flex',
+            //   justifyContent: 'space-between',
+            //   alignItems: 'center',
+            //   padding: '2%',
+            // }}
           >
+            <div className='flex flex-row justify-between'>
             <Typography.Title level={3} style={{ textAlign: 'left' }}>
               <div className='dashboardText'>Courses</div>
             </Typography.Title>
-            <Button className='noHover' type="primary" style={{ width: '50px' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'black' }} />}>
-            </Button>
-          </Box>
+            <Tooltip placement='bottom' title="Create Course">
+              <Button className='noHover' type="primary" style={{ width: '50px' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'black' }} />}>
+              </Button>
+            </Tooltip>
+            </div>
+            <div>{cards()}</div>
+          </Card>
+          
           </ThemeProvider>
-          <div>{cards()}</div>
+          
         </div>
     </div>
   )

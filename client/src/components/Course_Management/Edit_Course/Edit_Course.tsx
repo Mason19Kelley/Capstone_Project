@@ -1,5 +1,5 @@
 import  { useEffect } from 'react';
-import { Button, Card,  Typography, Popover } from 'antd';
+import { Button, Card,  Typography, Popover, Tooltip } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
@@ -203,7 +203,6 @@ function Edit_Course() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '2%',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -213,10 +212,15 @@ function Edit_Course() {
                 </div>
               </Typography.Title>
               <div style={{ display: 'flex', gap: '2px' }}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)} icon={<EditOutlined style={{ color: 'black' }} />}>
-                </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
-                </Button>
+                <Tooltip placement='bottom' title="Edit Content">
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)} icon={<EditOutlined style={{ color: 'black' }} />}>
+                  </Button>
+                </Tooltip>
+                <Tooltip placement='bottom' title="Delete Content">
+                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
+                  </Button>
+                </Tooltip>
+                
               </div>
           </div>
         </Card>
@@ -229,29 +233,33 @@ function Edit_Course() {
 
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
         <div className='courses'>
-          <Card
+          <Card className="course-modules-cards"
             style={{
               width: '100%',
               borderRadius: 8,
-              backgroundColor: 'white', // Adjust the background color as needed
+              backgroundColor: 'lightgrey', // Adjust the background color as needed
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               padding: '2%',
               
             }}
+            bodyStyle={{ padding: "20px 0" }}
+            headStyle={{ padding: 0}}
             title={
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography.Title level={3} style={{ textAlign: 'left', margin: 0 }}>
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
                 <div style={{ display: 'flex', gap: "2px" }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)} icon={<EditOutlined style={{ color: 'black' }} />}>
-                  </Button>
+                  <Tooltip placement='bottom' title='Edit Module Information'>
+                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)} icon={<EditOutlined style={{ color: 'black' }} />}>
+                    </Button>
+                  </Tooltip>
                   <Popover
                     key={module}
                     content={
-                      <div style={{display: 'flex'}} >
+                      <div style={{display: 'flex'}}>
                         <Button style={{flex: 1}} onClick={() => createQuiz(module)} >
                             Quiz
                         </Button>
@@ -265,20 +273,26 @@ function Edit_Course() {
                     open={popOverOpen === module}
                     onOpenChange={(visible) => createCourseContent(visible ? module : null)}
                     >
-                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)} icon={<PlusOutlined style={{ color: 'black' }} />}>
-                    </Button>
+                    <Tooltip placement='bottom' title="Add Course Content">
+                      <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)} icon={<PlusOutlined style={{ color: 'black' }} />}>
+                      </Button>
+                    </Tooltip>
                 </Popover>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
-                  </Button>
+                  <Tooltip placement='bottom' title="Delete Module">
+                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
+                    </Button>
+                  </Tooltip>
                   {selectedModuleID === module.moduleID && <EditModuleModal isModalOpen={editModuleOpen} closeModal={closeEditModuleModal} ModuleName={module['moduleName']} moduleID={module['moduleID']} courseJSON = {selectedCourse}></EditModuleModal>}
                 </div>
               </div>
             }
             bordered={true}
           >
-          {module['content'].map((content: any) => (
-              displayContent(module, content)
-          ))}
+            <div className="flex flex-col gap-[1px] w-[100%] ">
+              {module['content'].map((content: any) => (
+                  displayContent(module, content)
+              ))}
+            </div>
           </Card>
         </div>
       </div>
@@ -323,35 +337,32 @@ function Edit_Course() {
               </Typography.Title>
               <div>
               <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-                <Box
-                  sx={{
-                    width: 1,
-                    height: 75,
-                    borderRadius: 1,
-                    bgcolor: 'primary.main',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '2%',
-                    color: 'white'
-                  }}
-                >
-                  <Typography.Title level={3} style={{ textAlign: 'left' }}>
-                    <div className='dashboardText'>{selectedCourse['courseName']}</div>
-                    <div style={{fontSize:'15px'}}>{instructor}</div>
-                  </Typography.Title>
-                  <div style = {{display:'flex', gap: "2px"}}>
-                    <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
-                    </Button>
-                    <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
-                    </Button>
-                    <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
-                    </Button>
+                <Card>
+                  <div className="flex justify-between">
+                    <Typography.Title level={3} style={{ textAlign: 'left' }}>
+                      <div className='dashboardText'>{selectedCourse['courseName']}</div>
+                      <div style={{fontSize:'15px'}}>Instructor: {instructor}</div>
+                    </Typography.Title>
+                    <div style = {{display:'flex', gap: "2px"}}>
+                      <Tooltip placement='bottom' title="Edit Course Information">
+                        <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                      <Tooltip placement='bottom' title="Add Users">
+                        <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                      <Tooltip placement='bottom' title="Add New Module">
+                        <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                    </div>
                   </div>
-                </Box>
+                  <div>{listModules(selectedCourse)}</div>
+                </Card>
               </ThemeProvider>
               <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
-              <div>{listModules(selectedCourse)}</div>
+
               </div>
               <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
             </div>

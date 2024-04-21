@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './CourseModule.css';
 import PDFViewer from './PDFView';
-import QuizComponent from './Quiz'; // Import the QuizComponent
+import QuizComponent from './Quiz'; 
 import VideoPlayer from '../../components/VideoPlayer/VideoPlayer';
 import { Button, message, Steps, theme } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
-//import { QuizAPI } from '../../../../api/QuizAPI';
 import { StepContext } from '../../context/StepContext';
 
 interface Step {
@@ -20,8 +19,6 @@ const CourseModule: React.FC = () => {
   const [truesteps, setTrueSteps] = useState<Step[]>([]);
   const [contentDone, setContentDone] = useState(false)
   const { currentStep, setCurrentStep } = useContext(StepContext);
-  //const [quizCompleted, setQuizCompleted] = useState(false); // State to track quiz completion
-
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
@@ -45,7 +42,7 @@ const CourseModule: React.FC = () => {
 
           if (stepContent) {
             moduleSteps.push({
-              title: `Module ${module.moduleName} - ${content.fileName}`,
+              title: `${module.moduleName} - ${content.fileName}`,
               content: stepContent
             });
           }
@@ -75,7 +72,6 @@ const CourseModule: React.FC = () => {
   const items = truesteps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
-    // lineHeight: '260px',
     textAlign: 'center',
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
@@ -98,6 +94,8 @@ const CourseModule: React.FC = () => {
 
   const content = truesteps[currentStep] ? truesteps[currentStep].content : null;
 
+  const moduleName = truesteps[currentStep] ? truesteps[currentStep].title.split(' - ')[0] : '';
+
   return (
     <div className="cmod-container">
       <div className="back-button">
@@ -106,7 +104,7 @@ const CourseModule: React.FC = () => {
         </Link>
       </div>
       <div className="cmod-box">
-        <h3>Example Course Module</h3>
+        <h3>{moduleName}</h3>
         <div className="content-box">
           <>
             <Steps current={currentStep} items={items} />
