@@ -31,11 +31,11 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
 
     fetchPDF();
 
-    // Update container width on window resize
+    
     const handleResize = (): void => {
-      setContainerWidth(window.innerWidth * 0.69); // 90% of viewport width
+      setContainerWidth(window.innerWidth * 0.69); 
     };
-    handleResize(); // Initial call to set container width
+    handleResize(); 
     window.addEventListener('resize', handleResize);
     return (): void => {
       window.removeEventListener('resize', handleResize);
@@ -48,12 +48,12 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
 
   const handleIncreaseScale = (): void => {
     const newScaleFactor: number = scaleFactor + 0.25;
-    setScaleFactor(Math.min(newScaleFactor, 2.0)); // Limit scale factor to 2.0
+    setScaleFactor(Math.min(newScaleFactor, 2.0)); 
   };
 
   const handleDecreaseScale = (): void => {
     const newScaleFactor: number = scaleFactor - 0.25;
-    setScaleFactor(Math.max(newScaleFactor, 0.5)); // Limit scale factor to 0.5
+    setScaleFactor(Math.max(newScaleFactor, 0.5)); 
   };
 
   return (
