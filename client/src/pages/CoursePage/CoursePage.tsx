@@ -1,4 +1,4 @@
-import { Image, Layout, theme, Card, ConfigProvider, Button, Menu } from "antd";
+import { Image, Layout, theme, Card, ConfigProvider, Button, Menu, Tooltip } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Link, useParams } from "react-router-dom";
@@ -89,7 +89,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       }
     }
     return(
-      <Card title={jsonInfo?.modules[index].moduleName} style={{ width: '80vw', marginBottom: '5vh'}}>
+      <Card title={jsonInfo?.modules[index].moduleName} style={{ marginBottom: '5vh', background: 'lightgrey'}}>
         {cards.map(card => <div>{card}</div>)}
       </Card>
     )
@@ -188,12 +188,12 @@ const CoursePage: React.FC = () => {
         style={{flex:1 , minWidth: 0}}
         onClick={handleMenuClick}
         >
-          <Menu.Item key="Dashboard" icon=<HomeOutlined />>
+          <Menu.Item key="Dashboard" icon={<HomeOutlined />}>
             <Link to={`/home`}>
               <span>Dashboard</span>
             </Link>
           </Menu.Item>
-          <Menu.Item key="Courses" icon=<ProfileOutlined />>
+          <Menu.Item key="Courses" icon={<ProfileOutlined />}>
             <Link to={'/home'}>
               Courses
             </Link>
@@ -223,9 +223,11 @@ const CoursePage: React.FC = () => {
           {courseName}
         </h1>
         <Link to={`/courseModule/${id}`}>
-          <Button onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
-            Go to start
+          <Tooltip placement="bottom" title='Start Course'>
+            <Button onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
+              Go to start
           </Button>
+          </Tooltip>
         </Link>
       </div>
       <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
@@ -233,7 +235,7 @@ const CoursePage: React.FC = () => {
       </h2>
       <div className="modules" >
       <ConfigProvider>
-          {module.map(card => <div>{card}</div>)}
+          {module.map(card => <div className="w-[99%] ml-[1%]">{card}</div>)}
       </ConfigProvider>
       </div>
     </div>

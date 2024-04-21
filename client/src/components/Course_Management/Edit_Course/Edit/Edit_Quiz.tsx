@@ -141,7 +141,10 @@ function Edit_Quiz() {
     return (
         <div>
             <Card>
-              <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [] }))} />
+                <div className='flex flex-col'>
+                    <span className='font-semibold text-base text-start w-[100%]'>Quiz Title</span>
+                    <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [] }))} />
+                </div>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
