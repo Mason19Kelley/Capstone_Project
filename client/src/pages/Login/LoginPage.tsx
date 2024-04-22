@@ -55,6 +55,7 @@ const LoginPage: React.FC = () => {
         setLoggedIn(true)
         setUser(response.user)
         setOrganization(response.user.organization?.orgName || null)
+        setPage('Dashboard')
         navigate("/home")
       })
       .catch(error => {

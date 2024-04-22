@@ -39,21 +39,11 @@ const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#002F8B',
+  backgroundColor: '#4A7EE6',
   width: '17%', 
   minWidth: "215px",
   overflowY: 'auto', 
 };
-
-// Seeding the courses into the user (TODO: seed this in seed file
-// function seedCourses(id: number | undefined) {
-//   // created for testing purposes, inserting user into courses
-//   if(id != undefined) {
-//     CourseAPI.insertUser(2, id ?? 0)
-//     CourseAPI.insertUser(1, id ?? 0)
-//     CourseAPI.insertUser(3, id ?? 0)
-//   }
-// }
 
 function HomePage() {
   const { page, setPage} = useContext(PageContext);
@@ -135,20 +125,22 @@ function HomePage() {
               </Typography.Title>
             </div>
             <div className="user">
-              <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
+              <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
               <Typography.Title level={3} style={{ color: 'white' }}>
                 <div className='emName'>
                   { fullName }
                 </div>
               </Typography.Title>
             </div>
+            <div className='sideMenu'>
             <Menu
-              style={{ width: '100%', backgroundColor: '#002F8B' }}
+              style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '1em'}}
               defaultSelectedKeys={['Dashboard']}
               mode="vertical"
               onClick={handleMenuClick}
               items={items}
             />
+            </div>
           </Sider>
           <Content style={contentStyle}>
             {renderPage()}
