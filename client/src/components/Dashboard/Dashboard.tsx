@@ -1,6 +1,6 @@
 
 import './Dashboard.css'
-import { Card, ConfigProvider, Image, Typography } from 'antd';
+import { Card, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import Meta from 'antd/es/card/Meta';
@@ -9,13 +9,6 @@ import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { Link } from 'react-router-dom';
-
-const cards: string[] = [
-    'My Courses',
-    'Completed Courses',
-    'Certifications',
-    'Account'
-]
 
   // Here is where we create the cards
   interface CardProps {
@@ -90,11 +83,6 @@ function Dashboard() {
         />
       </div>
       <h1 style= {{color:'#0c2245', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
-      <div className='cards'>
-        <ConfigProvider theme={{ token: { fontFamily: "Playfair Display", fontSize: 30, paddingLG: 18 } }}>
-            {cards.map(card => <Card className="top-card"><Typography.Text>{card}</Typography.Text></Card>)}
-        </ConfigProvider>
-      </div>
 
       <div className='learningDashboard'>
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
