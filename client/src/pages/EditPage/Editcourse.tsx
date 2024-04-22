@@ -24,7 +24,6 @@ const layoutStyle = {
 const contentStyle: React.CSSProperties = {
   flex: 1, 
   overflowY: 'auto', 
-  padding: '20px',
   backgroundColor: '#dbdbdb',
   backgroundSize: '100%',
   textAlign: 'center',
@@ -76,7 +75,6 @@ function EditCourse() {
   };
 
   const renderPage = () => {
-    console.log(EditCourseContext)
 
     switch (EditCourseContext) {
       case 'Edit_Course':
@@ -134,7 +132,9 @@ function EditCourse() {
               preview = {false}
             />
           </div>
-          {renderPage()}
+          <div className='w-[98%] ml-[1%] mb-[1%]'>
+            {renderPage()}
+          </div>         
           </Content>
         </Layout>
       </Layout>
