@@ -12,6 +12,14 @@ export const AdminAPI = {
       return data
     },
 
+    getAdminByOrg: async (orgId: number | undefined) => {
+        if(orgId === undefined){
+            return
+        }
+        const { data } = await api.get(`/users/getAdminByOrg/${orgId}`);
+        return data
+    },
+
     updateOrgName: async (newOrgName: Organization) => {
         const { data } = await api.post(`/organizations/renameOrg`, newOrgName)
         return data

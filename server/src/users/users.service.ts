@@ -36,6 +36,12 @@ export class UsersService {
     return this.usersRepository.find({ where: { organization: Equal(orgId) } });
   }
 
+  async getAdminByOrg(orgId: number): Promise<User[] | undefined>{
+    const superAdmin = await this.rolesService.findRole(1);
+    const admin = await this.rolesService.findRole(2);
+    return this.usersRepository.find({ where: { organization: Equal(orgId), role: [superAdmin, admin]} });
+  }
+
   async deleteUser(id:number): Promise<DeleteResult | undefined> {
     return this.usersRepository.delete({ id })
   }

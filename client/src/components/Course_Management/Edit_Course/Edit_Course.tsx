@@ -361,7 +361,7 @@ function Edit_Course() {
                   <div>{listModules(selectedCourse)}</div>
                 </Card>
               </ThemeProvider>
-              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
 
               </div>
               <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>

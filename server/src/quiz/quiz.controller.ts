@@ -76,5 +76,7 @@ export class QuizController {
         @Param('quizID') quizID: string,
     ) {
         await this.quizService.updateQuiz(quiz, quizID);
+        const info = JSON.parse(quiz.Quiz_JSON);
+        
     }
 }
