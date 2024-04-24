@@ -3,7 +3,7 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined, CheckOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, LogoutOutlined, TeamOutlined, SettingOutlined, CheckOutlined } from '@ant-design/icons';
 import { useContext } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
@@ -13,9 +13,6 @@ import Management from '../../components/Course_Management/Management';
 import EditCourse from '../EditPage/Editcourse';
 import { PageContext } from '../../context/PageContext';
 import CourseProgress from '../../components/CourseProgress/CourseProgress';
-
-
-
 
 const layoutStyle = {
   width: '100%',

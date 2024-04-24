@@ -1,23 +1,32 @@
-import { Image, Layout, theme, Card, ConfigProvider, Button, Menu, Tooltip } from "antd";
+import { Image, Layout, theme, Card, ConfigProvider, Button, Menu, Tooltip, MenuProps, Typography, Avatar } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
 import { useContext, useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
-import { PlaySquareOutlined } from "@ant-design/icons";
-import { AuthAPI } from "../../api/AuthAPI";
-import { Role } from "../../models/role.model"
-import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
+import { BackwardOutlined, CheckOutlined, LogoutOutlined, PlaySquareOutlined, SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined } from '@ant-design/icons';
 import { AuthContext } from "../../context/AuthContext";
 import { PageContext } from "../../context/PageContext";
 import { StepContext } from "../../context/StepContext";
 
+const { Sider, Content } = Layout;
 
-const { Header, Content } = Layout;
+const siderStyle: React.CSSProperties = {
+  textAlign: 'center',
+  lineHeight: '120px',
+  color: '#fff',
+  backgroundColor: '#4A7EE6',
+  width: '17%', 
+  minWidth: "215px",
+  overflowY: 'auto', 
+};
 
+// counter to let CourseModule know what module to show
 let innerModules: {[counter: number]: string} = {};
 
+// Template for json information
 interface course {
   courseName : string,
   modules :
@@ -35,6 +44,7 @@ interface course {
       }[]
 }
 
+// Genertate the course modules recursivley, returns card html
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
   const { setCurrentStep } = useContext(StepContext);
   let { id } = useParams();
@@ -65,7 +75,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
     if(moduleContent?.Description == null){
       return(
         <Card onClick={handleClickWrapper} 
-          type="inner" style={{background: '#fafafa', marginBottom: '1vh', textAlign: "left"}}>
+          type="inner" style={{ marginBottom: '1vh', textAlign: "left", background: '#F5F5F5'}}>
             <Link to={`/courseModule/${id}`}>
               <Meta title={moduleName}/>
             </Link>
@@ -75,7 +85,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       return (
         <Link to={`/courseModule/${id}`}>
           <Card onClick={handleClickWrapper}
-            type="inner" title={moduleName} style={{marginBottom: '1vh'}}>
+            type="inner" title={moduleName} style={{marginBottom: '1vh', background: '#F5F5F5'}}>
               {moduleContent?.Description}
           </Card>
         </Link>
@@ -89,13 +99,14 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       }
     }
     return(
-      <Card title={jsonInfo?.modules[index].moduleName} style={{ marginBottom: '5vh', background: 'lightgrey'}}>
+      <Card title={jsonInfo?.modules[index].moduleName} style={{ marginBottom: '5vh', background: '#D0E2F0'}} >
         {cards.map(card => <div>{card}</div>)}
       </Card>
     )
   }
 }
 
+// Create all the different modules
 function createModule(jsonInfo: course | undefined): JSX.Element[] {
   innerModules = [];
   const cards: JSX.Element[] = [];
@@ -105,30 +116,6 @@ function createModule(jsonInfo: course | undefined): JSX.Element[] {
   }
 
   return cards
-}
-
-function createAdminButton(uid: number | undefined, courseName: string): JSX.Element {
- const [role, setRole] = useState<Role>();
-
-  useEffect(() => {
-    if(uid){
-      AuthAPI.getUser(uid).then((data: any) => {
-        setRole(data['role'])
-      })
-    }
-  }, [uid])
-  
-  if(role?.id == (1 || 2)){
-    return (
-      <Menu.Item key="EditCourse">
-        <Link to={`/editCourse/${courseName}`}>
-          <span>Edit Course</span>
-        </Link>
-      </Menu.Item>
-    )
-  } else {
-    return <Menu.Item/>
-  }
 }
 
 const CoursePage: React.FC = () => {
@@ -141,6 +128,7 @@ const CoursePage: React.FC = () => {
   const { setPage } = useContext(PageContext)
   const { setCurrentStep } = useContext(StepContext)
 
+  const navigate = useNavigate()
 
   useEffect(() => {
     if(id){
@@ -153,12 +141,35 @@ const CoursePage: React.FC = () => {
     }
   }, [id])
 
-  const optionalMenuItem  = createAdminButton(user?.id, courseName)
-    
+  type MenuItem = Required<MenuProps>['items'][number];
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+    type?: 'group',
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    } as MenuItem;
+  }
+
+  const items: MenuProps['items'] = [
+    getItem('Dashboard', 'Dashboard', <HomeOutlined />), (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('User Course Progress', 'User Course Progress', <CheckOutlined />) : null, (user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Admin', 'Admin', <TeamOutlined />) : null,(user?.role?.roleName === 'Systems Admin' || user?.role?.roleName === 'Administrator') ? getItem('Course Management', 'Management', <SettingOutlined />) : null, getItem('Logout', 'Logout', <LogoutOutlined />)
+  ];
+  
+  // Setting the homepage page
   const handleMenuClick = ({ key }: { key: string }) => {
     setPage(key);
+    navigate('/home')
   };
   
+  // Logic for Go-To-Start button
   const handleContenClick = () => {
     setCurrentStep(0)
   }
@@ -171,37 +182,33 @@ const CoursePage: React.FC = () => {
 
   return (
   <Layout style={{minHeight: '100vh'}}>
-      <Header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 1,
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['1']}
-        style={{flex:1 , minWidth: 0}}
-        onClick={handleMenuClick}
-        >
-          <Menu.Item key="Dashboard" icon={<HomeOutlined />}>
-            <Link to={`/home`}>
-              <span>Dashboard</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="Courses" icon={<ProfileOutlined />}>
-            <Link to={'/home'}>
-              Courses
-            </Link>
-          </Menu.Item>
-          {optionalMenuItem}
-        </Menu>
-      </Header>
-    <div className='headerImage'>
+    <Sider width="17%" style={siderStyle} className="csider">
+      <div className="ctitle">
+        <Typography.Title level={2} className='text-left align-middle'>
+          <div className = "cbrand">
+            Surge
+            </div>
+        </Typography.Title>
+      </div>
+      <div className="cuser">
+        <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
+          <Typography.Title level={3} style={{ color: 'white' }}>
+            <div className='cemName'>
+              { user?.fullName }
+            </div>
+          </Typography.Title>
+      </div>
+      <div className='csideMenu'>
+        <Menu
+          style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '1em'}}
+          mode="vertical"
+          onClick={handleMenuClick}
+          items={items}
+          />
+      </div>
+    </Sider>
+    <Content>
+      <div className='headerImage'>
         <Image
           width= '100%'
           height = '98%'
@@ -209,30 +216,28 @@ const CoursePage: React.FC = () => {
           preview = {false}
         />
       </div>
-    <Content style={{ padding: '0 48px' }}>
+      <h1 style= {{color:'#0c2245', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>{courseName}</h1>
       <div
         style={{
           padding: 24,
+          paddingTop: 20,
           minHeight: 380,
           background: colorBgContainer,
           borderRadius: borderRadiusLG,
         }}
       >
-        <div className="flex flex-row justify-between">
-        <h1 className='self-start' style= {{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
-          {courseName}
-        </h1>
+      <div className="flex flex-row justify-between">
+        <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
+          Taught by: {instructor}
+        </h2>
         <Link to={`/courseModule/${id}`}>
           <Tooltip placement="bottom" title='Start Course'>
-            <Button onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
+            <Button style={{background: '#F34B4B'}}onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
               Go to start
           </Button>
           </Tooltip>
         </Link>
       </div>
-      <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
-        Taught by: {instructor}
-      </h2>
       <div className="modules" >
       <ConfigProvider>
           {module.map(card => <div className="w-[99%] ml-[1%]">{card}</div>)}
