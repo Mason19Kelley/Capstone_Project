@@ -31,7 +31,7 @@ const CourseModule: React.FC = () => {
           let stepContent;
 
           if (content.contentType === 'Media') {
-            if (content.fileType === 'mp4' || content.fileType === 'x-matroska') {
+            if (content.fileType === 'mp4') {
               stepContent = <VideoPlayer fileName={content.fileName} done={checkVideoDone}/>;
             } else if (content.fileType === 'pdf') {
               stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;

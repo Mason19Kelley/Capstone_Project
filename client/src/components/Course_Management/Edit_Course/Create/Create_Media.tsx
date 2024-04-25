@@ -61,7 +61,7 @@ function Create_Media() {
           const type = fileList[0].type.split('/')[1];
           console.log(type)
 
-          if(type === 'mp4' || type === 'pdf' || type === 'x-matroska'){
+          if(type === 'mp4' || type === 'pdf'){
             const response = await FileAPI.uploadFile(formData);
             // Update jsonInformation and course information as needed
             const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
@@ -121,7 +121,7 @@ function Create_Media() {
               Support for a single upload. Strictly prohibited from uploading company data or other banned files.
             </p>
             <p className="ant-upload-hint" style={{color: 'red'}}>
-              Supported formats: mp4, mkv, pdf
+              Supported formats: mp4, pdf
               </p>
           </Upload>
           <br /><br />
