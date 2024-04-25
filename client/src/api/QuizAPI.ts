@@ -18,8 +18,8 @@ export const QuizAPI = {
         return data
     },
 
-    saveQuiz: async (quiz: Quiz, courseName: string, moduleID: string, orgID: number) => {
-        const { data } = await api.post(`quiz/saveQuiz/${courseName}/${moduleID}/${orgID}`, quiz);
+    saveQuiz: async (quiz: Quiz, courseName: string, moduleID: string, orgID: number, description: string) => {
+        const { data } = await api.post(`quiz/saveQuiz/${courseName}/${moduleID}/${orgID}/${description}`, quiz);
         return data;
     },
 

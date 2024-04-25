@@ -25,6 +25,12 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('getAdminByOrg/:OrgId')
+    async getAdminByOrg(@Param('OrgId') orgId: number) {
+        return await this.usersService.getAdminByOrg(orgId)
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Delete('deleteUser/:id')
     async deleteUser(@Param('id') id: number) {
         return await this.usersService.deleteUser(id)

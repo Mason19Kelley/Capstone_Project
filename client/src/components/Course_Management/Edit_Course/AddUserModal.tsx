@@ -19,11 +19,12 @@ function AddUserModal(props: { closeModal: () => void; isModalOpen: boolean | un
 
   useEffect(() => {
     if (props.isModalOpen) {
+      console.log(props.selectedCourse)
       setOptions([])
       CourseAPI.getUsersInCourse(props.selectedCourse).then((response: User[]) => {
         console.log(response)
         AdminAPI.getUsersByOrg(props.orgId).then((users: User[]) => {
-            const userOptions = users.map(user =>  ({
+          const userOptions = users.map(user =>  ({
                 label: user.fullName ?? "John Smith",
                 value: user.id ?? -1,
                 selected: response.map(res => res.id).includes(user.id)
@@ -50,6 +51,7 @@ function AddUserModal(props: { closeModal: () => void; isModalOpen: boolean | un
   }
 
   const handleChange = (value: string[]) => {
+    console.log(value)
     console.log(options.filter(option => option.selected === true).map(user => user.label))
     setUsersToAdd(value.map(user => +user))
   };

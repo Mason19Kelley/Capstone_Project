@@ -8,8 +8,6 @@ function EditModuleModal(props: { closeModal: () => void; isModalOpen: boolean |
   
 
   useEffect(() => {
-    console.log(props.ModuleName, props.courseJSON)
-    //setOldCourseName(CourseName)
     if (props.isModalOpen) {
         setModuleName(props.ModuleName || "");
         setCourseJSON(props.courseJSON || {});
@@ -17,6 +15,7 @@ function EditModuleModal(props: { closeModal: () => void; isModalOpen: boolean |
  }, [props.isModalOpen, props.ModuleName, props.courseJSON]);
 
   const closeModal = () => {
+    console.log(courseJSON)
     props.closeModal()
   }
 
@@ -33,12 +32,6 @@ function EditModuleModal(props: { closeModal: () => void; isModalOpen: boolean |
 
   const saveCourseInformation = () => {
     const updatedCourseJSON = updateModuleName(courseJSON, props.moduleID, ModuleName);
-    console.log(updatedCourseJSON)
-    //console.log(props.courseName)
-    //courseJSON.moduleName = ModuleName
-    console.log(ModuleName)
-    
-    console.log(courseJSON.modules)
     CourseAPI.updateCourseJSON(courseJSON.courseName, updatedCourseJSON)
     props.closeModal()
   }

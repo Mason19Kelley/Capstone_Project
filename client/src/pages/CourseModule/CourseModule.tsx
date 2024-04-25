@@ -49,9 +49,9 @@ const CourseModule: React.FC = () => {
       const data: Course = JSON.parse(response.jsonInformation);
       setCourseJson(data)
       CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
-        setCurrentModuleIndex(response.moduleCompleted)
-        setCurrentStep(response.contentCompleted)
-        setModule(data, response.moduleCompleted)
+        setCurrentModuleIndex(response.moduleCompleted ?? 0)
+        setCurrentStep(response.contentCompleted ?? 0)
+        setModule(data, response.moduleCompleted ?? 0)
       }).catch(error => {
         console.error("Error fetching completion data:", error);
       });
@@ -112,8 +112,8 @@ const CourseModule: React.FC = () => {
         let stepContent;
 
         if (content.contentType === 'Media') {
-          if (content.fileType === 'mp4') {
-            stepContent = <VideoPlayer done={checkVideoDone}/>;
+          if (content.fileType === 'mp4' || content.fileType === 'x-matroska') {
+            stepContent = <VideoPlayer fileName={content.fileName} done={checkVideoDone}/>;
           } else if (content.fileType === 'pdf') {
             stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
           }
