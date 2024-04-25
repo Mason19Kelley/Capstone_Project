@@ -9,6 +9,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { Link } from 'react-router-dom';
+import randomColor from 'randomcolor';
 
   // Here is where we create the cards
   interface CardProps {
@@ -23,7 +24,7 @@ import { Link } from 'react-router-dom';
       width: 1,
       height:147,
       borderRadius: "5px",
-      bgcolor: '#949292'
+      bgcolor: randomColor({luminosity: 'light'})
     };
   
     // Building the Actual card, obtaining the name and instructor
