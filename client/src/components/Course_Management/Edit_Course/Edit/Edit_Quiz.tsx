@@ -4,6 +4,8 @@ import { Button, Card, Input, message } from "antd";
 import { QuizAPI } from "../../../../api/QuizAPI";
 import { contentContext } from "../../../../context/contentContext";
 import { AuthContext } from "../../../../context/AuthContext";
+import { set } from "lodash";
+import { CourseAPI } from "../../../../api/CourseAPI";
 
 // interface for quiz json
 interface QuizInterface {
@@ -24,10 +26,11 @@ function Edit_Quiz() {
     // variables
     const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "", Questions: [], Description: ""});
     const [questionInputs, setQuestionInputs] = useState<string[]>([]);
-    const { contentID } = useContext(contentContext);
+    const { contentID, jsonInformation, setJsonInformation } = useContext(contentContext);
     const { setEditCourseContext } = useContext(AuthContext);
     const [loading, setLoading] = useState<boolean>(true);
     const [description, setDescription] = useState<string>('');
+    const [update, setUpdate] = useState(false);
 
     // fetch quiz from api
     useEffect(() => {
@@ -90,7 +93,7 @@ function Edit_Quiz() {
                 Questions: [
                     ...prevState.Questions,
                     {
-                        QuestionType: "", // Set appropriate type
+                        QuestionType: "Multiple Choice", // Set appropriate type
                         Question: "",
                         Answers: {
                             Correct: [],
@@ -121,11 +124,35 @@ function Edit_Quiz() {
         });
     }
 
+    useEffect(() => {
+        console.log(update)
+        if(jsonInformation && jsonInformation.modules && jsonInformation.modules.length > 0 && update){
+            console.log(jsonInformation)
+            CourseAPI.updateCourseJSON(jsonInformation.courseName, jsonInformation);
+        }
+    }
+    , [jsonInformation]);
+
     // Saves quiz and sends updated information to the api
     const saveQuiz = async () => {
+        console.log(quiz)
         console.log("Save Quiz clicked");
         if (!quiz) return;
         try {
+            const updatedModules = jsonInformation.modules.map((module: { content: any[]; }) => {
+                const updatedContent = module.content.map(content => {
+                    if (content.fileName === quiz?.QuizName) {
+                        return { ...content, Description: description };
+                    }
+                    return content;
+                });
+                return { ...module, content: updatedContent };
+            });
+            console.log(updatedModules)
+            setJsonInformation({ ...jsonInformation, modules: updatedModules });
+            setUpdate(true);
+            console.log(jsonInformation)
+
             await QuizAPI.updateQuiz(quiz, contentID);
             message.success('Quiz updated successfully');
             setTimeout(() => {
@@ -147,6 +174,7 @@ function Edit_Quiz() {
                 <div className='flex flex-col'>
                     <span className='font-semibold text-base text-start w-[100%]'>Quiz Title</span>
                     <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [], Description: description }))} />
+                    <Button onClick={addQuestion}>Add Question</Button>
                 </div>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (

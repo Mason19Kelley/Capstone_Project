@@ -55,7 +55,7 @@ function Edit_Course() {
         }]
     }
     
-  const { setContentID, setCourseName } = useContext(contentContext);
+  const { setContentID, setCourseName, setJsonInformation } = useContext(contentContext);
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
   const { id } = useParams();
@@ -74,14 +74,7 @@ function Edit_Course() {
         moduleName : "temp",
         moduleID : uniqueID,
         content : [
-          {
-            contentType : null,
-            fileType : null,
-            fileLocation :null,
-            fileName : null,
-            quizID : null,
-            Description : null
-          }]
+          ]
       }
     
       useEffect(() => {
@@ -186,6 +179,7 @@ function Edit_Course() {
     }
     else if(content.contentType === 'Quiz'){
       setContentID(content.quizID)
+      setJsonInformation(selectedCourse)
       setEditCourseContext('Edit_Quiz');
     }
     
