@@ -79,6 +79,9 @@ const LoginPage: React.FC = () => {
       return (<Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />)
     }else {
       return (<section className="login-box">
+        <div className='brand' style={{color: '#0c2245',marginTop: -100, marginBottom: 100, fontSize: '3em'}}>
+          Surge
+        </div>
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
