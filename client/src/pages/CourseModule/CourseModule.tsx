@@ -7,69 +7,71 @@ import { Button, message, Steps, theme } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
 import { StepContext } from '../../context/StepContext';
+import { AuthContext } from '../../context/AuthContext';
 
 interface Step {
   title: string;
   content: JSX.Element | string;
 }
 
+interface Course {
+  courseName: string;
+  modules: Module[];
+ }
+ 
+ interface Module {
+  moduleName: string;
+  moduleID: string;
+  content: Content[];
+ }
+ 
+ interface Content {
+  contentType: string;
+  fileType?: string;
+  fileName?: string;
+  quizID?: string;
+  Description?: string;
+ }
+
 const CourseModule: React.FC = () => {
+  const { user } = useContext(AuthContext)
   const { courseId } = useParams();
   const { token } = theme.useToken();
   const [truesteps, setTrueSteps] = useState<Step[]>([]);
   const [contentDone, setContentDone] = useState(false)
   const { currentStep, setCurrentStep } = useContext(StepContext);
+  const [courseJson, setCourseJson ] = useState<Course>();
+  const [ currentModuleIndex, setCurrentModuleIndex ] = useState<number>(0);
+  const [ items, setItems ] = useState<{key: string; title: string;}[]>()
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
-      const data = JSON.parse(response.jsonInformation);
-      console.log("Received data:", data);
-      const moduleSteps: Step[] = [];
-
-      data.modules.forEach((module: { content: any[]; moduleName: any; }) => {
-        module.content.forEach((content) => {
-          let stepContent;
-
-          if (content.contentType === 'Media') {
-            if (content.fileType === 'mp4') {
-              stepContent = <VideoPlayer done={checkVideoDone}/>;
-            } else if (content.fileType === 'pdf') {
-              stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
-            }
-          } else if (content.contentType === 'Quiz') {
-            stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
-          }
-
-          if (stepContent) {
-            moduleSteps.push({
-              title: `${module.moduleName} - ${content.fileName}`,
-              content: stepContent
-            });
-          }
-        });
+      const data: Course = JSON.parse(response.jsonInformation);
+      setCourseJson(data)
+      CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
+        setCurrentModuleIndex(response.moduleCompleted)
+        setCurrentStep(response.contentCompleted)
+        setModule(data, response.moduleCompleted)
+      }).catch(error => {
+        console.error("Error fetching completion data:", error);
       });
-
-      if (moduleSteps.length > 0) {
-        setTrueSteps(moduleSteps);
-      } else {
-        console.error("No content found in the modules:", data.modules);
-      }
     }).catch(error => {
       console.error("Error fetching course data:", error);
     });
+
+    
   }, [courseId]);
 
   const next = () => {
     setContentDone(false)
     setCurrentStep(currentStep + 1);
-    console.log(currentStep)
+    updateCourseCompletion(currentModuleIndex, currentStep+1)
   };
 
   const prev = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const items = truesteps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -82,6 +84,9 @@ const CourseModule: React.FC = () => {
 
   const checkQuizDone = (done: boolean) => {
     setContentDone(done)
+    if(done){
+      updateCourseCompletion(currentModuleIndex, currentStep+1)
+    }
   }
 
   const checkPdfDone = () => {
@@ -91,47 +96,90 @@ const CourseModule: React.FC = () => {
   const checkVideoDone = () => {
     setContentDone(true)
   }
+  
+  const finishModule = () => {
+    message.success('Module Complete!')
+    updateCourseCompletion(currentModuleIndex+1, 0)
+    setCurrentModuleIndex(currentModuleIndex+1)
+    setModule(courseJson, currentModuleIndex+1)
+    setCurrentStep(0)
+  }
 
-  const content = truesteps[currentStep] ? truesteps[currentStep].content : null;
+  const setModule = (data?: Course, moduleIndex?: number) => {
+    const moduleSteps: Step[] = [];
 
-  const moduleName = truesteps[currentStep] ? truesteps[currentStep].title.split(' - ')[0] : '';
+      data?.modules[moduleIndex ?? 0]?.content.forEach((content: any) => {
+        let stepContent;
+
+        if (content.contentType === 'Media') {
+          if (content.fileType === 'mp4') {
+            stepContent = <VideoPlayer done={checkVideoDone}/>;
+          } else if (content.fileType === 'pdf') {
+            stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
+          }
+        } else if (content.contentType === 'Quiz') {
+          stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
+        }
+
+        if (stepContent) {
+          moduleSteps.push({
+            title: `${content.fileName}`,
+            content: stepContent
+          });
+        }
+      });
+      if (moduleSteps.length > 0) {
+        setTrueSteps(moduleSteps);
+        setItems(moduleSteps.map((item) => ({ key: item.title, title: item.title })))
+      } else {
+        console.error("No content found in the modules:", data?.modules);
+      }
+  }
+
+  const updateCourseCompletion = (moduleCompleted: number, contentCompleted: number) => {
+    CourseAPI.updateCourseCompletion(user?.id ?? -1, +(courseId ?? '-1') ?? -1, moduleCompleted, contentCompleted).then(response => {
+      console.log(response)
+    })
+
+  }
+
+
 
   return (
     <div className="cmod-container">
-      <div className="back-button">
+      <div className="flex justify-between w-[98%] ml-[1%] mr-[1%] mt-[1%] mb-[1%]">
         <Link to={`/courses/${courseId}`}>
-          <button type="button">Back</button>
+          <Button type="primary">Back To Overview</Button>
         </Link>
+        <span className="font-semibold text-2xl">{courseJson?.modules[currentModuleIndex].moduleName}</span>
+        <Button type="primary">Next Module</Button>
       </div>
-      <div className="cmod-box">
-        <h3>{moduleName}</h3>
         <div className="content-box">
           <>
-            <Steps current={currentStep} items={items} />
-            <div style={contentStyle}>
-              {content}
+            <Steps current={currentStep} items={items} className='mr-[1%] ml-[1%] w-[98%] mt-[0.5%] mb-[0.5%]'/>
+            <div style={contentStyle} className='ml-[1%] mr-[1%] w-[98%]'>
+              {truesteps[currentStep]?.content}
             </div>
             <div style={{ marginTop: 24 }}>
+              {currentStep > 0 && (
+                <Button style={{ margin: '0 8px' }} onClick={prev}>
+                  Previous
+                </Button>
+              )}
               {currentStep < truesteps.length - 1 && (
-                <Button type="default" disabled={!contentDone} onClick={() => next()}>
+                <Button type="default" disabled={!contentDone} onClick={next}>
                   Next
                 </Button>
               )}
               {currentStep === truesteps.length - 1 && (
-                <Button type="default" onClick={() => message.success('Module Complete!')} className="course-button">
+                <Button type="primary" onClick={finishModule} disabled={!contentDone} className="course-button">
                   Done
-                </Button>
-              )}
-              {currentStep > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={prev}>
-                  Previous
                 </Button>
               )}
             </div>
           </>
         </div>
       </div>
-    </div>
   );
 };
 
