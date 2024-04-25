@@ -105,18 +105,17 @@ function Create_Media() {
       };
     
       return (
-        <Card>
+        <Card style={{background: '#D0E2F0', borderBlockWidth: '1vw', borderBlockColor: '#B1D0E7'}}>
           <Upload {...props}>
-            <p className="ant-upload-drag-icon">
+            <p style={{fontSize: '1.3em'}} className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
+            <p style={{fontFamily: 'Oswald', fontSize: '1.3em'}} className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p style={{fontFamily: 'Oswald', fontSize: '1.3em'}} className="ant-upload-hint">
               Support for a single upload. Strictly prohibited from uploading company data or other banned files.
             </p>
           </Upload>
-          <br /><br />
-          <p>Description:</p>
+          <p style={{fontFamily: 'Oswald', fontSize: '1.3em', marginTop: 25, marginBottom: 10}}>Description:</p>
           <textarea
             value={description}
             onChange={handleChange}
@@ -137,6 +136,7 @@ function Create_Media() {
           />
           <br /><br />
           <Button
+          style={{background: '#F34B4B'}}
             onClick={handleSubmit}
             disabled={fileList.length === 0 || uploading}
             loading={uploading}

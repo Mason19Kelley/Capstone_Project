@@ -34,8 +34,9 @@ const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#002F8B',
+  backgroundColor: '#4A7EE6',
   width: '17%', 
+  minWidth: "215px",
   overflowY: 'auto', 
 };
 
@@ -60,7 +61,7 @@ function EditCourse() {
       key,
       icon,
       children,
-      label,
+      label: <span style={{fontFamily: 'Oswald'}}>{label}</span>,
       type,
     } as MenuItem;
   }
@@ -108,14 +109,14 @@ function EditCourse() {
               </Typography.Title>
             </div>
             <div className="user">
-              <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
-              <Typography.Title level={3} style={{ color: 'white' }}>
+              <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
+              <Typography.Title level={3} style={{ color: '#0c2245', paddingTop: '15px' }}>
                 <div className='emName'>
                   { fullName }
                 </div>
               </Typography.Title>
               <Menu
-              style={{ width: '100%', backgroundColor: '#002F8B' }}
+              style={{ width: '100%', backgroundColor: '#4A7EE6' }}
               defaultSelectedKeys={['Dashboard']}
               mode="vertical"
               onClick={handleMenuClick}

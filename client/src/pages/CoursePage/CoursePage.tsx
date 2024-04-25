@@ -13,6 +13,12 @@ import { StepContext } from "../../context/StepContext";
 
 const { Sider, Content } = Layout;
 
+const layoutStyle = {
+  width: '100%',
+  height: '100vh', 
+  display: 'flex', 
+};
+
 // Style for Sider
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -22,6 +28,15 @@ const siderStyle: React.CSSProperties = {
   width: '17%', 
   minWidth: "215px",
   overflowY: 'auto', 
+};
+
+const contentStyle: React.CSSProperties = {
+  flex: 1, 
+  overflowY: 'auto', 
+  backgroundColor: '#dbdbdb',
+  backgroundSize: '100%',
+  textAlign: 'center',
+  lineHeight: '120px',
 };
 
 // counter to let CourseModule know what module to show
@@ -221,25 +236,25 @@ const CoursePage: React.FC = () => {
   const module = createModule(selectedCourse);
 
   return (
-  <Layout style={{minHeight: '100vh'}}>
-    <Sider width="17%" style={siderStyle} className="csider">
-      <div className="ctitle">
+  <Layout style={layoutStyle}>
+    <Sider width="17%" style={siderStyle}>
+      <div className="title">
         <Typography.Title level={2} className='text-left align-middle'>
-          <div className = "cbrand">
+          <div className = "brand">
             Surge
             </div>
         </Typography.Title>
       </div>
-      <div className="cuser">
+      <div className="user">
         <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
           <Typography.Title level={3} style={{ color: '#0c2245', paddingTop: '15px' }}>
-            <div className='cemName'>
+            <div className='emName'>
               { user?.fullName }
             </div>
           </Typography.Title>
       </div>
-      <div className='csideMenu'>
-        <Menu className="csideMenu" 
+      <div className='sideMenu'>
+        <Menu
           style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '125%'}}
           mode="vertical"
           onClick={handleMenuClick}
@@ -247,7 +262,7 @@ const CoursePage: React.FC = () => {
           />
       </div>
     </Sider>
-    <Content>
+    <Content style={contentStyle}>
       <div className='headerImage'>
         <Image
           width= '100%'

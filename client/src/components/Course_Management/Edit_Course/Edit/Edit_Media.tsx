@@ -52,7 +52,7 @@ function Edit_Media () {
     const pullInformation = () => {
         const description = getInformation(jsonInformation.modules, information.content, information.module);
         return (
-            <div>
+            <div style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>
                 Description: {description ? description.Description : 'Description not found.'}
             </div>
         );
@@ -91,15 +91,18 @@ function Edit_Media () {
                 style={{
                     textAlign: 'left',
                     padding: '2%',
-                    color: 'black'
+                    color: 'black',
+                    background: '#D0E2F0', 
+                    borderBlockWidth: '1vw', 
+                    borderBlockColor: '#B1D0E7',
                 }}
                 title={
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Typography.Title level={3} className='dashboardText' style={{ margin: 0 }}>
                             {information.content}
                         </Typography.Title>
-                        <Button className='noHover' style={{ width: '50px', marginLeft: 'auto' }} onClick={deleteContent}>
-                            <DeleteOutlined style={{ color: 'black' }} />
+                        <Button className='noHover' style={{ background: '#F34B4B', width: '50px', marginLeft: 'auto' }} onClick={deleteContent}>
+                            <DeleteOutlined style={{ color: 'white' }} />
                         </Button>
                     </div>
                 }
