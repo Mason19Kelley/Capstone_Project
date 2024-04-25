@@ -67,8 +67,8 @@ const QuizComponent = (props: {quizId: string, done: (arg0: boolean) => void}) =
             rules={[{ required: true, message: 'Please select an answer.' }]}
           >
             <Radio.Group>
-              {q.answers.map((opt) => (
-                <Radio key={opt.value} value={opt.value}>{opt.label}</Radio>
+              {q.answers.map((opt, i) => (
+                <Radio key={i} value={opt.value}>{opt.label}</Radio>
               ))}
             </Radio.Group>
           </Form.Item>
