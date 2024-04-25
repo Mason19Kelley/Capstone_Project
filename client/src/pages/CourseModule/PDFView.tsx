@@ -57,13 +57,13 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
+    <div style={{ width: '100%', height: '100%', overflow: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
         <Button onClick={handleDecreaseScale}>-</Button>
         <span style={{ margin: '0 16px' }}>Size: {scaleFactor}</span>
         <Button onClick={handleIncreaseScale}>+</Button>
       </div>
-      <div style={{ maxWidth: '90%', maxHeight: '60vh', margin: '0 auto' }}>
+      <div style={{ maxWidth: '90%', maxHeight: '60vh', overflow: 'auto' }}>
         {loading ? (
           <Spin size="large" />
         ) : (
@@ -82,6 +82,10 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
       </div>
     </div>
   );
+  
 };
 
 export default PDFViewer;
+
+
+
