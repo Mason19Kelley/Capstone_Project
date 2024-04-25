@@ -9,28 +9,32 @@ import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 
+interface course {
+  courseName : string,
+  modules :
+      {
+          moduleName : string,
+          moduleID: string,
+          content :
+              {
+                  contentType : string | null,
+                  fileType : string | null,
+                  fileName : string | null,
+                  quizID : number | null,
+                  Description : string | null
+              }[]
+      }[]
+}
 
 // Temporary course object to be used when creating a new course
-const newID = uuidv4();
+
 
 // temporary course information to be used when creating a 
 // new course
-const tempCourse = {
+const tempCourse: course = {
   courseName: 'temp',
   modules: [
-    {
-      moduleName : "temp",
-      moduleID : newID,
-      content : [
-        {
-            contentType : null,
-            fileType : null,
-            fileLocation :null,
-            fileName : null,
-            quizID : null,
-            Description : null
-        }]
-  }]
+    ]
 }
 
 

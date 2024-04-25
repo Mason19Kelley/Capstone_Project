@@ -21,7 +21,6 @@ export class CoursesController {
     //insert a course with appropriate information: course Name, JSON, instructor Name, and organization ID
     @Post('insertCourse/:course/:jsonInformation/:instructor/:organization')
     async insertCourse(@Param('course') course: string, @Param('jsonInformation') jsonInformation: string, @Param('instructor') instructor: string, @Param('organization') organization: number){
-        console.log('inserting course')
         return await this.coursesService.insertCourse(course, jsonInformation, instructor, organization)
     }
 
@@ -59,9 +58,7 @@ export class CoursesController {
     //updates a courses JSON based on course name
     @Post('updateCourseJSON/:courseName')
     async updateCourseJSON(@Param('courseName') courseName: string, @Body() courseJSON: JSON){
-        console.log(courseJSON)
         const temp = JSON.stringify(courseJSON)
-        console.log("success")
 
         return await this.coursesService.updateCourseJSON(courseName, temp)
     }

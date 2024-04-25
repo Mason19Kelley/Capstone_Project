@@ -27,16 +27,19 @@ export class QuizController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post("saveQuiz/:courseName/:moduleID/:orgID")
+    @Post("saveQuiz/:courseName/:moduleID/:orgID/:description")
     async saveQuiz(
         @Body() quiz: any,
         @Param('courseName') courseName: string,
         @Param('moduleID') moduleID: string,
-        @Param('orgID') orgID: number
+        @Param('orgID') orgID: number,
+        @Param('description') description: string
     ) {
         const newID = uuidv4();
 
         quiz.QuizID = newID;
+
+        quiz.Description = description;
 
         const NewQuiz = {
             Quiz_Name: quiz.QuizName,
@@ -51,7 +54,7 @@ export class QuizController {
         }
 
         const json = JSON.parse(course.jsonInformation);
-        const newContent = { contentType: "Quiz", fileType: null, fileName: quiz.QuizName, quizID: newID, Description: null };
+        const newContent = { contentType: "Quiz", fileType: null, fileName: quiz.QuizName, quizID: newID, Description: description };
         json.modules.forEach((module: any) => {
             if (module.moduleID === moduleID) {
                 module.content.push(newContent);
@@ -72,6 +75,9 @@ export class QuizController {
         @Body() quiz: any,
         @Param('quizID') quizID: string,
     ) {
+        console.log(quiz)
         await this.quizService.updateQuiz(quiz, quizID);
+        //const info = JSON.parse(quiz.Quiz_JSON);
+        
     }
 }

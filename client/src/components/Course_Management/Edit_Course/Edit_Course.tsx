@@ -16,6 +16,7 @@ import AddUserModal from './AddUserModal';
 
 // interface for course json
 interface course {
+  instructor: string,
   courseName : string,
   modules :
       {
@@ -37,6 +38,7 @@ function Edit_Course() {
   
  // creates new course with temporary information
   const initialCourse: course = {
+    instructor: '',
     courseName : 'temp',
     modules : [
         {
@@ -53,7 +55,7 @@ function Edit_Course() {
         }]
     }
     
-  const { setContentID, setCourseName } = useContext(contentContext);
+  const { setContentID, setCourseName, setJsonInformation } = useContext(contentContext);
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
   const { id } = useParams();
@@ -65,34 +67,33 @@ function Edit_Course() {
   const [selectedModuleID, setSelectedModuleID] = useState(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
+   console.log(selectedCourse)
 
     uniqueID = uuidv4();
       const tempModule = {
         moduleName : "temp",
         moduleID : uniqueID,
         content : [
-          {
-            contentType : null,
-            fileType : null,
-            fileLocation :null,
-            fileName : null,
-            quizID : null,
-            Description : null
-          }]
+          ]
       }
     
-  useEffect(() => {
-    
-    if(id && user?.organization?.id){
-      CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
-        console.log(data)
-        const jsonInformation = JSON.parse(data['jsonInformation']);
-        setInstructor(data['instructor']);
-        setselectedCourse(jsonInformation);
-        setCid(data.cid);
-      })
-    }
-  }, [])
+      useEffect(() => {
+        if (id && user?.organization?.id) {
+          CourseAPI.getOneCourse(id, user.organization.id)
+            .then((data: any) => {
+              const jsonInformation = JSON.parse(data['jsonInformation']);
+              setInstructor(data['instructor']);
+              setselectedCourse(jsonInformation);
+              setCid(data.cid);
+            })
+            .catch((error) => {
+              console.error("Error fetching course data:", error);
+              // Handle error, if needed
+            });
+        }
+      }, [instructor]);
+
+      
   
   useEffect(() => {
     updateJSON();
@@ -127,9 +128,12 @@ function Edit_Course() {
 
   // opens edit course modal
   const EditCourseInformation = () => {
+    console.log(selectedCourse)
     setisEditCourseOpen(true);
   }
   const closeEditModal = () => {
+    console.log(selectedCourse)
+    setInstructor(selectedCourse.instructor)
     setisEditCourseOpen(false);
    };
 
@@ -175,6 +179,7 @@ function Edit_Course() {
     }
     else if(content.contentType === 'Quiz'){
       setContentID(content.quizID)
+      setJsonInformation(selectedCourse)
       setEditCourseContext('Edit_Quiz');
     }
     
@@ -348,10 +353,53 @@ function Edit_Course() {
                 </Button>
               </Tooltip>
             </div>
+            <div>
+              <Typography.Title level={2} style={{ textAlign: 'left' }}>
+              <div className="flex flex-row justify-between">
+                <div className='dashboardText'>Edit Course</div>
+                <Link to={`/courses/${cid}`}>
+                  <Button type="primary" icon={<PlaySquareOutlined />}>
+                    Go to Course
+                  </Button>
+                </Link>
+                
+              </div>
+              </Typography.Title>
+              <div>
+              <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
+                <Card>
+                  <div className="flex justify-between">
+                    <Typography.Title level={3} style={{ textAlign: 'left' }}>
+                      <div className='dashboardText'>{selectedCourse['courseName']}</div>
+                      <div style={{fontSize:'15px'}}>Instructor: {instructor}</div>
+                    </Typography.Title>
+                    <div style = {{display:'flex', gap: "2px"}}>
+                      <Tooltip placement='bottom' title="Edit Course Information">
+                        <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                      <Tooltip placement='bottom' title="Add Users">
+                        <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                      <Tooltip placement='bottom' title="Add New Module">
+                        <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  </div>
+                  <div>{listModules(selectedCourse)}</div>
+                </Card>
+              </ThemeProvider>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
+
+              </div>
+              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
+            </div>
           </span>
           <div>{listModules(selectedCourse)}</div>
         </Card>
-      <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
+      <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
 
       </div>
       <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
