@@ -169,24 +169,24 @@ function Admin() {
    <div className="admin-wrapper">
       <h1 className="header">Organization Administration</h1>
       { user?.role?.roleName === 'Systems Admin' ?
-      <Card title="Organization Settings" className='org-management'>
+      <Card title=<span style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>Organization Settings</span> className='org-management'>
         <div>
         <p className="org-name">Organization Name</p>
         <Space.Compact style= {{width: "100%"}}>
           <Input defaultValue={orgName} onChange={handleOrgNameChange} style={{ width: "30vw" }}/>
-          <Button style={{ width: "8vw" }} type="primary" loading={orgSaving} onClick={changeOrgName} className="rename-button">Save</Button>
+          <Button style={{ width: "8vw", background: '#F34B4B'}} type="primary" loading={orgSaving} onClick={changeOrgName} className="rename-button">Save</Button>
         </Space.Compact>
         </div>
       </Card>
       : null
       }
-      <Card title="User Management" className='org-management' extra={<Tooltip placement='bottom' title="Create User"><Button icon={<PlusOutlined />} onClick={openCreateModal}></Button></Tooltip>}>
+      <Card title=<span style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>User Management</span> className='org-management' extra={<Tooltip placement='bottom' title="Create User"><Button style={{background: '#F34B4B', color: 'white'}} icon={<PlusOutlined />} onClick={openCreateModal}></Button></Tooltip>}>
         <Table columns={columns} dataSource={users} loading={areUsersLoading}style={{width: "100%"}}/>
       </Card>
       <DeleteModal isModalOpen={isDeleteModalOpen} closeModal={closeDeleteModal} closeDeleteModal={closeDeleteModal} selectedUserId={selectedUser?.id} refetchUsers={fetchUsers}></DeleteModal>
       <EditUserModal isModalOpen={isEditModalOpen} closeModal={closeEditModal} selectedUser={selectedUser} refetchUsers={fetchUsers}></EditUserModal>
       <CreateUserModal isModalOpen={isCreateModalOpen} closeModal={closeCreateModal} refetchUsers={fetchUsers}/>
-      <Card title="Logs" className='org-management'>
+      <Card title=<span style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>Logs</span> className='org-management'>
       <textarea
         value={textBoxValue}
         style={{
@@ -197,7 +197,7 @@ function Admin() {
         }}
         readOnly // Set the readOnly attribute
       />
-         <Button type="primary" onClick={pullLogs} className='rename-button'>Pull Logs</Button>
+         <Button style={{background: '#F34B4B'}} type="primary" onClick={pullLogs} className='rename-button'>Pull Logs</Button>
       </Card>
    </div>
     
