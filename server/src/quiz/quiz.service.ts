@@ -13,9 +13,7 @@ export class QuizService {
       ) {}
 
       async findQuizById(qid: string){
-        console.log(qid)
         const quiz = await this.quizRepository.findOne({ where: { id: qid } });
-        console.log(quiz)
         return quiz
       }
 
@@ -70,7 +68,7 @@ async seedOrganizations() {
     ]
 }
 
-    console.log(quizJSON)
+ 
 
     let quiz = await this.quizRepository.count();
 

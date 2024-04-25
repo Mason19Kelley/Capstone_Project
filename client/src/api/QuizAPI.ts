@@ -14,9 +14,7 @@ interface Quiz {
 
 export const QuizAPI = {
     getQuiz: async ( quizId: string) => {
-        console.log("quizID", quizId)
         const { data } = await api.get(`/quiz/getQuizById/${quizId}`);
-        console.log(data)
         return data
     },
 

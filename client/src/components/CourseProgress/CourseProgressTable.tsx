@@ -31,7 +31,7 @@ function CourseProgressTable(props: {courses: Completion[]}) {
         key: i,
         course: course.courseName,
         modules: `${course.moduleCompleted} / ${course.totalModules}`,
-        content: `${course.contentCompleted} / ${course.totalContent}`,
+        content: course.completed ? '-/-' : `${course.contentCompleted} / ${course.totalContent}`,
         completed: course.completed,
     })))
   }, [props.courses])
