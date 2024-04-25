@@ -48,6 +48,8 @@ font-family: 'Playfair Display', serif;
 min-width: 215px !important;
 }
 
-.csideMenu .ant-menu .ant-menu-item > *:first-child {
-font-family: 'Playfair Display', serif;
+.cardStyle {
+    margin-bottom: '1vh';
+    text-align: left;
+    background-color: '#F5F5F5';
 }

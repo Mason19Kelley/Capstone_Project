@@ -25,7 +25,3 @@
 .sider {
   min-width: 215px !important;
 }
-
-.sideMenu .ant-menu .ant-menu-item > *:first-child {
-  font-family: 'Playfair Display', serif;
-}

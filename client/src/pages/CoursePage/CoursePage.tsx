@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { CourseAPI } from "../../api/CourseAPI";
 import { useContext, useEffect, useState } from "react";
 import Meta from 'antd/es/card/Meta';
-import { BackwardOutlined, CheckOutlined, LogoutOutlined, PlaySquareOutlined, SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { CheckOutlined, LogoutOutlined, PlaySquareOutlined, SettingOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { HomeOutlined } from '@ant-design/icons';
 import { AuthContext } from "../../context/AuthContext";
 import { PageContext } from "../../context/PageContext";
@@ -13,6 +13,7 @@ import { StepContext } from "../../context/StepContext";
 
 const { Sider, Content } = Layout;
 
+// Style for Sider
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
@@ -48,6 +49,41 @@ interface course {
 function generateModule(inner: boolean, index: number, jsonInfo: course | undefined, mIndex?: number){
   const { setCurrentStep } = useContext(StepContext);
   let { id } = useParams();
+
+  const innerStyle: React.CSSProperties = {
+    marginBottom: '1vh', 
+    textAlign: "left",
+    borderBlockWidth: '1vw', 
+    borderBlockColor: '#ECECEC',
+    
+  }
+
+  const outerStyle: React.CSSProperties = {
+    marginBottom: '5vh', 
+    background: '#D0E2F0', 
+    borderBlockWidth: '1vw', 
+    borderBlockColor: '#B1D0E7',
+  }
+
+  const descFontStyle: React.CSSProperties = {
+    fontFamily: 'Oswald',
+    fontSize: '1.3em'
+  }
+
+  const titleFontStyle: React.CSSProperties = {
+    fontFamily: 'Oswald',
+    fontSize: '1.5em'
+  }
+
+  const altTitleFontStyle: React.CSSProperties = {
+    fontFamily: 'Oswald',
+    fontSize: '1.6em'
+  }
+
+  const moduleFontStyle: React.CSSProperties = {
+    fontFamily: 'Playfair',
+    fontSize: '1.6em'
+  }
   
   // This is the actual click Handle, it finds the index that correlates to the content in CourseModule
   // And sets the page to that in CourseModule, before moving to that page
@@ -75,9 +111,10 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
     if(moduleContent?.Description == null){
       return(
         <Card onClick={handleClickWrapper} 
-          type="inner" style={{ marginBottom: '1vh', textAlign: "left", background: '#F5F5F5'}}>
+          type="inner" style={innerStyle}>
             <Link to={`/courseModule/${id}`}>
-              <Meta title={moduleName}/>
+              <Meta style={{fontFamily: 'Oswald'}} 
+              title=<span style={titleFontStyle}>{moduleName}</span>/>
             </Link>
         </Card>
       )
@@ -85,8 +122,9 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       return (
         <Link to={`/courseModule/${id}`}>
           <Card onClick={handleClickWrapper}
-            type="inner" title={moduleName} style={{marginBottom: '1vh', background: '#F5F5F5'}}>
-              {moduleContent?.Description}
+            type="inner" 
+            title=<span style={altTitleFontStyle}>{moduleName}</span> style={innerStyle}>
+              <span style={descFontStyle}>{moduleContent?.Description}</span>
           </Card>
         </Link>
         )
@@ -99,7 +137,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       }
     }
     return(
-      <Card title={jsonInfo?.modules[index].moduleName} style={{ marginBottom: '5vh', background: '#D0E2F0'}} >
+      <Card title=<span style={moduleFontStyle}>{jsonInfo?.modules[index].moduleName}</span> style={outerStyle} >
         {cards.map(card => <div>{card}</div>)}
       </Card>
     )
@@ -119,6 +157,7 @@ function createModule(jsonInfo: course | undefined): JSX.Element[] {
 }
 
 const CoursePage: React.FC = () => {
+  // Gathering all info for page
   let { id } = useParams();
 
   const [selectedCourse, setselectedCourse] = useState<course>();
@@ -141,6 +180,7 @@ const CoursePage: React.FC = () => {
     }
   }, [id])
 
+  // Setting up the menu for the sidebar
   type MenuItem = Required<MenuProps>['items'][number];
 
   function getItem(
@@ -154,7 +194,7 @@ const CoursePage: React.FC = () => {
       key,
       icon,
       children,
-      label,
+      label: <span style={{fontFamily: 'Oswald'}}>{label}</span>,
       type,
     } as MenuItem;
   }
@@ -192,15 +232,15 @@ const CoursePage: React.FC = () => {
       </div>
       <div className="cuser">
         <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
-          <Typography.Title level={3} style={{ color: 'white' }}>
+          <Typography.Title level={3} style={{ color: '#0c2245', paddingTop: '15px' }}>
             <div className='cemName'>
               { user?.fullName }
             </div>
           </Typography.Title>
       </div>
       <div className='csideMenu'>
-        <Menu
-          style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '1em'}}
+        <Menu className="csideMenu" 
+          style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '125%'}}
           mode="vertical"
           onClick={handleMenuClick}
           items={items}
