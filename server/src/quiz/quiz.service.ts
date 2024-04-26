@@ -26,6 +26,7 @@ export class QuizService {
         const quizjson = JSON.stringify(quiz)
 
         const updateFields = {
+          Quiz_Name: quiz.QuizName,
           Quiz_JSON: quizjson
         }
         return this.quizRepository.update(quizId, updateFields)
