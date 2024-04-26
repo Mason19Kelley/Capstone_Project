@@ -4,7 +4,7 @@ import PDFViewer from './PDFView';
 import QuizComponent from './Quiz'; 
 import VideoPlayer from '../../components/VideoPlayer/VideoPlayer';
 import { Button, message, Steps, theme } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CourseAPI } from '../../api/CourseAPI';
 import { StepContext } from '../../context/StepContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -43,43 +43,20 @@ const CourseModule: React.FC = () => {
   const [courseJson, setCourseJson ] = useState<Course>();
   const [ currentModuleIndex, setCurrentModuleIndex ] = useState<number>(0);
   const [ items, setItems ] = useState<{key: string; title: string;}[]>()
+  const navigate = useNavigate();
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
-      const data = JSON.parse(response.jsonInformation);
-      console.log("Received data:", data);
-      const moduleSteps: Step[] = [];
-
-      data.modules.forEach((module: { content: any[]; moduleName: any; }) => {
-        module.content.forEach((content) => {
-          let stepContent;
-
-          if (content.contentType === 'Media') {
-            if (content.fileType === 'mp4') {
-              stepContent = <VideoPlayer fileName={content.fileName} done={checkVideoDone}/>;
-            } else if (content.fileType === 'pdf') {
-              stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
-            }
-          } else if (content.contentType === 'Quiz') {
-            stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
-          }
-
-          if (stepContent) {
-            moduleSteps.push({
-              title: `${module.moduleName} - ${content.fileName}`,
-              content: stepContent
-            });
-          }
-        });
-      });
-
-      if (moduleSteps.length > 0) {
-        setTrueSteps(moduleSteps);
-      } else {
-        console.error("No content found in the modules:", data.modules);
-      }
-    }).catch(error => {
-      console.error("Error fetching course data:", error);
+      const data: Course = JSON.parse(response.jsonInformation);
+      setCourseJson(data)
+      CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
+        if(response.moduleCompleted ?? 0 >= (courseJson?.modules.length ?? 1000)){
+          navigate('/home')
+        }
+        setCurrentModuleIndex(response.moduleCompleted ?? 0)
+        setCurrentStep(response.contentCompleted ?? 0)
+        setModule(data, response.moduleCompleted ?? 0)
+      }).catch(error => console.log(error))
     });
 
     
@@ -126,6 +103,9 @@ const CourseModule: React.FC = () => {
     setCurrentModuleIndex(currentModuleIndex+1)
     setModule(courseJson, currentModuleIndex+1)
     setCurrentStep(0)
+    if(currentModuleIndex+1 >= (courseJson?.modules.length ?? 1000)){
+      navigate('/home')
+    }
   }
 
   const setModule = (data?: Course, moduleIndex?: number) => {
