@@ -46,15 +46,38 @@ const CourseModule: React.FC = () => {
 
   useEffect(() => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
-      const data: Course = JSON.parse(response.jsonInformation);
-      setCourseJson(data)
-      CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
-        setCurrentModuleIndex(response.moduleCompleted ?? 0)
-        setCurrentStep(response.contentCompleted ?? 0)
-        setModule(data, response.moduleCompleted ?? 0)
-      }).catch(error => {
-        console.error("Error fetching completion data:", error);
+      const data = JSON.parse(response.jsonInformation);
+      console.log("Received data:", data);
+      const moduleSteps: Step[] = [];
+
+      data.modules.forEach((module: { content: any[]; moduleName: any; }) => {
+        module.content.forEach((content) => {
+          let stepContent;
+
+          if (content.contentType === 'Media') {
+            if (content.fileType === 'mp4') {
+              stepContent = <VideoPlayer fileName={content.fileName} done={checkVideoDone}/>;
+            } else if (content.fileType === 'pdf') {
+              stepContent = <PDFViewer fileName={content.fileName} done={checkPdfDone}/>;
+            }
+          } else if (content.contentType === 'Quiz') {
+            stepContent = <QuizComponent quizId={content.quizID} done={checkQuizDone}/>;
+          }
+
+          if (stepContent) {
+            moduleSteps.push({
+              title: `${module.moduleName} - ${content.fileName}`,
+              content: stepContent
+            });
+          }
+        });
       });
+
+      if (moduleSteps.length > 0) {
+        setTrueSteps(moduleSteps);
+      } else {
+        console.error("No content found in the modules:", data.modules);
+      }
     }).catch(error => {
       console.error("Error fetching course data:", error);
     });
