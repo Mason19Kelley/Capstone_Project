@@ -26,7 +26,6 @@ export class OrganizationsService {
     async insert(data) {
         const dataEntity = this.orgsRepository.create(data)
         await this.orgsRepository.insert(dataEntity)
-        console.log("inserted org")
       }
 
     async renameOrg(orgRename: OrgRenameDto) {

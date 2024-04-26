@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
-import { v4 as uuidv4 } from 'uuid';
 
 interface course {
   courseName : string,
@@ -83,10 +82,10 @@ function Management () {
     return (
       <div className="flex flex-col gap-[1px]">
         {courseList.map((course) => (
-        <div className='courses flex flex-row justify-between  w-[100%]'>
-          <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
+        <div className='courses flex flex-row justify-between  w-[99%]'>
             <Card
-            style={{ width: '100%', backgroundColor: 'lightgrey'}}
+            style={{ width: '100%', backgroundColor: '#D0E2F0', borderBlockWidth: '1vw', 
+            borderBlockColor: '#B1D0E7', marginBottom: 10}}
             >
               <div className="flex flex-row justify-between">
                 <Typography.Title level={3} style={{ textAlign: 'left' }}>
@@ -94,17 +93,16 @@ function Management () {
                 </Typography.Title>
                 <div style = {{display:'flex', gap: "2px"}}>
                   <Tooltip placement='bottom' title="Edit Course">
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'black' }} />}>
+                  <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => editCourse(course)} icon={<EditOutlined style={{ color: 'white' }} />}>
                   </Button>
                   </Tooltip>
                   <Tooltip placement='bottom' title="Delete Course">
-                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
+                    <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => removeCourse(course)} icon={<DeleteOutlined style={{ color: 'white' }} />}>
                     </Button>
                   </Tooltip>                  
                 </div>
               </div>
             </Card>
-          </ThemeProvider>
         </div>
         ))}
       </div>
@@ -125,32 +123,19 @@ function Management () {
       <h1 className='self-start course-m pb-3' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10}}>Course Management</h1>
       <div className='courses ml-[1%] mr-[1%]'>
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-          <Card
-            // sx={{
-            //   width: 1,
-            //   height: 75,
-            //   borderRadius: 1,
-            //   bgcolor: 'primary.main',
-            //   display: 'flex',
-            //   justifyContent: 'space-between',
-            //   alignItems: 'center',
-            //   padding: '2%',
-            // }}
-          >
+          <Card>
             <div className='flex flex-row justify-between'>
             <Typography.Title level={3} style={{ textAlign: 'left' }}>
               <div className='dashboardText'>Courses</div>
             </Typography.Title>
             <Tooltip placement='bottom' title="Create Course">
-              <Button className='noHover' type="primary" style={{ width: '50px' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'black' }} />}>
+              <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick = {addCourse} icon={<PlusOutlined style={{ color: 'white' }} />}>
               </Button>
             </Tooltip>
             </div>
             <div>{cards()}</div>
           </Card>
-          
           </ThemeProvider>
-          
         </div>
     </div>
   )

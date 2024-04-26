@@ -47,9 +47,10 @@
     left: 5px;
     transform: translateY(-50%);
     color: #fff;
-    font-size: 1em;
+    font-size: 1.15em;
     pointer-events: none;
     transition: 0.5s;
+    font-family: 'Oswald';
   }
   
   input:focus ~ label {
@@ -68,6 +69,7 @@
     font-size: 1em;
     padding: 0 35px 0 5px;
     color: #fff;
+    font-family: 'Oswald';
   }
   
   .inputbox-org ion-icon {
@@ -112,12 +114,13 @@
     width: 100%;
     height: 40px;
     border-radius: 40px;
-    background: #fff;
+    background: #F34B4B;
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.3em;
     font-weight: 600;
+    font-family: 'Oswald';
   }
   
   .register {

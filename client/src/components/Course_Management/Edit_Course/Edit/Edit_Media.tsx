@@ -5,9 +5,6 @@ import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { DeleteOutlined } from '@ant-design/icons';
 import { FileAPI } from '../../../../api/FileAPI';
-import { json } from 'react-router-dom';
-
-
 
 function Edit_Media() {
     const { contentID } = useContext(contentContext);
@@ -56,6 +53,15 @@ function Edit_Media() {
         return null;
     };
 
+    //pulls description from the json 
+    const pullInformation = () => {
+        const description = getInformation(jsonInformation.modules, information.content, information.module);
+        return (
+            <div style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>
+                Description: {description ? description.Description : 'Description not found.'}
+            </div>
+        );
+    }
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(e.target.value);
     };
@@ -112,23 +118,29 @@ function Edit_Media() {
                 style={{
                     textAlign: 'left',
                     padding: '2%',
-                    color: 'black'
+                    color: 'black',
+                    background: '#D0E2F0', 
+                    borderBlockWidth: '1vw', 
+                    borderBlockColor: '#B1D0E7',
                 }}
                 title={
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Typography.Title level={3} className='dashboardText' style={{ margin: 0 }}>
                             {information.content}
                         </Typography.Title>
-                        <Button className='noHover' style={{ width: '50px', marginLeft: 'auto' }} onClick={deleteContent}>
-                            <DeleteOutlined style={{ color: 'black' }} />
+                        <Button className='noHover' style={{ background: '#F34B4B', width: '50px', marginLeft: 'auto' }} onClick={deleteContent}>
+                            <DeleteOutlined style={{ color: 'white' }} />
                         </Button>
                     </div>
                 }
             >
                 <div>
-                    Description: <Input value={description} onChange={handleDescriptionChange} />
-                    <Button onClick={updateContent}>Update</Button>
+                <span style={{fontFamily: 'Oswald', fontSize: '1.6em', }} className='font-semibold text-base text-start w-[100%]'>Description</span> 
+                    <Input  style={{marginTop: '2%'}} value={description} onChange={handleDescriptionChange} />
                 </div>
+                <div>
+                    <Button style={{background: '#F34B4B', color: 'white', marginTop: '2%'}} onClick={updateContent}>Update</Button>
+                </div>    
             </Card>
         </div>
     );

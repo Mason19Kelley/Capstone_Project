@@ -19,3 +19,37 @@
     justify-content: center;
     flex-direction: column;
 }
+
+.ctitle {
+    background-color: #F34B4B;
+    height: 10%;
+}
+    
+.cuser {
+padding-top: 15px;
+height: 30%;
+margin-top:5%;
+font-size: 128px;
+}
+
+.cbrand {
+padding-top: 15px;
+padding-left: 25px;
+font-size: 160%;
+font-family: 'Major Mono Display', monospace;
+}
+
+.cemName {
+padding-top: 5px;
+font-family: 'Playfair Display', serif;
+}
+
+.csider {
+min-width: 215px !important;
+}
+
+.cardStyle {
+    margin-bottom: '1vh';
+    text-align: left;
+    background-color: '#F5F5F5';
+}

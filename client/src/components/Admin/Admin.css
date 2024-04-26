@@ -1,5 +1,5 @@
 .header {
-    color: black;
+    color: #0c2245;
     margin-left: 1%;
     align-self: self-start;
 }
@@ -12,10 +12,11 @@
     margin-right: 1%;
     width: 98%;
     margin-bottom: 1%;
+    margin-top: 2%;
 }
 
 .card-title {
-    color: black;
+    color: #0c2245;
     font-size: 1.5rem;
 }
 
@@ -39,6 +40,8 @@
 
 .org-name {
     text-align: left;
+    font-family: 'Oswald';
+    font-size: 1.2em;
 }
 
 .ant-card-body {

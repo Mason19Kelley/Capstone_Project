@@ -104,7 +104,6 @@ export class UsersService {
   async getCoursesById(uid: number): Promise<Courses[]> {
     const user = (await this.usersRepository.findOne({relations: ['courses'], where: {id: uid}}));
 
-    console.log(user)
     
     if(!user) {
       return
@@ -118,7 +117,6 @@ export class UsersService {
   async insert(data) {
     const dataEntity = this.usersRepository.create(data)
     await this.usersRepository.insert(dataEntity)
-    console.log("inserted user")
   }
 
   async saveUserEntity(user: User){
@@ -186,7 +184,7 @@ export class UsersService {
 
     const newUsers = this.usersRepository.create(usersToSeed);
 
-    console.log(newUsers)
+
     await this.usersRepository.insert(newUsers);
    
     
