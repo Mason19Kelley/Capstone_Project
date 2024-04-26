@@ -50,7 +50,7 @@ const CourseModule: React.FC = () => {
       const data: Course = JSON.parse(response.jsonInformation);
       setCourseJson(data)
       CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
-        if(response.moduleCompleted ?? 0 >= (courseJson?.modules.length ?? 1000)){
+        if((response.moduleCompleted ?? 0) >= (data?.modules.length ?? 1000)){
           navigate('/home')
         }
         setCurrentModuleIndex(response.moduleCompleted ?? 0)
