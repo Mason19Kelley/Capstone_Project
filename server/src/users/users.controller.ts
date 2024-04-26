@@ -25,6 +25,12 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('getAdminByOrg/:OrgId')
+    async getAdminByOrg(@Param('OrgId') orgId: number) {
+        return await this.usersService.getAdminByOrg(orgId)
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Delete('deleteUser/:id')
     async deleteUser(@Param('id') id: number) {
         return await this.usersService.deleteUser(id)
@@ -39,7 +45,6 @@ export class UsersController {
     
     @Post('insertUser/:cid/:uid')
     async insertUser(@Param( 'cid') cid: number, @Param('uid') uid: number) {
-        console.log("inserting user in course")
         return this.usersService.insertUserInCourse(cid, uid)
     }
 
@@ -51,7 +56,6 @@ export class UsersController {
     @Get('getCourses/:uid')
     async getCourse(@Param('uid') uid: number): Promise<Courses[]>{
         var temp = await this.usersService.getCoursesById(uid) as Courses[]
-        console.log(temp)
         return temp
     }
 

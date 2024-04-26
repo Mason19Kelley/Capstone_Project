@@ -113,12 +113,13 @@
     width: 100%;
     height: 40px;
     border-radius: 40px;
-    background: #fff;
+    background: #F34B4B;
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.3em;
     font-weight: 600;
+    font-family: 'Oswlad';
   }
   
   .register {

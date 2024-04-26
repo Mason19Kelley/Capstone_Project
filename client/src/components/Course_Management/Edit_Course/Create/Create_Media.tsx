@@ -56,30 +56,36 @@ function Create_Media() {
     
           const formData = new FormData();
 
-            formData.append('file', fileList[0]);
+          formData.append('file', fileList[0]);
           
-          const response = await FileAPI.uploadFile(formData);
-    
-          // Update jsonInformation and course information as needed
-          const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
           const type = fileList[0].type.split('/')[1];
-          tempMediaJSON.fileType = type;
-          tempMediaJSON.fileName = fileList[0].name;
-          tempMediaJSON.Description = description;
-          moduleToEdit.content.push(tempMediaJSON);
+          console.log(type)
 
-          console.log('Upload response:', response);
-    
-          if (id) {
-            await CourseAPI.updateCourseJSON(id, jsonInformation);
+          if(type === 'mp4' || type === 'pdf'){
+            const response = await FileAPI.uploadFile(formData);
+            // Update jsonInformation and course information as needed
+            const moduleToEdit = jsonInformation.modules.find((module: any) => module.moduleID === contentID);
+            
+            tempMediaJSON.fileType = type;
+            tempMediaJSON.fileName = fileList[0].name;
+            tempMediaJSON.Description = description;
+            moduleToEdit.content.push(tempMediaJSON);
+
+            console.log('Upload response:', response);
+      
+            if (id) {
+              await CourseAPI.updateCourseJSON(id, jsonInformation);
+            }
+      
+            message.success('Upload successful.');
+            setFileList([]);
+            setDescription('');
+            setTimeout(() => {
+              setEditCourseContext('Edit_Course');
+              }, 500);
+          }else{
+            message.error('Please select a video or pdf file');
           }
-    
-          message.success('Upload successful.');
-          setFileList([]);
-          setDescription('');
-          setTimeout(() => {
-            setEditCourseContext('Edit_Course');
-            }, 500);
         } catch (error) {
           console.error('Upload error:', error);
           message.error('Upload failed.');
@@ -105,18 +111,20 @@ function Create_Media() {
       };
     
       return (
-        <Card>
+        <Card style={{background: '#D0E2F0', borderBlockWidth: '1vw', borderBlockColor: '#B1D0E7'}}>
           <Upload {...props}>
-            <p className="ant-upload-drag-icon">
+            <p style={{fontSize: '1.3em'}} className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
+            <p style={{fontFamily: 'Oswald', fontSize: '1.3em'}} className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p style={{fontFamily: 'Oswald', fontSize: '1.3em'}} className="ant-upload-hint">
               Support for a single upload. Strictly prohibited from uploading company data or other banned files.
             </p>
+            <p className="ant-upload-hint" style={{color: 'red'}}>
+              Supported formats: mp4, pdf
+              </p>
           </Upload>
-          <br /><br />
-          <p>Description:</p>
+          <p style={{fontFamily: 'Oswald', fontSize: '1.3em', marginTop: 25, marginBottom: 10}}>Description:</p>
           <textarea
             value={description}
             onChange={handleChange}
@@ -137,6 +145,7 @@ function Create_Media() {
           />
           <br /><br />
           <Button
+          style={{background: '#F34B4B'}}
             onClick={handleSubmit}
             disabled={fileList.length === 0 || uploading}
             loading={uploading}

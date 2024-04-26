@@ -1,5 +1,5 @@
 import  { useEffect } from 'react';
-import { Button, Card,  Typography, Popover } from 'antd';
+import { Button, Card,  Typography, Popover, Tooltip } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
@@ -16,6 +16,7 @@ import AddUserModal from './AddUserModal';
 
 // interface for course json
 interface course {
+  instructor: string,
   courseName : string,
   modules :
       {
@@ -37,6 +38,7 @@ function Edit_Course() {
   
  // creates new course with temporary information
   const initialCourse: course = {
+    instructor: '',
     courseName : 'temp',
     modules : [
         {
@@ -53,7 +55,7 @@ function Edit_Course() {
         }]
     }
     
-  const { setContentID, setCourseName } = useContext(contentContext);
+  const { setContentID, setCourseName, setJsonInformation } = useContext(contentContext);
   const {user, setEditCourseContext} = useContext(AuthContext)
   const [selectedCourse, setselectedCourse] = useState<course>(initialCourse);
   const { id } = useParams();
@@ -65,34 +67,33 @@ function Edit_Course() {
   const [selectedModuleID, setSelectedModuleID] = useState(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
+   console.log(selectedCourse)
 
     uniqueID = uuidv4();
       const tempModule = {
         moduleName : "temp",
         moduleID : uniqueID,
         content : [
-          {
-            contentType : null,
-            fileType : null,
-            fileLocation :null,
-            fileName : null,
-            quizID : null,
-            Description : null
-          }]
+          ]
       }
     
-  useEffect(() => {
-    
-    if(id && user?.organization?.id){
-      CourseAPI.getOneCourse(id, user.organization.id).then((data: any) => {
-        console.log(data)
-        const jsonInformation = JSON.parse(data['jsonInformation']);
-        setInstructor(data['instructor']);
-        setselectedCourse(jsonInformation);
-        setCid(data.cid);
-      })
-    }
-  }, [])
+      useEffect(() => {
+        if (id && user?.organization?.id) {
+          CourseAPI.getOneCourse(id, user.organization.id)
+            .then((data: any) => {
+              const jsonInformation = JSON.parse(data['jsonInformation']);
+              setInstructor(data['instructor']);
+              setselectedCourse(jsonInformation);
+              setCid(data.cid);
+            })
+            .catch((error) => {
+              console.error("Error fetching course data:", error);
+              // Handle error, if needed
+            });
+        }
+      }, [instructor]);
+
+      
   
   useEffect(() => {
     updateJSON();
@@ -127,9 +128,12 @@ function Edit_Course() {
 
   // opens edit course modal
   const EditCourseInformation = () => {
+    console.log(selectedCourse)
     setisEditCourseOpen(true);
   }
   const closeEditModal = () => {
+    console.log(selectedCourse)
+    setInstructor(selectedCourse.instructor)
     setisEditCourseOpen(false);
    };
 
@@ -175,6 +179,7 @@ function Edit_Course() {
     }
     else if(content.contentType === 'Quiz'){
       setContentID(content.quizID)
+      setJsonInformation(selectedCourse)
       setEditCourseContext('Edit_Quiz');
     }
     
@@ -192,7 +197,9 @@ function Edit_Course() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '2%',
+            borderBlockWidth: '1vw', 
+            borderBlockColor: '#ECECEC',
+            marginBottom: 10
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -202,10 +209,15 @@ function Edit_Course() {
                 </div>
               </Typography.Title>
               <div style={{ display: 'flex', gap: '2px' }}>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => EditContent(module,content)} icon={<EditOutlined style={{ color: 'black' }} />}>
-                </Button>
-                <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteContent(selectedCourse, module, content)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
-                </Button>
+                <Tooltip placement='bottom' title="Edit Content">
+                  <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => EditContent(module,content)} icon={<EditOutlined style={{ color: 'white' }} />}>
+                  </Button>
+                </Tooltip>
+                <Tooltip placement='bottom' title="Delete Content">
+                  <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => deleteContent(selectedCourse, module, content)} icon={<DeleteOutlined style={{ color: 'white' }} />}>
+                  </Button>
+                </Tooltip>
+                
               </div>
           </div>
         </Card>
@@ -218,29 +230,34 @@ function Edit_Course() {
 
       <div style={{gap:'10px', justifyContent: 'space-between' }}>
         <div className='courses'>
-          <Card
+          <Card className="course-modules-cards"
             style={{
               width: '100%',
               borderRadius: 8,
-              backgroundColor: 'white', // Adjust the background color as needed
-              display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               padding: '2%',
-              
+              background: '#D0E2F0', 
+              borderBlockWidth: '1vw', 
+              borderBlockColor: '#B1D0E7',
+              marginBottom: 15,
             }}
+            bodyStyle={{ padding: "20px 0" }}
+            headStyle={{ padding: 0}}
             title={
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography.Title level={3} style={{ textAlign: 'left', margin: 0 }}>
                   <div className='dashboardText'>{module['moduleName']}</div>
                 </Typography.Title>
                 <div style={{ display: 'flex', gap: "2px" }}>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => editModuleInformation(module)} icon={<EditOutlined style={{ color: 'black' }} />}>
-                  </Button>
+                  <Tooltip placement='bottom' title='Edit Module Information'>
+                    <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => editModuleInformation(module)} icon={<EditOutlined style={{ color: 'white' }} />}>
+                    </Button>
+                  </Tooltip>
                   <Popover
                     key={module}
                     content={
-                      <div style={{display: 'flex'}} >
+                      <div style={{display: 'flex'}}>
                         <Button style={{flex: 1}} onClick={() => createQuiz(module)} >
                             Quiz
                         </Button>
@@ -254,20 +271,26 @@ function Edit_Course() {
                     open={popOverOpen === module}
                     onOpenChange={(visible) => createCourseContent(visible ? module : null)}
                     >
-                    <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => createCourseContent(module)} icon={<PlusOutlined style={{ color: 'black' }} />}>
-                    </Button>
+                    <Tooltip placement='bottom' title="Add Course Content">
+                      <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => createCourseContent(module)} icon={<PlusOutlined style={{ color: 'white' }} />}>
+                      </Button>
+                    </Tooltip>
                 </Popover>
-                  <Button className='noHover' type="primary" style={{ width: '50px' }} onClick={() => deleteModule(selectedCourse, module)} icon={<DeleteOutlined style={{ color: 'black' }} />}>
-                  </Button>
+                  <Tooltip placement='bottom' title="Delete Module">
+                    <Button className='noHover' type="primary" style={{ width: '50px', background: '#F34B4B' }} onClick={() => deleteModule(selectedCourse, module)} icon={<DeleteOutlined style={{ color: 'white' }} />}>
+                    </Button>
+                  </Tooltip>
                   {selectedModuleID === module.moduleID && <EditModuleModal isModalOpen={editModuleOpen} closeModal={closeEditModuleModal} ModuleName={module['moduleName']} moduleID={module['moduleID']} courseJSON = {selectedCourse}></EditModuleModal>}
                 </div>
               </div>
             }
             bordered={true}
           >
-          {module['content'].map((content: any) => (
-              displayContent(module, content)
-          ))}
+            <div className="flex flex-col gap-[1px] w-[100%] ">
+              {module['content'].map((content: any) => (
+                  displayContent(module, content)
+              ))}
+            </div>
           </Card>
         </div>
       </div>
@@ -298,53 +321,49 @@ function Edit_Course() {
 
   
   return (
-            <div>
-              <Typography.Title level={2} style={{ textAlign: 'left' }}>
-              <div className="flex flex-row justify-between">
-                <div className='dashboardText'>Edit Course</div>
-                <Link to={`/courses/${cid}`}>
-                  <Button type="primary" icon={<PlaySquareOutlined />}>
-                    Go to Course
-                  </Button>
-                </Link>
-                
-              </div>
-              </Typography.Title>
-              <div>
-              <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-                <Box
-                  sx={{
-                    width: 1,
-                    height: 75,
-                    borderRadius: 1,
-                    bgcolor: 'primary.main',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '2%',
-                    color: 'white'
-                  }}
-                >
-                  <Typography.Title level={3} style={{ textAlign: 'left' }}>
-                    <div className='dashboardText'>{selectedCourse['courseName']}</div>
-                    <div style={{fontSize:'15px'}}>{instructor}</div>
-                  </Typography.Title>
-                  <div style = {{display:'flex', gap: "2px"}}>
-                    <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
-                    </Button>
-                    <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
-                    </Button>
-                    <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
-                    </Button>
-                  </div>
-                </Box>
-              </ThemeProvider>
-              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse}></EditCourseModal>
-              <div>{listModules(selectedCourse)}</div>
-              </div>
-              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
+    <div>
+      <Typography.Title level={2} style={{ textAlign: 'left' }}>
+      <div className="flex flex-row justify-between">
+        <div style={{marginLeft: 10}} className='dashboardText'>Edit Course</div>
+        <Link to={`/courses/${cid}`}>
+          <Button type="primary" style={{background: '#F34B4B'}} icon={<PlaySquareOutlined />}>
+            Go to Course
+          </Button>
+        </Link>
+      </div>
+      </Typography.Title>
+      <div>
+        <Card>
+          <span className="flex flex-row justify-between">
+            <Typography.Title level={3} style={{ textAlign: 'left' }}>
+              <div style={{fontSize: '1.2em', fontFamily: 'Oswald'}}>{selectedCourse['courseName']}</div>
+              <div style={{fontSize:'1em', fontFamily: 'Oswald'}}>Instructor: {instructor}</div>
+            </Typography.Title>
+            <div style = {{ display:'flex', gap: "2px"}}>
+              <Tooltip placement='bottom' title="Edit Course Information">
+                <Button className='noHover' style={{ width: '50px', background: '#F34B4B' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'white' }} />}>
+                </Button>
+              </Tooltip>
+              <Tooltip placement='bottom' title="Add Users">
+                <Button className='noHover' style={{ width: '50px', background: '#F34B4B'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'white' }} />}>
+                </Button>
+              </Tooltip>
+              <Tooltip placement='bottom' title="Add New Module">
+                <Button className='noHover' style={{ width: '50px', background: '#F34B4B' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'white' }} />}>
+                </Button>
+              </Tooltip>
             </div>
             
+          </span>
+          <div>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
+              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
+          </div>
+          <div>{listModules(selectedCourse)}</div>
+        </Card>
+        </div>
+        </div>
+      
             
   )
 }

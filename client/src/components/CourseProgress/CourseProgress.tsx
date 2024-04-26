@@ -30,8 +30,8 @@ function CourseProgress() {
             key: i,
             label: (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>{completion.user.fullName}</span>
-                  <span>{completion.completion.filter(c => c.completed).length} / {completion.completion.length} Done</span> {/* Replace 'Extra Text' with your actual content */}
+                  <span style={{fontFamily: 'Oswald', fontSize:'1.2em'}}>{completion.user.fullName}</span>
+                  <span style={{fontFamily: 'Oswald', fontSize:'1.2em'}}>{completion.completion.filter(c => c.completed).length} / {completion.completion.length} Done</span> {/* Replace 'Extra Text' with your actual content */}
               </div>
           ),
             children: <CourseProgressTable courses={completion.completion}/>
@@ -40,8 +40,8 @@ function CourseProgress() {
 
   return (
    <div className='course-progress-container'>
-      <h1 style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>User Course Progress</h1>
-      <Card title="Users">
+      <h1 style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10, marginLeft: "1%", textAlign: "start", paddingBottom: 10}}>User Course Progress</h1>
+      <Card title=<span style={{fontFamily: 'Oswald', fontSize: '1.6em'}}>Users</span>>
       {loading ? (
           <Spin tip="Loading..." />
         ) : (

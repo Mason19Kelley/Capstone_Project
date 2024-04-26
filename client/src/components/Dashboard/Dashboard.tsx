@@ -1,6 +1,6 @@
 
 import './Dashboard.css'
-import { Card, ConfigProvider, Image, Typography } from 'antd';
+import { Card, Image, Typography } from 'antd';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Box, ThemeProvider } from '@mui/system';
 import Meta from 'antd/es/card/Meta';
@@ -9,13 +9,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Courses } from '../../models/courses.model';
 import { CourseAPI } from '../../api/CourseAPI';
 import { Link } from 'react-router-dom';
-
-const cards: string[] = [
-    'My Courses',
-    'Completed Courses',
-    'Certifications',
-    'Account'
-]
+import randomColor from 'randomcolor';
 
   // Here is where we create the cards
   interface CardProps {
@@ -29,15 +23,15 @@ const cards: string[] = [
     const boxTemplate = {
       width: 1,
       height:147,
-      borderRadius: 1,
-      bgcolor: 'gray'
+      borderRadius: "5px",
+      bgcolor: randomColor({luminosity: 'light'})
     };
   
     // Building the Actual card, obtaining the name and instructor
     return (
       <Link to={`/courses/${cid}`}>
-      <Card hoverable={true} style={{ width: 300 }} cover={ <Box sx={ boxTemplate } /> }>
-        <Meta title = { courseName } description= { instructor } />
+      <Card hoverable={true} className="course-card" cover={ <Box sx={ boxTemplate } /> }>
+        <Meta title = {<div className='cardText'>{ courseName }</div>} description= {<div className='cardText'>{instructor}</div> } />
       </Card>
       </Link>
     );
@@ -89,12 +83,7 @@ function Dashboard() {
           preview = {false}
         />
       </div>
-      <h1 style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
-      <div className='cards'>
-        <ConfigProvider theme={{ token: { fontFamily: "Mulish", fontSize: 30, paddingLG: 18 } }}>
-            {cards.map(card => <Card style={{width: '100%', minWidth: "202px"}} className="course-card"><Typography.Text>{card}</Typography.Text></Card>)}
-        </ConfigProvider>
-      </div>
+      <h1 style= {{color:'#0c2245', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>Dashboard</h1>
 
       <div className='learningDashboard'>
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>

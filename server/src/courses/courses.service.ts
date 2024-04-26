@@ -6,6 +6,7 @@ import { CourseCompletion } from './course-completion.entity';
 import { User } from 'src/users/user.entity';
 
 
+
 // logic for courses
 @Injectable()
 export class CoursesService {
@@ -14,6 +15,7 @@ export class CoursesService {
         private courseRepository: Repository<Courses>,
         @InjectRepository(CourseCompletion)
         private courseCompletionRepository: Repository<CourseCompletion>,
+        
     ) {}
 
     // get course by id
@@ -103,7 +105,6 @@ export class CoursesService {
             .set({ jsonInformation: courseJSON})
             .where("courseName = :courseName", { courseName: courseName })
             .execute();
-        console.log(updateCourse)
     }
 
     async getCourseCompletion(userId: number, courseId: number) {
@@ -281,13 +282,15 @@ export class CoursesService {
             ]
           }
 
+        
+
         if(courses > 0) return
 
         const coursesToSeed = [
-            { courseName: 'Cyber', instructor: 'Mason', jsonInformation: JSON.stringify(cyberInfo), organization_ID: 1 },
-            { courseName: 'OSHA', instructor: 'Abigail', jsonInformation: JSON.stringify(oshaInfo), organization_ID: 1 },
-            { courseName: 'Forklift', instructor: 'Jacob', jsonInformation: JSON.stringify(forkliftInfo),  organization_ID: 1 },
-            { courseName: 'Safety', instructor: 'Gabe', jsonInformation: JSON.stringify(SafetyInfo),  organization_ID: 2 },
+            { courseName: 'Cyber', instructor: "John Smith", jsonInformation: JSON.stringify(cyberInfo), organization_ID: 1 },
+            { courseName: 'OSHA', instructor: "Martha Johnson", jsonInformation: JSON.stringify(oshaInfo), organization_ID: 1 },
+            { courseName: 'Forklift', instructor: "John Smith", jsonInformation: JSON.stringify(forkliftInfo),  organization_ID: 1 },
+            { courseName: 'Safety', instructor: "Jacob Roberts", jsonInformation: JSON.stringify(SafetyInfo),  organization_ID: 2 },
         ];
 
         const voteEntities = this.courseRepository.create(coursesToSeed)

@@ -1,25 +1,27 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { FileAPI } from '../../api/FileAPI'; // Import your FileAPI
-import { Spin } from 'antd';
+import { FileAPI } from '../../api/FileAPI';
+import { Spin, Button } from 'antd';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 interface PDFViewerProps {
   fileName: string;
-  done: () => void
+  done: () => void;
 }
 
-export default function PDFViewer({ fileName, done }: PDFViewerProps) {
+const PDFViewer: React.FC<PDFViewerProps> = ({ fileName, done }) => {
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [scaleFactor, setScaleFactor] = useState<number>(1.0);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
 
   useEffect(() => {
-    const fetchPDF = async () => {
+    const fetchPDF = async (): Promise<void> => {
       try {
-        done()
-        const pdfBlob = await FileAPI.getFile(fileName);
+        done();
+        const pdfBlob: Blob = await FileAPI.getFile(fileName);
         setPdfFile(pdfBlob);
         setLoading(false);
       } catch (error) {
@@ -29,40 +31,61 @@ export default function PDFViewer({ fileName, done }: PDFViewerProps) {
 
     fetchPDF();
 
-    return () => {
-      // Cleanup function
-      setPdfFile(null);
-      setLoading(true);
+    
+    const handleResize = (): void => {
+      setContainerWidth(window.innerWidth * 0.69); 
     };
-  }, [fileName]);
+    handleResize(); 
+    window.addEventListener('resize', handleResize);
+    return (): void => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [fileName, done]);
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setPageCount(numPages);
-  }
+  };
 
-  const renderPages = () => {
-    if (pageCount) {
-      return Array.from(new Array(pageCount), (_, index) => (
-        <Page
-          key={`page_${index + 1}`}
-          pageNumber={index + 1}
-          renderTextLayer={false}
-        />
-      ));
-    } else {
-      return null;
-    }
+  const handleIncreaseScale = (): void => {
+    const newScaleFactor: number = scaleFactor + 0.25;
+    setScaleFactor(Math.min(newScaleFactor, 2.0)); 
+  };
+
+  const handleDecreaseScale = (): void => {
+    const newScaleFactor: number = scaleFactor - 0.25;
+    setScaleFactor(Math.max(newScaleFactor, 0.5)); 
   };
 
   return (
-    <div style={{ width: '1050px', height: '490px', overflow: 'auto' }}>
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
-          {renderPages()}
-        </Document>
-      )}
+    <div style={{ width: '100%', height: '100%', overflow: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+        <Button onClick={handleDecreaseScale}>-</Button>
+        <span style={{ margin: '0 16px' }}>Size: {scaleFactor}</span>
+        <Button onClick={handleIncreaseScale}>+</Button>
+      </div>
+      <div style={{ maxWidth: '90%', maxHeight: '60vh', overflow: 'auto' }}>
+        {loading ? (
+          <Spin size="large" />
+        ) : (
+          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
+            {pageCount && Array.from(new Array(pageCount), (_, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                renderTextLayer={false}
+                width={containerWidth * scaleFactor}
+                renderAnnotationLayer={false}
+              />
+            ))}
+          </Document>
+        )}
+      </div>
     </div>
   );
-}
+  
+};
+
+export default PDFViewer;
+
+
+

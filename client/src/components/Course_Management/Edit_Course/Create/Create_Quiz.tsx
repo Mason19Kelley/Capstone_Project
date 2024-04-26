@@ -18,14 +18,15 @@ interface QuizInterface {
             Incorrect: string[];
         }
     }[];
+    Description: string;
 }
 
 const CreateQuiz: React.FC = () => {
-    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", QuizID: '', Questions: [] });
+    const [quiz, setQuiz] = useState<QuizInterface | null>({ QuizName: "Test Quiz", QuizID: '', Questions: [], Description: ''});
     const [questionInputs, setQuestionInputs] = useState<string[]>(['']);
     const { contentID, courseName } = useContext(contentContext);
     const {user,  setEditCourseContext } = useContext(AuthContext)
-
+    const [description, setDescription] = useState<string>('');
 
     const addQuestion = () => {
         
@@ -87,7 +88,7 @@ const CreateQuiz: React.FC = () => {
         if (!quiz) return;
         // Call your API function here with the quiz state
         try{
-            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0);
+            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0, description);
         message.success('Quiz saved successfully');
         setTimeout(() => {
             setEditCourseContext('Edit_Course');
@@ -98,25 +99,61 @@ const CreateQuiz: React.FC = () => {
         }
     }
 
+    const deleteQuestion = (index: number) => {
+        setQuiz(prevState => {
+            if (!prevState) return prevState;
+            const updatedQuestions = prevState.Questions.filter((_, i) => i !== index);
+            return {
+                ...prevState,
+                Questions: updatedQuestions
+            };
+        });
+        setQuestionInputs(prevInputs => {
+            const updatedInputs = [...prevInputs];
+            updatedInputs.splice(index * 5, 5);
+            return updatedInputs;
+        });
+    }
+    
+
     return (
         <div>
-            <Card>
-                <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, QuizID: '', Questions: [] }))} />
-                <Button onClick={addQuestion}>Add Question</Button>
+            <Card style={{ marginBottom: 10, background: '#D0E2F0', borderBlockWidth: '1vw', borderBlockColor: '#B1D0E7',}}>
+                <div className='flex flex-col'>
+                    <span style={{fontFamily: 'Oswald', fontSize: '1.6em', marginBottom: '2%'}} className='font-semibold text-base text-start w-[100%]'>Quiz Title</span>
+                <Input 
+                placeholder="Quiz Name" 
+                value={quiz?.QuizName} 
+                onChange={(e) => setQuiz((prevState: QuizInterface | null) => ({ ...prevState!, QuizName: e.target.value, QuizID: '', Questions: prevState?.Questions || [], Description: description }))} 
+                />
+                <span style={{fontFamily: 'Oswald', fontSize: '1.6em', marginBottom: '2%', marginTop: '2%'}} className='font-semibold text-base text-start w-[100%]'>Description</span>
+                <Input 
+                        placeholder="Description" 
+                        allowClear 
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    >
+                </Input>
+                </div>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
-                    <Card title={`Question ${index + 1}`}>
-                        <Input placeholder="Question" value={questionInputs[index * 5]} onChange={(e) => handleQuestionInputChange(index * 5, e.target.value)} />
-                        <Input placeholder="Correct Answer" value={questionInputs[index * 5 + 1]} onChange={(e) => handleQuestionInputChange(index * 5 + 1, e.target.value)} />
-                        <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 2]} onChange={(e) => handleQuestionInputChange(index * 5 + 2, e.target.value)} />
-                        <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 3]} onChange={(e) => handleQuestionInputChange(index * 5 + 3, e.target.value)} />
-                        <Input placeholder="Incorrect Answer" value={questionInputs[index * 5 + 4]} onChange={(e) => handleQuestionInputChange(index * 5 + 4, e.target.value)} />
+                    <Card style={{marginBottom: 10, borderBlockWidth: '1vw', borderBlockColor: '#ECECEC', background: '#F5F5F5' }}
+                     title=<span style={{fontFamily: 'Oswald', fontSize: '1.5em'}}>{`Question ${index + 1}`}</span>>
+                        <Input style={{marginBottom: 15, height: '3em'}} placeholder="Question" value={questionInputs[index * 5]} onChange={(e) => handleQuestionInputChange(index * 5, e.target.value)} />
+                        <Input style={{marginBottom: 3}} placeholder="Correct Answer" value={questionInputs[index * 5 + 1]} onChange={(e) => handleQuestionInputChange(index * 5 + 1, e.target.value)} />
+                        <Input style={{marginBottom: 3}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 2]} onChange={(e) => handleQuestionInputChange(index * 5 + 2, e.target.value)} />
+                        <Input style={{marginBottom: 3}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 3]} onChange={(e) => handleQuestionInputChange(index * 5 + 3, e.target.value)} />
+                        <Input style={{marginBottom: 15}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 4]} onChange={(e) => handleQuestionInputChange(index * 5 + 4, e.target.value)} />
+                        <Button style={{background: '#F34B4B', color: 'white'}} onClick={() => deleteQuestion(index)}>Delete</Button>
                     </Card>
                 </div>
             ))}
-            <div>
-                <Button onClick={saveQuiz}>Save</Button>
+
+            <div style={{marginBottom: -60, marginTop: -40}}>
+            <Button style={{background: '#F34B4B', color: 'white'}} onClick={addQuestion}>Add Question</Button>
+            </div><div>
+                <Button style={{background: '#F34B4B', color: 'white'}} onClick={saveQuiz}>Save</Button>
             </div>
         </div>
     );
