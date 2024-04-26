@@ -4,7 +4,7 @@ import { Avatar, Layout, Menu, MenuProps } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 import headerImg from '../../assets/Dashboard/DashboardHeader.png'
-import { UserOutlined, TeamOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
@@ -42,7 +42,7 @@ const siderStyle: React.CSSProperties = {
 
 
 function EditCourse() {
-  const {user,  EditCourseContext } = useContext(AuthContext)
+  const {user,  EditCourseContext, setEditCourseContext } = useContext(AuthContext)
   const { fullName } = user || {};
   const { setPage } = useContext(PageContext)
 
@@ -66,16 +66,23 @@ function EditCourse() {
     } as MenuItem;
   }
 
+
   const items: MenuProps['items'] = [
-    getItem('Home', 'Dashboard', <TeamOutlined />)
+    getItem('Home', 'Dashboard', <TeamOutlined />),
+    getItem('Back', 'Edit_Course', <RollbackOutlined />)
   ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    setPage(key);
-    navigate('/home')
+    if(key === 'Dashboard'){
+      setPage(key)
+      navigate('/home')
+    } 
+    if(key === 'Edit_Course') setEditCourseContext('Edit_Course')
+    if (EditCourseContext === 'Edit_Course') navigate('/home')
   };
 
   const renderPage = () => {
+    console.log(EditCourseContext)
 
     switch (EditCourseContext) {
       case 'Edit_Course':

@@ -121,7 +121,7 @@ function Create_Media() {
               Support for a single upload. Strictly prohibited from uploading company data or other banned files.
             </p>
             <p className="ant-upload-hint" style={{color: 'red'}}>
-              Supported formats: mp4, mkv, pdf
+              Supported formats: mp4, pdf
               </p>
           </Upload>
           <p style={{fontFamily: 'Oswald', fontSize: '1.3em', marginTop: 25, marginBottom: 10}}>Description:</p>

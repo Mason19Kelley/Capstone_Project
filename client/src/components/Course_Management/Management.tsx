@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { CourseAPI } from '../../api/CourseAPI';
 import { AuthContext } from '../../context/AuthContext';
-import { v4 as uuidv4 } from 'uuid';
 
 interface course {
   courseName : string,
@@ -124,18 +123,7 @@ function Management () {
       <h1 className='self-start course-m pb-3' style= {{color:'#0c2245', fontFamily: 'Playfair-Display', paddingTop: 10}}>Course Management</h1>
       <div className='courses ml-[1%] mr-[1%]'>
         <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-          <Card
-            // sx={{
-            //   width: 1,
-            //   height: 75,
-            //   borderRadius: 1,
-            //   bgcolor: 'primary.main',
-            //   display: 'flex',
-            //   justifyContent: 'space-between',
-            //   alignItems: 'center',
-            //   padding: '2%',
-            // }}
-          >
+          <Card>
             <div className='flex flex-row justify-between'>
             <Typography.Title level={3} style={{ textAlign: 'left' }}>
               <div className='dashboardText'>Courses</div>
@@ -147,9 +135,7 @@ function Management () {
             </div>
             <div>{cards()}</div>
           </Card>
-          
           </ThemeProvider>
-          
         </div>
     </div>
   )

@@ -5,9 +5,6 @@ import { CourseAPI } from '../../../../api/CourseAPI';
 import { AuthContext } from '../../../../context/AuthContext';
 import { DeleteOutlined } from '@ant-design/icons';
 import { FileAPI } from '../../../../api/FileAPI';
-import { json } from 'react-router-dom';
-
-
 
 function Edit_Media() {
     const { contentID } = useContext(contentContext);
@@ -138,9 +135,12 @@ function Edit_Media() {
                 }
             >
                 <div>
-                    Description: <Input value={description} onChange={handleDescriptionChange} />
-                    <Button onClick={updateContent}>Update</Button>
+                <span style={{fontFamily: 'Oswald', fontSize: '1.6em', }} className='font-semibold text-base text-start w-[100%]'>Description</span> 
+                    <Input  style={{marginTop: '2%'}} value={description} onChange={handleDescriptionChange} />
                 </div>
+                <div>
+                    <Button style={{background: '#F34B4B', color: 'white', marginTop: '2%'}} onClick={updateContent}>Update</Button>
+                </div>    
             </Card>
         </div>
     );

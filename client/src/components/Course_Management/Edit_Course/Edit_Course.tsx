@@ -339,7 +339,7 @@ function Edit_Course() {
               <div style={{fontSize: '1.2em', fontFamily: 'Oswald'}}>{selectedCourse['courseName']}</div>
               <div style={{fontSize:'1em', fontFamily: 'Oswald'}}>Instructor: {instructor}</div>
             </Typography.Title>
-            <div style = {{display:'flex', gap: "2px"}}>
+            <div style = {{ display:'flex', gap: "2px"}}>
               <Tooltip placement='bottom' title="Edit Course Information">
                 <Button className='noHover' style={{ width: '50px', background: '#F34B4B' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'white' }} />}>
                 </Button>
@@ -353,58 +353,17 @@ function Edit_Course() {
                 </Button>
               </Tooltip>
             </div>
-            <div>
-              <Typography.Title level={2} style={{ textAlign: 'left' }}>
-              <div className="flex flex-row justify-between">
-                <div className='dashboardText'>Edit Course</div>
-                <Link to={`/courses/${cid}`}>
-                  <Button type="primary" icon={<PlaySquareOutlined />}>
-                    Go to Course
-                  </Button>
-                </Link>
-                
-              </div>
-              </Typography.Title>
-              <div>
-              <ThemeProvider theme={{ palette: {primary: {main: 'white'}}}}>
-                <Card>
-                  <div className="flex justify-between">
-                    <Typography.Title level={3} style={{ textAlign: 'left' }}>
-                      <div className='dashboardText'>{selectedCourse['courseName']}</div>
-                      <div style={{fontSize:'15px'}}>Instructor: {instructor}</div>
-                    </Typography.Title>
-                    <div style = {{display:'flex', gap: "2px"}}>
-                      <Tooltip placement='bottom' title="Edit Course Information">
-                        <Button className='noHover' style={{ width: '50px' }} onClick={() => EditCourseInformation()} icon={<EditOutlined style={{ color: 'black' }} />}>
-                        </Button>
-                      </Tooltip>
-                      <Tooltip placement='bottom' title="Add Users">
-                        <Button className='noHover' style={{ width: '50px'  }} onClick={() => openAddUserModal()} icon={<UserAddOutlined style={{ color: 'black' }} />}>
-                        </Button>
-                      </Tooltip>
-                      <Tooltip placement='bottom' title="Add New Module">
-                        <Button className='noHover' style={{ width: '50px' }} onClick={() => addModule()} icon={<PlusOutlined style={{ color: 'black' }} />}>
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </div>
-                  <div>{listModules(selectedCourse)}</div>
-                </Card>
-              </ThemeProvider>
-              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
-
-              </div>
-              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
-            </div>
+            
           </span>
+          <div>
+              <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
+              <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
+          </div>
           <div>{listModules(selectedCourse)}</div>
         </Card>
-      <EditCourseModal isModalOpen={editCourseOpen} closeModal={closeEditModal} courseName={selectedCourse['courseName']} instructorName={instructor} courseJSON = {selectedCourse} orgId={user?.organization?.id}></EditCourseModal>
-
-      </div>
-      <AddUserModal closeModal={closeAddUserModal} isModalOpen={isAddUserModalOpen} selectedCourse={selectedCourse.courseName} orgId={user?.organization?.id}></AddUserModal>
-    </div>
-    
+        </div>
+        </div>
+      
             
   )
 }

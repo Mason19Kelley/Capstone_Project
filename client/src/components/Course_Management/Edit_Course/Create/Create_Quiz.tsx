@@ -125,8 +125,15 @@ const CreateQuiz: React.FC = () => {
                 placeholder="Quiz Name" 
                 value={quiz?.QuizName} 
                 onChange={(e) => setQuiz((prevState: QuizInterface | null) => ({ ...prevState!, QuizName: e.target.value, QuizID: '', Questions: prevState?.Questions || [], Description: description }))} 
-            />
-
+                />
+                <span style={{fontFamily: 'Oswald', fontSize: '1.6em', marginBottom: '2%', marginTop: '2%'}} className='font-semibold text-base text-start w-[100%]'>Description</span>
+                <Input 
+                        placeholder="Description" 
+                        allowClear 
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    >
+                </Input>
                 </div>
             </Card>
             {quiz && quiz.Questions.map((_question, index) => (
@@ -138,23 +145,10 @@ const CreateQuiz: React.FC = () => {
                         <Input style={{marginBottom: 3}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 2]} onChange={(e) => handleQuestionInputChange(index * 5 + 2, e.target.value)} />
                         <Input style={{marginBottom: 3}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 3]} onChange={(e) => handleQuestionInputChange(index * 5 + 3, e.target.value)} />
                         <Input style={{marginBottom: 15}} placeholder="Incorrect Answer" value={questionInputs[index * 5 + 4]} onChange={(e) => handleQuestionInputChange(index * 5 + 4, e.target.value)} />
-                        <Button onClick={() => deleteQuestion(index)}>Delete</Button>
+                        <Button style={{background: '#F34B4B', color: 'white'}} onClick={() => deleteQuestion(index)}>Delete</Button>
                     </Card>
                 </div>
             ))}
-            
-            <div>
-                <Card>
-                    Description: 
-                    <Input 
-                        placeholder="Description" 
-                        allowClear 
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    >
-                    </Input>
-                </Card>
-            </div>
 
             <div style={{marginBottom: -60, marginTop: -40}}>
             <Button style={{background: '#F34B4B', color: 'white'}} onClick={addQuestion}>Add Question</Button>

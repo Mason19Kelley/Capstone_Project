@@ -173,9 +173,22 @@ function Edit_Quiz() {
                 <div className='flex flex-col'>
                     <span style={{fontFamily: 'Oswald', fontSize: '1.6em', marginBottom: '2%'}} className='font-semibold text-base text-start w-[100%]'>Quiz Title</span>
                     <Input placeholder="Quiz Name" value={quiz?.QuizName} onChange={(e) => setQuiz(prevState => ({ ...prevState, QuizName: e.target.value, Questions: prevState?.Questions || [], Description: description }))} />
-                    <Button onClick={addQuestion}>Add Question</Button>
-                </div>
-            </Card>
+                    <span style={{fontFamily: 'Oswald', fontSize: '1.6em', marginBottom: '2%', marginTop: '2%'}} className='font-semibold text-base text-start w-[100%]'>Description</span>
+                    <Input 
+                        placeholder="Description" 
+                        allowClear 
+                        value={description}
+                        onChange={(e) => {
+                            setDescription(e.target.value);
+                            setQuiz((prevState: QuizInterface | null) => ({
+                                ...prevState!,
+                                Description: e.target.value,
+                                QuizName: prevState?.QuizName || '', // Ensure QuizName is included
+                            }));
+                        }}
+                    />
+                    </div>
+                </Card>
             {quiz && quiz.Questions.map((_question, index) => (
                 <div key={index}>
                     <Card style={{marginBottom: 10, borderBlockWidth: '1vw', borderBlockColor: '#ECECEC', background: '#F5F5F5' }}
@@ -193,26 +206,6 @@ function Edit_Quiz() {
             <Button style={{background: '#F34B4B', color: 'white'}} onClick={addQuestion}>Add Question</Button>
             </div><div>
                 <Button style={{background: '#F34B4B', color: 'white'}} onClick={saveQuiz}>Save</Button>
-            <div>
-
-            <Card>
-                    Description: 
-                    <Input 
-                        placeholder="Description" 
-                        allowClear 
-                        value={description}
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                            setQuiz((prevState: QuizInterface | null) => ({
-                                ...prevState!,
-                                Description: e.target.value,
-                                QuizName: prevState?.QuizName || '', // Ensure QuizName is included
-                            }));
-                        }}
-                    />
-                </Card>
-                <Button onClick={saveQuiz}>Save</Button>
-            </div>
         </div>
         </div>
     );
