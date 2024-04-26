@@ -4,7 +4,6 @@ import { Link, useParams } from 'react-router-dom';
 import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext';
-import { Box, ThemeProvider } from '@mui/system'
 import { CourseAPI } from '../../../api/CourseAPI';
 import EditCourseModal from '../../modals/EditCourseModal/EditCourseModal';
 import { v4 as uuidv4 } from 'uuid';

@@ -54,14 +54,14 @@ function Edit_Media() {
     };
 
     //pulls description from the json 
-    const pullInformation = () => {
-        const description = getInformation(jsonInformation.modules, information.content, information.module);
-        return (
-            <div style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>
-                Description: {description ? description.Description : 'Description not found.'}
-            </div>
-        );
-    }
+    // const pullInformation = () => {
+    //     const description = getInformation(jsonInformation.modules, information.content, information.module);
+    //     return (
+    //         <div style={{fontFamily: 'Oswald', fontSize: '1.3em'}}>
+    //             Description: {description ? description.Description : 'Description not found.'}
+    //         </div>
+    //     );
+    // }
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(e.target.value);
     };

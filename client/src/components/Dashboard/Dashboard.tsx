@@ -98,7 +98,7 @@ function Dashboard() {
               Learning Dashboard
               </div>
             </Typography.Title>
-            <div className='test-card'>{Coursecards.map(c => <Box>{c}</Box>)}</div>
+            <div className='test-card'>{Coursecards.map(c => <Box className="mb-1">{c}</Box>)}</div>
           </Box>
         </ThemeProvider>
       </div>
