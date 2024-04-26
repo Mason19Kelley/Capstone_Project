@@ -27,7 +27,7 @@ const ForgetPass: React.FC = () => {
         <div className='link'><Link to={'/login'}><ArrowLeftOutlined style={{color:'white'}}/></Link></div>
         <div className="form-value">
           <form onSubmit={handleSubmit}>
-            <h2>Forgot Password?</h2>
+            <h2 style={{fontFamily: 'Oswald'}} >Forgot Password?</h2>
             <div className="inputbox">
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
               <label>Enter your email</label>

@@ -55,6 +55,7 @@ const LoginPage: React.FC = () => {
         setLoggedIn(true)
         setUser(response.user)
         setOrganization(response.user.organization?.orgName || null)
+        setPage('Dashboard')
         navigate("/home")
       })
       .catch(error => {
@@ -78,6 +79,9 @@ const LoginPage: React.FC = () => {
       return (<Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />)
     }else {
       return (<section className="login-box">
+        <div className='brand' style={{color: '#0c2245',marginTop: -100, marginBottom: 100, fontSize: '3em'}}>
+          Surge
+        </div>
       <div className="form-box">
         <div className="form-value">
           <form onSubmit={handleSubmit}>
@@ -100,7 +104,7 @@ const LoginPage: React.FC = () => {
             </div>
             <button className="login-button" type="submit" >Login</button>
             <div className="register">
-              <p>
+              <p style={{fontFamily: 'Oswald', fontSize: '1.1em'}}>
                 Don't have an account ? <Link to="/createorg">Register</Link>
               </p>
             </div>

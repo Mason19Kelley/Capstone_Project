@@ -10,17 +10,17 @@ function CourseProgressTable(props: {courses: Completion[]}) {
     const [dataSource, setDataSource] = useState<object[]>([])
     const columns = [
         {
-          title: 'Course',
+          title: <span style={{fontFamily: 'Oswald', fontSize:'1.3em'}}>Course</span>,
           dataIndex: 'course',
           key: 'course',
         },
         {
-          title: 'Modules Completed',
+          title: <span style={{fontFamily: 'Oswald', fontSize:'1.3em'}}>Modules Completed</span>,
           dataIndex: 'modules',
           key: 'modules',
         },
         {
-          title: 'Content Completed',
+          title: <span style={{fontFamily: 'Oswald', fontSize:'1.3em'}}>Content Completed</span>,
           dataIndex: 'content',
           key: 'content',
         },
@@ -29,9 +29,9 @@ function CourseProgressTable(props: {courses: Completion[]}) {
   useEffect(() => {
     setDataSource(props.courses.map((course, i) => ({
         key: i,
-        course: course.courseName,
-        modules: `${course.moduleCompleted} / ${course.totalModules}`,
-        content: course.completed ? '-/-' : `${course.contentCompleted} / ${course.totalContent}`,
+        course: <span style={{fontFamily: 'Oswald', fontSize:'1.2em'}}>{course.courseName}</span>,
+        modules: <span style={{fontFamily: 'Oswald', fontSize:'1.2em'}}>{course.moduleCompleted} / {course.totalModules}</span>,
+        content: <span style={{fontFamily: 'Oswald', fontSize:'1.2em'}}>{course.contentCompleted} / {course.totalContent}</span>,
         completed: course.completed,
     })))
   }, [props.courses])

@@ -3,7 +3,7 @@ import './HomePage.css'
 import { Avatar, Layout, Menu, MenuProps, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import { HomeOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, TeamOutlined, SettingOutlined, CheckOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, LogoutOutlined, TeamOutlined, SettingOutlined, CheckOutlined } from '@ant-design/icons';
 import { useContext } from 'react'
 import Dashboard from '../../components/Dashboard/Dashboard';
 import { AuthContext } from '../../context/AuthContext';
@@ -13,9 +13,6 @@ import Management from '../../components/Course_Management/Management';
 import EditCourse from '../EditPage/Editcourse';
 import { PageContext } from '../../context/PageContext';
 import CourseProgress from '../../components/CourseProgress/CourseProgress';
-
-
-
 
 const layoutStyle = {
   width: '100%',
@@ -37,21 +34,11 @@ const siderStyle: React.CSSProperties = {
   textAlign: 'center',
   lineHeight: '120px',
   color: '#fff',
-  backgroundColor: '#002F8B',
+  backgroundColor: '#4A7EE6',
   width: '17%', 
   minWidth: "215px",
   overflowY: 'auto', 
 };
-
-// Seeding the courses into the user (TODO: seed this in seed file
-// function seedCourses(id: number | undefined) {
-//   // created for testing purposes, inserting user into courses
-//   if(id != undefined) {
-//     CourseAPI.insertUser(2, id ?? 0)
-//     CourseAPI.insertUser(1, id ?? 0)
-//     CourseAPI.insertUser(3, id ?? 0)
-//   }
-// }
 
 function HomePage() {
   const { page, setPage} = useContext(PageContext);
@@ -107,7 +94,7 @@ function HomePage() {
       key,
       icon,
       children,
-      label,
+      label: <span style={{fontFamily: 'Oswald'}}>{label}</span>,
       type,
     } as MenuItem;
   }
@@ -129,20 +116,22 @@ function HomePage() {
               </Typography.Title>
             </div>
             <div className="user">
-              <Avatar style={{backgroundColor: '#3e74c9'}} size={160} icon={<UserOutlined />} />
-              <Typography.Title level={3} style={{ color: 'white' }}>
+              <Avatar style={{backgroundColor: '#A4BFE8'}} size={160} icon={<UserOutlined />} />
+              <Typography.Title level={3} style={{ color: '#0c2245', paddingTop: '15px' }}>
                 <div className='emName'>
                   { fullName }
                 </div>
               </Typography.Title>
             </div>
+            <div className='sideMenu'>
             <Menu
-              style={{ width: '100%', backgroundColor: '#002F8B' }}
+              style={{ width: '100%', backgroundColor: '#4A7EE6', fontSize: '125%'}}
               defaultSelectedKeys={['Dashboard']}
               mode="vertical"
               onClick={handleMenuClick}
               items={items}
             />
+            </div>
           </Sider>
           <Content style={contentStyle}>
             {renderPage()}
