@@ -139,13 +139,15 @@ function Edit_Quiz() {
         try {
             const updatedModules = jsonInformation.modules.map((module: { content: any[]; }) => {
                 const updatedContent = module.content.map((content): any => { // Add return type annotation 'any'
-                    if (contentID === quiz?.QuizID) {
+                    if (contentID === content.quizID) {
                         return { ...content, fileName: quiz.QuizName, Description: description };
                     }
                     return content;
                 });
                 return { ...module, content: updatedContent };
             });
+
+            console.log(updatedModules)
             setJsonInformation({ ...jsonInformation, modules: updatedModules });
             setUpdate(true);
 
