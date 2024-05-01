@@ -66,7 +66,6 @@ function Edit_Course() {
   const [selectedModuleID, setSelectedModuleID] = useState(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
-   console.log(selectedCourse)
 
     uniqueID = uuidv4();
       const tempModule = {
@@ -141,9 +140,20 @@ function Edit_Course() {
     setSelectedModuleID(module.moduleID)
     setEditModuleOpen(true);
    }
-   const closeEditModuleModal = () => {
+   const closeEditModuleModal = (newModuleName?: string) => {
+    if(newModuleName){
+      setselectedCourse(({
+        ...selectedCourse,
+         modules: selectedCourse.modules.map(module => {
+           if (module.moduleID === selectedModuleID) {
+             return {...module, moduleName: newModuleName };
+           }
+           return module;
+         }),
+       }));
+    }
     setEditModuleOpen(false);
-   };
+  };
 
    // function that changes the context to create media component
   const createMedia= (module: any) => {
