@@ -102,6 +102,11 @@ function Dashboard() {
           </Box>
         </ThemeProvider>
       </div>
+      <button className='createCourseButton'>
+        <Link to='/courseCompletion/Cyber/1'>
+          Create Course
+        </Link>
+      </button>
     </div>
     
   )

@@ -10,7 +10,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import EditCourse from './pages/EditPage/Editcourse';
 import CoursePage from './pages/CoursePage/CoursePage';
 import CourseModule from './pages/CourseModule/CourseModule';
-//import PrivateRoute from './PrivateRoute'
+import CourseCompletion from './pages/CourseCompletion/CourseCompletion';
 
 
 
@@ -46,14 +46,11 @@ const AppRoutes: React.FC = () => {
         </ProtectedRoute>
       
       } />
-      {/* <Route path="/courseCompletion" element={
+      <Route path="/courseCompletion/:courseName/:id" element={
         <ProtectedRoute>
-          <AdminRoute>
-            <h1>Hello</h1>
-          </AdminRoute>
+          <CourseCompletion />
         </ProtectedRoute>
-      
-      } /> */}
+      } />
 
     </Routes>
   );

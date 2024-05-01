@@ -49,9 +49,12 @@ const CourseModule: React.FC = () => {
     CourseAPI.getCourses(+(courseId ?? -1)).then(response => {
       const data: Course = JSON.parse(response.jsonInformation);
       setCourseJson(data)
+      console.log(data)
       CourseAPI.getCourseCompletion(user?.id ?? -1, +(courseId ?? '-1')).then(response => {
-        if((response.moduleCompleted ?? 0) >= (data?.modules.length ?? 1000)){
-          navigate('/home')
+        if(response.moduleCompleted ?? 0 >= (courseJson?.modules.length ?? 1000)){
+          const name = data.courseName;
+          const id = courseId;
+          navigate(`/courseCompletion/${name}/${id}`);
         }
         setCurrentModuleIndex(response.moduleCompleted ?? 0)
         setCurrentStep(response.contentCompleted ?? 0)
