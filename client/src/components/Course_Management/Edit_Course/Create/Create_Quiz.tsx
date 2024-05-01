@@ -87,12 +87,17 @@ const CreateQuiz: React.FC = () => {
         console.log("Save Quiz clicked");
         if (!quiz) return;
         // Call your API function here with the quiz state
-        try{
-            QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0, description);
-        message.success('Quiz saved successfully');
-        setTimeout(() => {
-            setEditCourseContext('Edit_Course');
-            }, 500);
+        try {
+            console.log(description);
+            if (description !== '') {
+                QuizAPI.saveQuiz(quiz, courseName, contentID, user?.organization?.id ?? 0, description);
+                message.success('Quiz saved successfully');
+                setTimeout(() => {
+                    setEditCourseContext('Edit_Course');
+                }, 500);
+            }else{
+                message.error('Please enter a description');
+            }
         }
         catch (error) {
             message.error('Failed to save quiz');
