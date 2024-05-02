@@ -52,7 +52,7 @@ export const CourseAPI = {
 
     //used to a delete course
     deleteCourse: async (course: string) => {
-        const { data } = await api.post(`/courses/deleteCourse/${course}`);
+        const { data } = await api.post(`/users/deleteCourse/${course}`);
         return data
     },
 

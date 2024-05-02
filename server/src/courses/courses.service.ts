@@ -68,9 +68,8 @@ export class CoursesService {
         return users
     }
 
-    // delete course
-    deleteCourse(course: string) {
-        return this.courseRepository.delete({courseName: course})
+    deleteCourse(course: Courses) {
+        return this.courseRepository.delete(course)
     }
 
     // update course name and instructor name

@@ -64,6 +64,28 @@ export class UsersService {
     
 }
 
+  // delete course
+  async deleteCourse(courseName: string) {
+
+    const course = await this.courseService.findCourseByName(courseName)
+
+    if (!course) {
+        throw new Error(`Course with name ${courseName} not found.`);
+    }
+
+    // Remove the association between the course and its users
+    for (const user of course.users) {
+        course.users = []
+    }
+    console.log(course)
+    return this.courseService.deleteCourse(course)
+  }
+
+async removeFromMany(user: User, course: Courses): Promise<void> {
+  user.courses = user.courses.filter((c) => c.cid!== course.cid);
+  await this.usersRepository.save(user);
+}
+
   // insert user into course
   async insertUserInCourse(cid: number, id: number) {
     const user = await this.usersRepository.findOne({relations: ['courses'], where: {id: id}});

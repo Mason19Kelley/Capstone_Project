@@ -24,7 +24,7 @@ import randomColor from 'randomcolor';
       width: 1,
       height:147,
       borderRadius: "5px",
-      bgcolor: randomColor({luminosity: 'light'})
+      bgcolor: randomColor({luminosity: 'light', seed: cid})
     };
   
     // Building the Actual card, obtaining the name and instructor
