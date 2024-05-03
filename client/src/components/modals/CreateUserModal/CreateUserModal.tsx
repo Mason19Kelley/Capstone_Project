@@ -18,6 +18,7 @@ function EditUserModal(props: { closeModal: () => void; isModalOpen: boolean | u
       setFullName("");
       setEmail("");
       setRole("");
+      setLoading(false)
     }
  }, [props.isModalOpen]);
 
