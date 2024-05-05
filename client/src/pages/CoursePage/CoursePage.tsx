@@ -113,7 +113,7 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
   };
 
   if (inner && mIndex != undefined){
-    const moduleContent = jsonInfo?.modules[mIndex].content[index];
+    const moduleContent = jsonInfo?.modules[mIndex]?.content[index];
     const moduleName = moduleContent?.fileName || "Default";
 
     const handleClickWrapper = () => {
@@ -146,13 +146,13 @@ function generateModule(inner: boolean, index: number, jsonInfo: course | undefi
       }
   } else {
     const cards: JSX.Element[] = [];
-    if(jsonInfo?.modules[index].content.length || 1 > 0){
-      for (let ind = 0; ind < (jsonInfo?.modules[index].content.length || 1); ind++){
+    if(jsonInfo?.modules[index]?.content?.length || 1 > 0){
+      for (let ind = 0; ind < (jsonInfo?.modules[index]?.content?.length || 1); ind++){
         cards.push(generateModule(true, ind, jsonInfo, index))
       }
     }
     return(
-      <Card title=<span style={moduleFontStyle}>{jsonInfo?.modules[index].moduleName}</span> style={outerStyle} >
+      <Card title=<span style={moduleFontStyle}>{jsonInfo?.modules[index]?.moduleName}</span> style={outerStyle} >
         {cards.map(card => <div>{card}</div>)}
       </Card>
     )
@@ -164,7 +164,7 @@ function createModule(jsonInfo: course | undefined): JSX.Element[] {
   innerModules = [];
   const cards: JSX.Element[] = [];
 
-  for (let index = 0; index < (jsonInfo?.modules.length || 1); index++){
+  for (let index = 0; index < (jsonInfo?.modules?.length || 1); index++){
     cards.push(generateModule(false, index, jsonInfo))
   }
 
@@ -181,16 +181,22 @@ const CoursePage: React.FC = () => {
   const { user } = useContext(AuthContext)
   const { setPage } = useContext(PageContext)
   const { setCurrentStep } = useContext(StepContext)
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
   const navigate = useNavigate()
 
   useEffect(() => {
     if(id){
       CourseAPI.getCourses(parseInt(id || '')).then((data: any) => {
-        const jsonInformation = JSON.parse(data['jsonInformation']);
-        setInstructor(data['instructor']);
-        setcourseName(data['courseName']);
-        setselectedCourse(jsonInformation);
+        CourseAPI.getCourseCompletion(user?.id ?? -1, +id ?? -1).then((response: any) => {
+          const jsonInformation = JSON.parse(data['jsonInformation']);
+          setIsCompleted(response.moduleCompleted === jsonInformation.modules.length)
+          console.log(response.moduleCompleted === jsonInformation.modules.length)
+          setInstructor(data['instructor']);
+          setcourseName(data['courseName']);
+          setselectedCourse(jsonInformation);
+        })
+        
       })
     }
   }, [id])
@@ -280,15 +286,16 @@ const CoursePage: React.FC = () => {
           background: colorBgContainer,
           borderRadius: borderRadiusLG,
         }}
+        className="w-[98%] ml-[1%] mr-[2%]"
       >
       <div className="flex flex-row justify-between">
         <h2 style={{color: 'black', fontFamily: 'Playfair-Display', paddingLeft: '1vw', paddingBottom: '2vh', textAlign: "left"}}>
           Taught by: {instructor}
         </h2>
         <Link to={`/courseModule/${id}`}>
-          <Tooltip placement="bottom" title='Start Course'>
-            <Button style={{background: '#F34B4B'}}onClick={handleContenClick} type="primary" icon={<PlaySquareOutlined />}>
-              Go to start
+          <Tooltip placement="bottom" title={isCompleted ? "" : 'Start Course'}>
+            <Button style={{background: '#F34B4B'}}onClick={handleContenClick} type="primary" icon={isCompleted ? <></> : <PlaySquareOutlined />} disabled={isCompleted}>
+              {isCompleted ? 'Course Already Completed' : 'Go to start'}
           </Button>
           </Tooltip>
         </Link>
