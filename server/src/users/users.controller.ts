@@ -4,13 +4,14 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateUser } from './UpdateUser.model';
 import { Courses } from 'src/courses/courses.entity';
+import { CoursesService } from 'src/courses/courses.service';
 
 @ApiTags('users')
 @Controller('users')
 @ApiBearerAuth()
 export class UsersController {
 
-    constructor(private usersService: UsersService) {}
+    constructor(private usersService: UsersService, private courseService: CoursesService) {}
 
     @UseGuards(JwtAuthGuard)
     @Get('getUser/:id')
@@ -67,5 +68,10 @@ export class UsersController {
     @Get('getUsersCompletion/:orgId')
     async getUsersCompletion(@Param('orgId') orgId: number) {
         return await this.usersService.getUsersWithCourseCompletion(orgId)
+    }
+
+    @Post('deleteCourse/:course')
+    async deleteCourse(@Param('course') course: string) {
+        return await this.usersService.deleteCourse(course)
     }
 }

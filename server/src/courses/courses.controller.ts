@@ -43,11 +43,7 @@ export class CoursesController {
         return await this.coursesService.getUsersInCourse(course)
     }
 
-    //deletes a course
-    @Post('deleteCourse/:course')
-    async deleteCourse(@Param('course') course: string) {
-        return await this.coursesService.deleteCourse(course)
-    }
+    
 
     //updates a courses name and instructor name
     @Post('updateCourse/:courseName/:oldCourseName/:instructor/:oldInstructorName')
