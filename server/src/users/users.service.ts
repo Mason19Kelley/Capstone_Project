@@ -67,18 +67,23 @@ export class UsersService {
   // delete course
   async deleteCourse(courseName: string) {
 
+    // const course = await this.courseService.findCourseByName(courseName)
+
+    // if (!course) {
+    //     throw new Error(`Course with name ${courseName} not found.`);
+    // }
+
+    // // Remove the association between the course and its users
+    // for (const user of course.users) {
+    //     course.users = []
+    // }
+    // console.log(course)
+    // return this.courseService.deleteCourse(course)
+
     const course = await this.courseService.findCourseByName(courseName)
-
-    if (!course) {
-        throw new Error(`Course with name ${courseName} not found.`);
-    }
-
-    // Remove the association between the course and its users
-    for (const user of course.users) {
-        course.users = []
-    }
-    console.log(course)
-    return this.courseService.deleteCourse(course)
+    Object.assign(course, { users: [] });
+    await this.courseService.save(course)
+    return await this.courseService.deleteCourse(course)
   }
 
 async removeFromMany(user: User, course: Courses): Promise<void> {

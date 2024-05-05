@@ -98,15 +98,11 @@ function Dashboard() {
               Learning Dashboard
               </div>
             </Typography.Title>
-            <div className='test-card'>{Coursecards.map(c => <Box className="mb-1">{c}</Box>)}</div>
+            {Coursecards.length === 0 ? <span className="dashboardText text-gray-600 ml-7 text-md">You are not assigned to any courses</span> : 
+            <div className='test-card'>{Coursecards.map(c => <Box className="mb-1">{c}</Box>)}</div>}
           </Box>
         </ThemeProvider>
       </div>
-      <button className='createCourseButton'>
-        <Link to='/courseCompletion/Cyber/1'>
-          Create Course
-        </Link>
-      </button>
     </div>
     
   )

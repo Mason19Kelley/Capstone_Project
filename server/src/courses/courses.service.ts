@@ -68,8 +68,10 @@ export class CoursesService {
         return users
     }
 
-    deleteCourse(course: Courses) {
-        return this.courseRepository.delete(course)
+    async deleteCourse(course: Courses) {
+        const completions = await this.courseCompletionRepository.findBy({courseId: course.cid})
+        this.courseCompletionRepository.remove(completions)
+        return await this.courseRepository.remove(course)
     }
 
     // update course name and instructor name
