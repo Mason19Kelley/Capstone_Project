@@ -335,7 +335,7 @@ function Edit_Course() {
       <div className="flex flex-row justify-between">
         <div style={{marginLeft: 10}} className='dashboardText'>Edit Course</div>
         <Link to={`/courses/${cid}`}>
-          <Button type="primary" style={{background: '#F34B4B'}} icon={<PlaySquareOutlined />}>
+          <Button type="primary" style={{background: '#F34B4B'}} icon={<PlaySquareOutlined />} disabled={selectedCourse.modules?.length === 0}>
             Go to Course
           </Button>
         </Link>
