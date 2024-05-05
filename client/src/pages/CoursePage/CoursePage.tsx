@@ -182,6 +182,7 @@ const CoursePage: React.FC = () => {
   const { setPage } = useContext(PageContext)
   const { setCurrentStep } = useContext(StepContext)
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [userList, setUserList] = useState<number[]>([])
 
   const navigate = useNavigate()
 
@@ -191,7 +192,7 @@ const CoursePage: React.FC = () => {
         CourseAPI.getCourseCompletion(user?.id ?? -1, +id ?? -1).then((response: any) => {
           const jsonInformation = JSON.parse(data['jsonInformation']);
           setIsCompleted(response.moduleCompleted === jsonInformation.modules.length)
-          console.log(response.moduleCompleted === jsonInformation.modules.length)
+          setUserList(data.users.map((user: any) => user.id))
           setInstructor(data['instructor']);
           setcourseName(data['courseName']);
           setselectedCourse(jsonInformation);
@@ -294,7 +295,7 @@ const CoursePage: React.FC = () => {
         </h2>
         <Link to={`/courseModule/${id}`}>
           <Tooltip placement="bottom" title={isCompleted ? "" : 'Start Course'}>
-            <Button style={{background: '#F34B4B'}}onClick={handleContenClick} type="primary" icon={isCompleted ? <></> : <PlaySquareOutlined />} disabled={isCompleted}>
+            <Button style={{background: '#F34B4B'}}onClick={handleContenClick} type="primary" icon={isCompleted ? <></> : <PlaySquareOutlined />} disabled={isCompleted || (selectedCourse?.modules?.length === 0 || selectedCourse?.modules[0]?.content?.length === 0)|| !userList.includes(user?.id ?? -1)}>
               {isCompleted ? 'Course Already Completed' : 'Go to start'}
           </Button>
           </Tooltip>
@@ -306,6 +307,8 @@ const CoursePage: React.FC = () => {
       </ConfigProvider>
       </div>
     </div>
+    <Button onClick={() => console.log(userList.includes(user?.id ?? -1))}></Button>
+
     </Content>
   </Layout>
   );
