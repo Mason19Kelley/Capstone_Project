@@ -189,7 +189,7 @@ const CoursePage: React.FC = () => {
   useEffect(() => {
     if(id){
       CourseAPI.getCourses(parseInt(id || '')).then((data: any) => {
-        CourseAPI.getCourseCompletion(user?.id ?? -1, +id ?? -1).then((response: any) => {
+        CourseAPI.getCourseCompletion(user?.id ?? -1, parseInt(id || -1)).then((response: any) => {
           const jsonInformation = JSON.parse(data['jsonInformation']);
           setIsCompleted(response.moduleCompleted === jsonInformation.modules.length)
           setUserList(data.users.map((user: any) => user.id))
