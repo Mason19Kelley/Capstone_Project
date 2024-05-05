@@ -307,7 +307,6 @@ const CoursePage: React.FC = () => {
       </ConfigProvider>
       </div>
     </div>
-    <Button onClick={() => console.log(userList.includes(user?.id ?? -1))}></Button>
 
     </Content>
   </Layout>
