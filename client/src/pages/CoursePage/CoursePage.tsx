@@ -1,4 +1,4 @@
-import { Image, Layout, theme, Card, ConfigProvider, Button, Menu, Tooltip, MenuProps, Typography, Avatar } from "antd";
+import { Image, Layout, theme, Card, ConfigProvider, Button, Menu, Tooltip, MenuProps, Typography, Avatar, Spin } from "antd";
 import './CoursePage.css';
 import headerImg from '../../assets/Dashboard/DashboardHeader.png';
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -183,19 +183,22 @@ const CoursePage: React.FC = () => {
   const { setCurrentStep } = useContext(StepContext)
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [userList, setUserList] = useState<number[]>([])
+  const [isLoading, setIsLoading ] = useState<boolean>(true)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     if(id){
       CourseAPI.getCourses(parseInt(id || '')).then((data: any) => {
-        CourseAPI.getCourseCompletion(user?.id ?? -1, parseInt(id || -1)).then((response: any) => {
+        CourseAPI.getCourseCompletion(user?.id ?? -1, data.cid).then((response: any) => {
+          console.log(data)
           const jsonInformation = JSON.parse(data['jsonInformation']);
           setIsCompleted(response.moduleCompleted === jsonInformation.modules.length)
           setUserList(data.users.map((user: any) => user.id))
           setInstructor(data['instructor']);
           setcourseName(data['courseName']);
           setselectedCourse(jsonInformation);
+          setIsLoading(false)
         })
         
       })
@@ -278,6 +281,7 @@ const CoursePage: React.FC = () => {
           preview = {false}
         />
       </div>
+      {isLoading ? (<Spin tip="Loading..." />) : (<>
       <h1 style= {{color:'#0c2245', paddingTop: 10, marginLeft: "1%", textAlign: "start"}}>{courseName}</h1>
       <div
         style={{
@@ -306,7 +310,7 @@ const CoursePage: React.FC = () => {
           {module.map(card => <div className="w-[99%] ml-[1%]">{card}</div>)}
       </ConfigProvider>
       </div>
-    </div>
+    </div></>)}
 
     </Content>
   </Layout>

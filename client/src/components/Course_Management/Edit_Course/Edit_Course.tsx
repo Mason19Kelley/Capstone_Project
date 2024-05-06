@@ -1,5 +1,5 @@
 import  { useEffect } from 'react';
-import { Button, Card,  Typography, Popover, Tooltip } from 'antd';
+import { Button, Card,  Typography, Popover, Tooltip, Spin } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
@@ -65,6 +65,7 @@ function Edit_Course() {
   const [ editModuleOpen, setEditModuleOpen ] = useState<boolean>(false);
   const [selectedModuleID, setSelectedModuleID] = useState(null);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
 
     uniqueID = uuidv4();
@@ -83,6 +84,7 @@ function Edit_Course() {
               setInstructor(data['instructor']);
               setselectedCourse(jsonInformation);
               setCid(data.cid);
+              setIsLoading(false);
             })
             .catch((error) => {
               console.error("Error fetching course data:", error);
@@ -335,12 +337,13 @@ function Edit_Course() {
       <div className="flex flex-row justify-between">
         <div style={{marginLeft: 10}} className='dashboardText'>Edit Course</div>
         <Link to={`/courses/${cid}`}>
-          <Button type="primary" style={{background: '#F34B4B'}} icon={<PlaySquareOutlined />} disabled={selectedCourse.modules?.length === 0}>
+          <Button type="primary" style={{background: '#F34B4B'}} icon={<PlaySquareOutlined />} disabled={selectedCourse.modules?.length === 0 || selectedCourse.modules[0]?.content?.length === 0}>
             Go to Course
           </Button>
         </Link>
       </div>
       </Typography.Title>
+      { isLoading ? (<Spin tip="Loading..." />) :
       <div>
         <Card>
           <span className="flex flex-row justify-between">
@@ -371,7 +374,8 @@ function Edit_Course() {
           <div>{listModules(selectedCourse)}</div>
         </Card>
         </div>
-        </div>
+}
+    </div>
       
             
   )
