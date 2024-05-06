@@ -124,7 +124,7 @@ function Admin() {
    }
 
    const pullLogs = () => {
-    AdminAPI.pullLogs().then(response => {
+    AdminAPI.pullLogs(user?.organization?.id ?? 0).then(response => {
       if (response.length > 0) {
         const firstLog = response[0];
         const logProperties = Object.keys(firstLog);

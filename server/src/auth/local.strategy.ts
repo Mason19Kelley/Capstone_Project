@@ -20,12 +20,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
+    console.log(user)
     //If the user is valid, log the login attempt
-    this.loginLogsService.handleLoginLog(email, true);
+    this.loginLogsService.handleLoginLog(email, true, user.organization.id);
     return user;
   } catch (e) {
     //If the user is invalid, log the login attempt
-    this.loginLogsService.handleLoginLog(email, false);
+    this.loginLogsService.handleLoginLog(email, false, 0);
   }
  }
 

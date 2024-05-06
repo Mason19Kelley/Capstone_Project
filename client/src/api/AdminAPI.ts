@@ -38,8 +38,8 @@ export const AdminAPI = {
         return data
     },
 
-    pullLogs: async () => {
-        const { data } = await api.get(`/auth/getLogs`)
+    pullLogs: async (orgID: number) => {
+        const { data } = await api.get(`/auth/getLogs/${orgID}`)
         return data
       },
 
