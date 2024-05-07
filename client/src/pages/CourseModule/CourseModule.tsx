@@ -107,7 +107,9 @@ const CourseModule: React.FC = () => {
     setModule(courseJson, currentModuleIndex+1)
     setCurrentStep(0)
     if(currentModuleIndex+1 >= (courseJson?.modules.length ?? 1000)){
-      navigate('/home')
+      const name = courseJson?.courseName;
+      const id = courseId;
+      navigate(`/courseCompletion/${name}/${id}`);
     }
   }
 

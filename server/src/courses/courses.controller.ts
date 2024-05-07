@@ -44,7 +44,6 @@ export class CoursesController {
     }
 
     
-
     //updates a courses name and instructor name
     @Post('updateCourse/:courseName/:oldCourseName/:instructor/:oldInstructorName')
     async updateCourse(@Param('courseName') courseName: string, @Param('oldCourseName') oldCourseName: string, @Param('instructor') instructor: string, @Param('oldInstructorName') oldInstructorName: string){

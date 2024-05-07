@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Request, Get, Body, Res } from '@nestjs/common';
+import { Controller, UseGuards, Post, Request, Get, Body, Res, Param } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -51,9 +51,9 @@ export class AuthController {
         return this.authService.resetPassword(userId as unknown as number, token, password);
     }
 
-    @Get('getLogs')
-    async getLogs(){
-        const logOutput = await this.loginLogsService.findAllLogs()
+    @Get('getLogs/:orgID')
+    async getLogs(@Param() orgID: number){
+        const logOutput = await this.loginLogsService.findAllLogs(orgID)
         return logOutput
     }
 

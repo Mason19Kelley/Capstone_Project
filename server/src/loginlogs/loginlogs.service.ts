@@ -16,8 +16,14 @@ export class LoginLogsService {
     }
 
     // function that can be called to pull all logs
-    findAllLogs() {
-        return this.logRepository.find()
+    findAllLogs(orgID: number) {
+      const organizationID = parseInt(orgID['orgID'])
+      console.log(typeof(organizationID))
+        return this.logRepository
+        .createQueryBuilder('log')
+        .select(['log.Timestamp', 'log.user', 'log.success'])
+        .where('log.orgID = :orgID', {orgID: organizationID})
+        .getMany()
     }
 
     // function that can be called to insert a log
@@ -27,12 +33,14 @@ export class LoginLogsService {
     }
 
      //Function that logs the login attempt
-  async handleLoginLog(username: string, success: boolean): Promise<void> {
+  async handleLoginLog(username: string, success: boolean, orgID: number): Promise<void> {
+    console.log(orgID)
     const timestamp = new Date().toISOString();
     const log = new LoginLog();
     log.user = username;
     log.Timestamp = timestamp;
     log.success = success;
+    log.orgID = orgID;
     await this.insertLog(log);
   }
 
@@ -41,7 +49,7 @@ export class LoginLogsService {
       const timestamp1 = new Date().toISOString();
 
         const logsToSeed = [
-          { user: 'SuperAdmin@example.com', success: true, Timestamp: timestamp1 },
+          { user: 'SuperAdmin@example.com', success: true, Timestamp: timestamp1, orgID: 1},
         ];
     
         const voteEntities = this.logRepository.create(logsToSeed)
