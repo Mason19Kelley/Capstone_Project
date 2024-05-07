@@ -11,7 +11,7 @@ export class LoginLog {
   @Column()
     success: boolean;
 
-  @Column()
+  @Column({ nullable: true })
     orgID: number;
 
 }
