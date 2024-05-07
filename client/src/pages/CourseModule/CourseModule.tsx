@@ -104,13 +104,13 @@ const CourseModule: React.FC = () => {
     message.success('Module Complete!')
     updateCourseCompletion(currentModuleIndex+1, 0)
     setCurrentModuleIndex(currentModuleIndex+1)
-    setModule(courseJson, currentModuleIndex+1)
-    setCurrentStep(0)
     if(currentModuleIndex+1 >= (courseJson?.modules.length ?? 1000)){
       const name = courseJson?.courseName;
       const id = courseId;
       navigate(`/courseCompletion/${name}/${id}`);
     }
+    setModule(courseJson, currentModuleIndex+1)
+    setCurrentStep(0)
   }
 
   const setModule = (data?: Course, moduleIndex?: number) => {

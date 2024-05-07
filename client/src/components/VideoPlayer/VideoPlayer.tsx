@@ -1,5 +1,5 @@
 
-import './VideoPlayer.module.css'
+import './VideoPlayer.css'
 import { useEffect, useState } from 'react';
 
 import { FileAPI } from '../../api/FileAPI';
