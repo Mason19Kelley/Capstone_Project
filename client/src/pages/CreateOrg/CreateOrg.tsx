@@ -11,13 +11,18 @@ const CreateOrg: React.FC = () => {
   const [organization, setOrgname] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
-
+  const [ passwordTooShort, setPasswordTooShort] = useState(false)
 
   useEffect(() => {
     
   }, [])
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if(password.length < 8){
+      setPasswordTooShort(true)
+      return
+    }
     CreateOrgAPI.createOrg(username, password, email, organization)
     .then(response => {
       console.log("here")
@@ -32,7 +37,7 @@ const CreateOrg: React.FC = () => {
       <div className="org-box">
       <Link to={'/login'} className="create-org-back"><ArrowLeftOutlined style={{color:'white'}} /></Link>
         <div className="form-value">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(event) =>handleSubmit(event)}>
             <div className='back-link'>
               <h2>Create an Organization</h2>
             </div>
@@ -53,6 +58,7 @@ const CreateOrg: React.FC = () => {
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               <label>Administrator Password</label>
             </div>
+            {passwordTooShort ? <span className="text-red-700 text-sm">Your password must be at least 8 characters</span> : <></>}
             <button type="submit" className="create-org-button">Create</button>
           </form>
         </div>
