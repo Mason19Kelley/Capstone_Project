@@ -77,19 +77,40 @@ function Edit_Course() {
       }
     
       useEffect(() => {
+        console.log(id)
+        console.log(selectedCourse)
         if (id && user?.organization?.id) {
-          CourseAPI.getOneCourse(id, user.organization.id)
-            .then((data: any) => {
-              const jsonInformation = JSON.parse(data['jsonInformation']);
-              setInstructor(data['instructor']);
-              setselectedCourse(jsonInformation);
-              setCid(data.cid);
-              setIsLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error fetching course data:", error);
-              // Handle error, if needed
-            });
+          if(selectedCourse.courseName === 'temp'){
+            console.log("bam")
+            CourseAPI.getOneCourse(id, user.organization.id)
+              .then((data: any) => {
+                const jsonInformation = JSON.parse(data['jsonInformation']);
+                setInstructor(data['instructor']);
+                setselectedCourse(jsonInformation);
+                setCid(data.cid);
+                setIsLoading(false);
+              })
+              .catch((error) => {
+                console.error("Error fetching course data:", error);
+                // Handle error, if needed
+              });
+          }else{
+            console.log("boom")
+            console.log(selectedCourse.courseName)
+            CourseAPI.getOneCourse(selectedCourse.courseName, user.organization.id)
+              .then((data: any) => {
+                console.log(data)
+                const jsonInformation = JSON.parse(data['jsonInformation']);
+                setInstructor(data['instructor']);
+                setselectedCourse(jsonInformation);
+                setCid(data.cid);
+                setIsLoading(false);
+              })
+              .catch((error) => {
+                console.error("Error fetching course data:", error);
+                // Handle error, if needed
+              })
+          }
         }
       }, [instructor]);
 
@@ -133,6 +154,7 @@ function Edit_Course() {
   }
   const closeEditModal = () => {
     console.log(selectedCourse)
+    updateJSON();
     setInstructor(selectedCourse.instructor)
     setisEditCourseOpen(false);
    };
