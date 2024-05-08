@@ -1,6 +1,6 @@
 import  { useEffect } from 'react';
 import { Button, Card,  Typography, Popover, Tooltip, Spin } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { UserAddOutlined, PlusOutlined, EditOutlined, DeleteOutlined, PlaySquareOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../../context/AuthContext';
@@ -34,6 +34,8 @@ interface course {
 
 function Edit_Course() {
  let uniqueID = uuidv4();
+
+ const navigate = useNavigate()
   
  // creates new course with temporary information
   const initialCourse: course = {
@@ -128,11 +130,10 @@ function Edit_Course() {
 
   // opens edit course modal
   const EditCourseInformation = () => {
-    console.log(selectedCourse)
     setisEditCourseOpen(true);
   }
   const closeEditModal = () => {
-    console.log(selectedCourse)
+    navigate(`/editCourse/${selectedCourse.courseName}`)
     setInstructor(selectedCourse.instructor)
     setisEditCourseOpen(false);
    };
